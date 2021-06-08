@@ -10,20 +10,30 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
         appBar: AppBar(
-          title: Text("to do list "),
-        ),
-      body: Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        color: Theme.of(context).splashColor,
-        child: Card(
-          child: Icon(Icons.ac_unit_outlined,color: Theme.of(context).primaryColorLight,),
-          color: Theme.of(context).splashColor,
-          elevation: 4,
-          margin: EdgeInsets.all(50),
-        ),
-      ),
+          leading: Builder(builder: (BuildContext context) {
+            return IconButton(
+                icon: Icon(Icons.ac_unit),
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                });
+          })),
+          body: Container(color: Colors.red,),
+          drawer: ClipRRect(
+            borderRadius: BorderRadius.only(
+                topRight: Radius.circular(10), bottomRight: Radius.circular(10)),
+
+            child: Drawer(
+              elevation: 2,
+              child: Container(
+                decoration: BoxDecoration(
+                   // borderRadius: BorderRadius.all(Radius.circular(10)),
+                  color: Colors.white
+                ),
+                ),
+                ),
+          ),
 
     );
   }
