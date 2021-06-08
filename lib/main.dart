@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
         primaryColorLight: Colors.white, //2
         primaryColorDark: Color(0xFFE6FFFB), //3
         backgroundColor: Color(0xFFF4F6FD), //4
-        primarySwatch: Colors.white, //5
+        splashColor: Colors.white, //5
         errorColor: Color(0xFFFF6272), //6
         cardColor: Colors.white, //7
         accentColor: Colors.white, //8
@@ -45,7 +45,8 @@ class MyApp extends StatelessWidget {
         primaryColorLight: Color(0x17FFFFFF), //2
         primaryColorDark: Color(0xFF121212), //3
         backgroundColor: Color(0xFF121212), //4
-        primarySwatch: Colors.black, //5
+        //primarySwatch: Colors.black, //5
+        splashColor: Colors.black,
         errorColor: Color(0xFFFF4A5D), //6
         cardColor: Color(0xFF121212), //7
         accentColor: Color(0x1FFFFFFF), //8
@@ -54,16 +55,16 @@ class MyApp extends StatelessWidget {
 
         floatingActionButtonTheme: FloatingActionButtonThemeData(
           backgroundColor: Color(0xFFADADAD), //11
-          focusColor: Color(0xFF020417),//12
+          focusColor: Color(0xDEFFFFFF),//12
 
         ),
-        canvasColor: Color(0xFFF53948),//13
-        dividerColor: Color(0xFF9D9AFF),//14
-        bottomAppBarColor:Color(0xFF707070),//15
+        canvasColor: Color(0xFFF99FA6),//13
+        dividerColor: Color(0xFFB5B3FF),//14
+        bottomAppBarColor:Color(0x99FFFFFF),//15
 
 
 
-        primaryColorBrightness: Brightness.light,
+        primaryColorBrightness: Brightness.dark,
 
 
 
