@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
 
 import 'View/ToDoList_View.dart';
 
 void main() {
+  //Now we use SystemChrome
+
   runApp(MyApp());
 }
 
@@ -10,7 +14,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'ToDoList',
       theme: ThemeData(
         primaryColor: Color(0xFF2643C4), //1
