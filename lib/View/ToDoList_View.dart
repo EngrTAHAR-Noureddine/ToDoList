@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
+import 'package:todolist/ModelView/build_vertical_layout.dart';
+
 
 
 class Home extends StatefulWidget {
@@ -55,7 +57,13 @@ class _HomeState extends State<Home> {
             ),
           ],
         ),
-          body: Container(color: Theme.of(context).backgroundColor,),
+          body: OrientationBuilder(
+            builder: (context, orientation) {
+              return orientation == Orientation.portrait
+                  ? BuildVerticalLayout()
+                  : BuildHorizontalLayout();
+            },
+          ),
           drawer: ClipRRect(
             borderRadius: BorderRadius.only(
                 topRight: Radius.circular(10), bottomRight: Radius.circular(10)),
