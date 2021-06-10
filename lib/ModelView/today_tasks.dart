@@ -11,15 +11,13 @@ TodayTasks({this.isLarge});
 
 class _TodayTasksState extends State<TodayTasks> {
   bool _isLarge;
+  Future<List<Task>> getTasks(){
+
+  }
   Widget todayTask(){
-    return Column(
-      children: [
-        Text("Today Tasks"),
-        Expanded(
-            child:
-        ),
-      ],
-    );
+    return FutureBuilder(
+      future: ,
+        builder:(context,AsyncSnapshot snapshot){});
   }
 
   @override

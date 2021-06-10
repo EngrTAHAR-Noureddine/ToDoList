@@ -13,7 +13,10 @@ class CategoryLayout extends StatefulWidget {
 
 class _CategoryLayoutState extends State<CategoryLayout> {
   bool _isLarge;
+  DateTime date;
   Future<List<Category>> getCategories()async{
+    date = DateTime.now();
+
 
     List<Map> list = await DBProvider.db.getCategories();
 

@@ -34,7 +34,7 @@ class DBProvider {
           "note TEXT,"
           "status TEXT,"
           "frequency TEXT,"
-          "date INTEGER"
+          "date TEXT"
           ")");
     });
   }
