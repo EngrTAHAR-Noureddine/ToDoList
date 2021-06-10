@@ -21,6 +21,10 @@ class Variables{
   int getNum(String name){
     return this._tasks[name];
   }
+  List<String> getKeys(){
+    return this._tasks.keys;
+  }
+
   setCat(List<String> cat){
     this._categories = cat;
   }

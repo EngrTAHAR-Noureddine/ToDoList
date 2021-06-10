@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todolist/ModelView/category_layout.dart';
+import 'package:todolist/ModelView/add_new_task.dart';
 import 'dart:math' as math;
 
 import 'package:todolist/ModelView/to_do_list.dart';
@@ -59,7 +60,20 @@ class _HomeState extends State<Home> {
           ],
         ),
           body: ToDoList(),
+          floatingActionButton: FloatingActionButton(
+            elevation: 0,
+            child: Icon(Icons.add ,color: Theme.of(context).splashColor,),
+            backgroundColor: Theme.of(context).primaryColor,
+            onPressed: (){
+             return  Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AddNewTasks(),
+                ),
+              );
 
+            },
+          ),
           drawer: ClipRRect(
             borderRadius: BorderRadius.only(
                 topRight: Radius.circular(10), bottomRight: Radius.circular(10)),

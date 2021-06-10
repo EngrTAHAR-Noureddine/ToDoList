@@ -26,10 +26,12 @@ class _CategoryLayoutState extends State<CategoryLayout> {
         tomorrow.year.toString()+"-"+tomorrow.month.toString()+"-"+tomorrow.day.toString();
     List<Task> tasksToday = await DBProvider.db.getByDate(dateToday);
     List<Task> tasktomorrow= await DBProvider.db.getByDate(dateTomorrow);
+    List<Task> tasktemporary =await DBProvider.db.getTemporary("temporary");
     bool isExist;
-    if(tasksToday.isNotEmpty||tasktomorrow.isNotEmpty){
+    if(tasksToday.isNotEmpty||tasktomorrow.isNotEmpty||tasktemporary.isNotEmpty){
       Variables().setTask("today", tasksToday.length);
       Variables().setTask("tomorrow", tasktomorrow.length);
+      Variables().setTask("temporary", tasktemporary.length);
     isExist = true;
     }else isExist = false;
 
@@ -37,8 +39,6 @@ class _CategoryLayoutState extends State<CategoryLayout> {
   }
 
   Future<List<Category>> getCategories()async{
-    //date = DateTime.now();
-//TODO khassek cat ta3 date now and tomorrow datepicker yedi DateTime ymedlek year month day apres chouf idha kifkif ou pas
 
     List<Map> list = await DBProvider.db.getCategories();
 
@@ -59,9 +59,10 @@ class _CategoryLayoutState extends State<CategoryLayout> {
         builder: (context, AsyncSnapshot snapshot) {
           List<Category> list = (snapshot.hasData)?snapshot.data:[];
           if(list.isNotEmpty){
-            List<String> cats;
+            List<String> cats= [];
             list.forEach((element) {cats.add(element.category); });
-            Variables().setCat(cats);}
+            Variables().setCat(cats);
+          }
           return Container(
             color: Theme.of(context).backgroundColor,
             width:(_isLarge)?MediaQuery.of(context).size.width:220,
@@ -81,15 +82,74 @@ class _CategoryLayoutState extends State<CategoryLayout> {
 
                     color: Colors.transparent,
                     child: ListView(
-
+                        scrollDirection:(_isLarge)? Axis.horizontal:Axis.vertical,
                       children:[
+                       FutureBuilder(
+                           future: getTask(),
+                           builder:(context,AsyncSnapshot snapshot){
+                             bool isExistTasks = (snapshot.hasData)?snapshot.data:false;
+                             print("dakhel getTAsk");
+                             print(snapshot.error);
+                             print("_______________");
+                             List<String> listTask;
+                             (isExistTasks)?listTask=Variables().getKeys():listTask=[];
+                             return (isExistTasks)?
+                             Container(
+                                 child: ListView.builder(
+                                     shrinkWrap: true,
+                                     scrollDirection:(_isLarge)? Axis.horizontal:Axis.vertical,
+                                     physics: ScrollPhysics(),
+                                     itemCount: listTask.length,
 
-                        FutureBuilder(
-                            future: getTask(),
-                            builder:(context,AsyncSnapshot snapshot){
+                                     itemBuilder: (BuildContext context, int index) {
+                                       return Container(
+                                         width: 200,
+                                         height: 100,
+                                         margin: EdgeInsets.all(10),
+                                         padding: EdgeInsets.all(0),
 
-                              return Container();
-                            }),
+                                         decoration: BoxDecoration(
+                                           borderRadius: BorderRadius.all(Radius.circular(20)),
+                                           boxShadow: [
+
+                                             BoxShadow(
+                                               color: Color(0x40000000),//.withOpacity(0.5),
+                                               spreadRadius: 0,
+                                               blurRadius: 4,
+                                               offset: Offset(0, 4), // changes position of shadow
+                                             ),
+                                           ],
+                                           color: Theme.of(context).cardColor,
+                                         ),
+                                         child: MaterialButton(
+
+                                           onPressed: (){},
+                                           colorBrightness:Theme.of(context).primaryColorBrightness,
+                                           padding: EdgeInsets.only(left: 10),
+                                           elevation: 3,
+                                           shape: RoundedRectangleBorder(
+                                               borderRadius: BorderRadius.circular(20)
+                                           ),
+                                           color: Theme.of(context).accentColor,
+                                           child: Column(
+                                             mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                             crossAxisAlignment: CrossAxisAlignment.start,
+
+                                             children: [
+                                               Align(
+                                                   alignment: Alignment.topLeft,
+                                                   child: Text("Task: "+Variables().getNum(listTask[index]).toString(),style:TextStyle(color:Theme.of(context).bottomAppBarColor ,fontSize:16,fontFamily: "Roboto") ,)
+                                               ),
+                                               Text(listTask[index] ,style: TextStyle(color:Theme.of(context).floatingActionButtonTheme.focusColor ,fontSize:20,fontFamily: "Roboto"),),
+                                             ],
+                                           ),
+                                         ),
+                                       );
+                                     }
+                                 )
+                             ):Container();
+                           }),
+
 
                         (snapshot.hasData)?
                       Container(
