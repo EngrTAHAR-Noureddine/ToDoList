@@ -34,15 +34,18 @@ class _CategoryLayoutState extends State<CategoryLayout> {
         builder: (context, AsyncSnapshot snapshot) {
           List<Category> list = (snapshot.hasData)?snapshot.data:[];
           return Container(
-            color:Theme.of(context).backgroundColor ,
+            color: Theme.of(context).backgroundColor,
             child: ListView(
               shrinkWrap: true,
               scrollDirection: Axis.vertical,
               children: [
                 Text("Categories",style: TextStyle(color:Color(0xFF979DB0) ,fontSize:20,fontFamily: "Roboto"),),
                 Container(
-                  child: ListView(
-                    shrinkWrap: true,
+                  height:(_isLarge)? 100:300,//MediaQuery.of(context).size.width,
+                  width:(_isLarge)? MediaQuery.of(context).size.width:300,
+                  /*child: ListView(
+                   shrinkWrap: true,
+
                     scrollDirection:(_isLarge)? Axis.horizontal:Axis.vertical,
                     children: [
 
@@ -56,7 +59,17 @@ class _CategoryLayoutState extends State<CategoryLayout> {
                           child: Icon(Icons.add,color: Theme.of(context).floatingActionButtonTheme.focusColor,size: 30,),
                         ),
                       ),
-                      (snapshot.hasData)?
+                      Container(
+                        width: 200,
+                        height: 100,
+                        padding: EdgeInsets.all(0),
+                        color: Theme.of(context).cardColor,
+                        child: Card(
+                          color: Theme.of(context).accentColor,
+                          child: Icon(Icons.add,color: Theme.of(context).floatingActionButtonTheme.focusColor,size: 30,),
+                        ),
+                      ),
+                     /* (snapshot.hasData)?
                       Container(
                           child: ListView.builder(
                               shrinkWrap: true,
@@ -82,12 +95,12 @@ class _CategoryLayoutState extends State<CategoryLayout> {
                                 );
                               }
                           )
-                      ):Container(),
+                      ):Container(),*/
 
 
 
                     ],
-                  ),
+                  ),*/
                 ),
               ],
             ),
