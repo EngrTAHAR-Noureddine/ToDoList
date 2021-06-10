@@ -19,7 +19,7 @@ class _CategoryLayoutState extends State<CategoryLayout> {
 
     List<Category> listCat = list.map((c) => Category.fromMap(c)).toList();
 
-    return (listCat.isNotEmpty)?list:[];
+    return (listCat.isNotEmpty)?listCat:[];
   }
 
   @override
@@ -35,75 +35,82 @@ class _CategoryLayoutState extends State<CategoryLayout> {
           List<Category> list = (snapshot.hasData)?snapshot.data:[];
           return Container(
             color: Theme.of(context).backgroundColor,
-            child: ListView(
-              shrinkWrap: true,
-              scrollDirection: Axis.vertical,
+            width:(_isLarge)?MediaQuery.of(context).size.width:220,
+            height: (_isLarge)?170:MediaQuery.of(context).size.width,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Text("Categories",style: TextStyle(color:Color(0xFF979DB0) ,fontSize:20,fontFamily: "Roboto"),),
                 Container(
-                  height:(_isLarge)? 100:300,//MediaQuery.of(context).size.width,
-                  width:(_isLarge)? MediaQuery.of(context).size.width:300,
-                  /*child: ListView(
-                   shrinkWrap: true,
+                  color: Colors.transparent,
+                  height: 50,
+                  alignment: Alignment.centerLeft,
+                  padding: EdgeInsets.only(left: 10),
+                  child: Text("Categories",style: TextStyle(color:Color(0xFF979DB0) ,fontSize:20,fontFamily: "Roboto"),),
+                ),
+                Expanded(
+                  child: Container(
 
-                    scrollDirection:(_isLarge)? Axis.horizontal:Axis.vertical,
-                    children: [
+                    color: Colors.transparent,
+                    child: (snapshot.hasData)?
+                    Container(
+                        child: ListView.builder(
+                            shrinkWrap: true,
+                            scrollDirection:(_isLarge)? Axis.horizontal:Axis.vertical,
+                            physics: ScrollPhysics(),
+                            itemCount: list.length,
 
-                      Container(
-                        width: 200,
-                        height: 100,
-                        padding: EdgeInsets.all(0),
-                        color: Theme.of(context).cardColor,
-                        child: Card(
-                          color: Theme.of(context).accentColor,
-                          child: Icon(Icons.add,color: Theme.of(context).floatingActionButtonTheme.focusColor,size: 30,),
-                        ),
-                      ),
-                      Container(
-                        width: 200,
-                        height: 100,
-                        padding: EdgeInsets.all(0),
-                        color: Theme.of(context).cardColor,
-                        child: Card(
-                          color: Theme.of(context).accentColor,
-                          child: Icon(Icons.add,color: Theme.of(context).floatingActionButtonTheme.focusColor,size: 30,),
-                        ),
-                      ),
-                     /* (snapshot.hasData)?
-                      Container(
-                          child: ListView.builder(
-                              shrinkWrap: true,
-                              scrollDirection:(_isLarge)? Axis.horizontal:Axis.vertical,
-                              itemCount: list.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Container(
+                                width: 200,
+                                height: 100,
+                                margin: EdgeInsets.all(10),
+                                padding: EdgeInsets.all(0),
 
-                              itemBuilder: (BuildContext context, int index) {
-                                return Container(
-                                  width: 200,
-                                  height: 100,
-                                  color: Theme.of(context).cardColor,
-                                  padding: EdgeInsets.all(0),
-                                  child: Card(
-                                    color: Theme.of(context).accentColor,
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      children: [
-                                        Text("Task: "+list[index].count.toString(),style:TextStyle(color:Theme.of(context).bottomAppBarColor ,fontSize:16,fontFamily: "Roboto") ,),
-                                        Text(list[index].category ,style: TextStyle(color:Theme.of(context).floatingActionButtonTheme.focusColor ,fontSize:20,fontFamily: "Roboto"),),
-                                      ],
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                                  boxShadow: [
+
+                                    BoxShadow(
+                                      color: Color(0x40000000),//.withOpacity(0.5),
+                                      spreadRadius: 0,
+                                      blurRadius: 4,
+                                      offset: Offset(0, 4), // changes position of shadow
                                     ),
+                                  ],
+                                  color: Theme.of(context).cardColor,
+                                ),
+                                child: MaterialButton(
+
+                                  onPressed: (){},
+                                  colorBrightness:Theme.of(context).primaryColorBrightness,
+                                  padding: EdgeInsets.only(left: 10),
+                                  elevation: 3,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20)
                                   ),
-                                );
-                              }
-                          )
-                      ):Container(),*/
+                                  color: Theme.of(context).accentColor,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
 
-
-
-                    ],
-                  ),*/
+                                    children: [
+                                      Align(
+                                          alignment: Alignment.topLeft,
+                                          child: Text("Task: "+list[index].count.toString(),style:TextStyle(color:Theme.of(context).bottomAppBarColor ,fontSize:16,fontFamily: "Roboto") ,)
+                                      ),
+                                      Text(list[index].category ,style: TextStyle(color:Theme.of(context).floatingActionButtonTheme.focusColor ,fontSize:20,fontFamily: "Roboto"),),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            }
+                        )
+                    ):Container(),
+                  ),
                 ),
               ],
             ),
+
           );
 
         }

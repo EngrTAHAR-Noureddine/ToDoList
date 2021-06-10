@@ -16,8 +16,22 @@ class _ToDoListState extends State<ToDoList> {
 
     return OrientationBuilder(builder: (context, orientation) {
             isLarge =  (orientation == Orientation.portrait);
-            return CategoryLayout(isLarge:isLarge);
-              /*ListView(
+            return (isLarge)?
+            Column(
+              children: [
+                CategoryLayout(isLarge:isLarge),
+                Expanded(child: TodayTasks(isLarge:isLarge)),
+              ],
+            )
+                :
+            Row(
+              children: [
+                CategoryLayout(isLarge:isLarge),
+                Expanded(child: TodayTasks(isLarge:isLarge)),
+              ],
+            )
+            ;
+      /*ListView(
               scrollDirection: Axis.vertical,
               children: [
                 CategoryLayout(isLarge:isLarge),
