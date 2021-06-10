@@ -7,7 +7,13 @@ class Variables{
 
   Variables._internal();
 
-  int idOfList=0;
-  
+  int _idOfList;
+  setData(int value){
+    this._idOfList = value;
+  }
+  getData(){
+    return this._idOfList;
+  }
+
 
 }

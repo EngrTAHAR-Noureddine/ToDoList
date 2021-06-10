@@ -50,3 +50,38 @@ class Task {
     "date": date,
   };
 }
+
+
+
+
+Category categoryFromJson(String str) {
+  final jsonData = json.decode(str);
+  return Category.fromMap(jsonData);
+}
+
+String categoryToJson(Category data) {
+  final dyn = data.toMap();
+  return json.encode(dyn);
+}
+
+class Category {
+  int count;
+  String category;
+
+  Category({
+    this.count,
+    this.category,
+  });
+
+  factory Category.fromMap(Map<String, dynamic> json) => new Category(
+    count: json["COUNT(category)"],
+    category: json["category"],
+
+  );
+
+  Map<String, dynamic> toMap() => {
+    "COUNT(category)": count,
+    "category": category,
+
+  };
+}

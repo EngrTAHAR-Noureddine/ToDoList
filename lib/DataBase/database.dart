@@ -59,6 +59,16 @@ class DBProvider {
     res.isNotEmpty ? res.map((c) => Task.fromMap(c)).toList() : [];
     return list;
   }
+  Future<List<dynamic>> getCategories() async {
+    final db = await database;
+    var res = await db.rawQuery("SELECT COUNT(category), category FROM Task GROUP BY category");
+    List<dynamic> list =
+    res.isNotEmpty ? res.toList() : [];
+    return list;
+  }
+
+
+
   //get all tasks with search by task name
   Future<List<Task>> getAllSearch(String taskSearch) async {
     final db = await database;
