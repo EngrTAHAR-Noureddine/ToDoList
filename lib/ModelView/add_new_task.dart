@@ -9,17 +9,18 @@ class _AddNewTasksState extends State<AddNewTasks> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        width: 150.0,
-        height: 150.0,
-        child: new Stack(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        margin: EdgeInsets.all(0),
+        padding: EdgeInsets.all(10),
 
-        children: <Widget>[
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(20)),
 
-        new Container(
-        alignment: Alignment.center,
-        color: Colors.redAccent,
-        child: Text('Hello'),
-    )]
-    ));
+          color: Theme.of(context).backgroundColor,
+        ),
+
+
+    );
   }
 }
