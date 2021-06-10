@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:todolist/ModelView/today_tasks.dart';
+import 'package:todolist/View/category_view.dart';
 
 class ToDoList extends StatefulWidget {
 
@@ -13,7 +15,13 @@ class _ToDoListState extends State<ToDoList> {
 
     return OrientationBuilder(builder: (context, orientation) {
             isLarge =  (orientation == Orientation.portrait);
-            return Container();
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                CategoryLayout(),
+                (isLarge)?Container():TodayTasks(),
+              ],
+            );
     });
   }
 }
