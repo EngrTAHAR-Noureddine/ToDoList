@@ -17,7 +17,7 @@ class Task {
   String note;
   String status;
   String frequency;
-  int date;
+  String date;
 
   Task({
     this.id,

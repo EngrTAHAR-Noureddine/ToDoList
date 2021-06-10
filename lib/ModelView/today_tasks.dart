@@ -15,6 +15,7 @@ class _TodayTasksState extends State<TodayTasks> {
 
   }
   Widget todayTask(){
+
     return FutureBuilder(
       future: ,
         builder:(context,AsyncSnapshot snapshot){});
@@ -22,7 +23,7 @@ class _TodayTasksState extends State<TodayTasks> {
 
   @override
   void initState() {
-    // TODO: implement initState
+
     _isLarge = widget.isLarge;
   }
   @override

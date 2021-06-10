@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todolist/DataBase/database.dart';
+import 'package:todolist/Models/list_show.dart';
 import 'package:todolist/Models/task_model.dart';
 
 class CategoryLayout extends StatefulWidget {
@@ -36,6 +37,10 @@ class _CategoryLayoutState extends State<CategoryLayout> {
         future: getCategories(),
         builder: (context, AsyncSnapshot snapshot) {
           List<Category> list = (snapshot.hasData)?snapshot.data:[];
+          if(list.isNotEmpty){
+            List<String> cats;
+            list.forEach((element) {cats.add(element.category); });
+            Variables().setCat(cats);}
           return Container(
             color: Theme.of(context).backgroundColor,
             width:(_isLarge)?MediaQuery.of(context).size.width:220,
