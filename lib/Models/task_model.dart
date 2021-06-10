@@ -18,6 +18,7 @@ class Task {
   String status;
   String frequency;
   String date;
+  String time;
 
   Task({
     this.id,
@@ -27,6 +28,7 @@ class Task {
     this.status,
     this.frequency,
     this.date,
+    this.time,
   });
 
   factory Task.fromMap(Map<String, dynamic> json) => new Task(
@@ -37,6 +39,7 @@ class Task {
     status: json["status"],
     frequency: json["frequency"],
     date: json["date"],
+    time:json["time"],
 
   );
 
@@ -48,6 +51,7 @@ class Task {
     "status": status,
     "frequency": frequency,
     "date": date,
+    "time":time,
   };
 }
 

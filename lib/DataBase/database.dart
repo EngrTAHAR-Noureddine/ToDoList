@@ -34,7 +34,8 @@ class DBProvider {
           "note TEXT,"
           "status TEXT,"
           "frequency TEXT,"
-          "date TEXT"
+          "date TEXT,"
+          "time TEXT"
           ")");
     });
   }
@@ -59,6 +60,13 @@ class DBProvider {
     res.isNotEmpty ? res.map((c) => Task.fromMap(c)).toList() : [];
     return list;
   }
+  Future<List<Task>> getTemporary(String temporary) async {
+    final db = await database;
+    var res = await db.query("Task", where: "status = ?", whereArgs: [temporary]);
+    List<Task> list =
+    res.isNotEmpty ? res.map((c) => Task.fromMap(c)).toList() : [];
+    return list;
+  }
   Future<List<dynamic>> getCategories() async {
     final db = await database;
     var res = await db.rawQuery("SELECT COUNT(category), category FROM Task GROUP BY category");
@@ -78,6 +86,7 @@ class DBProvider {
     return list;
   }
   //get all task by date
+  ///date form : yyyy-mm-dd-hh-mm
   Future<List<Task>> getByDate(String date) async {
     final db = await database;
     var res = await db.query("Task", where: "date = ?", whereArgs: [date]);

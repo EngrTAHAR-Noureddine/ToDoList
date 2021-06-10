@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todolist/DataBase/database.dart';
-import 'package:todolist/Models/list_show.dart';
+import 'package:todolist/Models/data_variable.dart';
 import 'package:todolist/Models/task_model.dart';
 
 class CategoryLayout extends StatefulWidget {
@@ -14,10 +14,31 @@ class CategoryLayout extends StatefulWidget {
 
 class _CategoryLayoutState extends State<CategoryLayout> {
   bool _isLarge;
-  DateTime date;
-  Future<List<Category>> getCategories()async{
-    date = DateTime.now();
 
+  Future<bool> getTask()async{
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final tomorrow = DateTime(now.year, now.month, now.day + 1);
+
+    String dateToday =
+        today.year.toString()+"-"+today.month.toString()+"-"+today.day.toString();
+    String dateTomorrow =
+        tomorrow.year.toString()+"-"+tomorrow.month.toString()+"-"+tomorrow.day.toString();
+    List<Task> tasksToday = await DBProvider.db.getByDate(dateToday);
+    List<Task> tasktomorrow= await DBProvider.db.getByDate(dateTomorrow);
+    bool isExist;
+    if(tasksToday.isNotEmpty||tasktomorrow.isNotEmpty){
+      Variables().setTask("today", tasksToday.length);
+      Variables().setTask("tomorrow", tasktomorrow.length);
+    isExist = true;
+    }else isExist = false;
+
+    return isExist;
+  }
+
+  Future<List<Category>> getCategories()async{
+    //date = DateTime.now();
+//TODO khassek cat ta3 date now and tomorrow datepicker yedi DateTime ymedlek year month day apres chouf idha kifkif ou pas
 
     List<Map> list = await DBProvider.db.getCategories();
 
@@ -59,61 +80,74 @@ class _CategoryLayoutState extends State<CategoryLayout> {
                   child: Container(
 
                     color: Colors.transparent,
-                    child: (snapshot.hasData)?
-                    Container(
-                        child: ListView.builder(
-                            shrinkWrap: true,
-                            scrollDirection:(_isLarge)? Axis.horizontal:Axis.vertical,
-                            physics: ScrollPhysics(),
-                            itemCount: list.length,
+                    child: ListView(
 
-                            itemBuilder: (BuildContext context, int index) {
-                              return Container(
-                                width: 200,
-                                height: 100,
-                                margin: EdgeInsets.all(10),
-                                padding: EdgeInsets.all(0),
+                      children:[
 
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                                  boxShadow: [
+                        FutureBuilder(
+                            future: getTask(),
+                            builder:(context,AsyncSnapshot snapshot){
 
-                                    BoxShadow(
-                                      color: Color(0x40000000),//.withOpacity(0.5),
-                                      spreadRadius: 0,
-                                      blurRadius: 4,
-                                      offset: Offset(0, 4), // changes position of shadow
-                                    ),
-                                  ],
-                                  color: Theme.of(context).cardColor,
-                                ),
-                                child: MaterialButton(
+                              return Container();
+                            }),
 
-                                  onPressed: (){},
-                                  colorBrightness:Theme.of(context).primaryColorBrightness,
-                                  padding: EdgeInsets.only(left: 10),
-                                  elevation: 3,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20)
-                                  ),
-                                  color: Theme.of(context).accentColor,
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                        (snapshot.hasData)?
+                      Container(
+                          child: ListView.builder(
+                              shrinkWrap: true,
+                              scrollDirection:(_isLarge)? Axis.horizontal:Axis.vertical,
+                              physics: ScrollPhysics(),
+                              itemCount: list.length,
 
-                                    children: [
-                                      Align(
-                                          alignment: Alignment.topLeft,
-                                          child: Text("Task: "+list[index].count.toString(),style:TextStyle(color:Theme.of(context).bottomAppBarColor ,fontSize:16,fontFamily: "Roboto") ,)
+                              itemBuilder: (BuildContext context, int index) {
+                                return Container(
+                                  width: 200,
+                                  height: 100,
+                                  margin: EdgeInsets.all(10),
+                                  padding: EdgeInsets.all(0),
+
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                                    boxShadow: [
+
+                                      BoxShadow(
+                                        color: Color(0x40000000),//.withOpacity(0.5),
+                                        spreadRadius: 0,
+                                        blurRadius: 4,
+                                        offset: Offset(0, 4), // changes position of shadow
                                       ),
-                                      Text(list[index].category ,style: TextStyle(color:Theme.of(context).floatingActionButtonTheme.focusColor ,fontSize:20,fontFamily: "Roboto"),),
                                     ],
+                                    color: Theme.of(context).cardColor,
                                   ),
-                                ),
-                              );
-                            }
-                        )
-                    ):Text("not exist categories",style:TextStyle(color:Theme.of(context).bottomAppBarColor ,fontSize:14,fontFamily: "Roboto") ,),
+                                  child: MaterialButton(
+
+                                    onPressed: (){},
+                                    colorBrightness:Theme.of(context).primaryColorBrightness,
+                                    padding: EdgeInsets.only(left: 10),
+                                    elevation: 3,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(20)
+                                    ),
+                                    color: Theme.of(context).accentColor,
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+
+                                      children: [
+                                        Align(
+                                            alignment: Alignment.topLeft,
+                                            child: Text("Task: "+list[index].count.toString(),style:TextStyle(color:Theme.of(context).bottomAppBarColor ,fontSize:16,fontFamily: "Roboto") ,)
+                                        ),
+                                        Text(list[index].category ,style: TextStyle(color:Theme.of(context).floatingActionButtonTheme.focusColor ,fontSize:20,fontFamily: "Roboto"),),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              }
+                          )
+                      ):Text("not exist categories",style:TextStyle(color:Theme.of(context).bottomAppBarColor ,fontSize:14,fontFamily: "Roboto") ,),
+                    ]
+                    ),
                   ),
                 ),
               ],
