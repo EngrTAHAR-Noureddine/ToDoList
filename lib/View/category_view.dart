@@ -105,7 +105,7 @@ class _CategoryLayoutState extends State<CategoryLayout> {
                               );
                             }
                         )
-                    ):Container(),
+                    ):Text("not exist categories",style:TextStyle(color:Theme.of(context).bottomAppBarColor ,fontSize:14,fontFamily: "Roboto") ,),
                   ),
                 ),
               ],
