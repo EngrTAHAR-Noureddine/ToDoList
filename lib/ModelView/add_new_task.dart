@@ -10,6 +10,7 @@ class AddNewTasks extends StatefulWidget {
 
 class _AddNewTasksState extends State<AddNewTasks> {
   String _categorySelected = "Category";
+  String _statusSelected = "Status";
   bool _addCategory = false;
   @override
   Widget build(BuildContext context) {
@@ -308,7 +309,7 @@ class _AddNewTasksState extends State<AddNewTasks> {
                       itemBuilder: (context) {
                         var list = List<PopupMenuEntry<int>>();
 
-                        List<String> itemStatus = ["Important", "Temporary","Less important",];
+                        List<String> itemStatus = Variables().status;
 
                         itemStatus.forEach((element) {
 
@@ -344,7 +345,7 @@ class _AddNewTasksState extends State<AddNewTasks> {
                       },
                       onSelected: (value) {
                         setState(() {
-                          _categorySelected = Variables().getCat()[value];
+                          _statusSelected = Variables().status[value];
                         });
                       },
 
@@ -368,7 +369,7 @@ class _AddNewTasksState extends State<AddNewTasks> {
                           trailing: Icon(Icons.keyboard_arrow_down_rounded , color: Color(0xFF363636),),
                           title: RichText(
                               softWrap: true,
-                              text: TextSpan(text: _categorySelected , style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal , color: Color(0xFF363636), ))),
+                              text: TextSpan(text: _statusSelected , style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal , color: Color(0xFF363636), ))),
 
                         ),
                       ),

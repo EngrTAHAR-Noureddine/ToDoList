@@ -19,6 +19,10 @@ class Task {
   String frequency;
   String date;
   String time;
+  String dateReminder;
+  String timeReminder;
+  String goal;
+
 
   Task({
     this.id,
@@ -29,6 +33,9 @@ class Task {
     this.frequency,
     this.date,
     this.time,
+    this.dateReminder,
+    this.timeReminder,
+    this.goal,
   });
 
   factory Task.fromMap(Map<String, dynamic> json) => new Task(
@@ -40,7 +47,9 @@ class Task {
     frequency: json["frequency"],
     date: json["date"],
     time:json["time"],
-
+    timeReminder: json["timeReminder"],
+      dateReminder:json["dateReminder"],
+      goal:json["goal"],
   );
 
   Map<String, dynamic> toMap() => {
@@ -52,6 +61,9 @@ class Task {
     "frequency": frequency,
     "date": date,
     "time":time,
+    "dateReminder":dateReminder,
+    "timeReminder":timeReminder,
+    "goal":goal,
   };
 }
 

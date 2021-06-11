@@ -24,8 +24,8 @@ class _CategoryLayoutState extends State<CategoryLayout> {
         today.year.toString()+"-"+today.month.toString()+"-"+today.day.toString();
     String dateTomorrow =
         tomorrow.year.toString()+"-"+tomorrow.month.toString()+"-"+tomorrow.day.toString();
-    List<Task> tasksToday = await DBProvider.db.getByDate(dateToday);
-    List<Task> tasktomorrow= await DBProvider.db.getByDate(dateTomorrow);
+    List<Task> tasksToday = await DBProvider.db.getByDate(dateToday,dateToday);
+    List<Task> tasktomorrow= await DBProvider.db.getByDate(dateTomorrow,dateTomorrow);
     List<Task> tasktemporary =await DBProvider.db.getTemporary("temporary");
     bool isExist;
     if(tasksToday.isNotEmpty||tasktomorrow.isNotEmpty||tasktemporary.isNotEmpty){

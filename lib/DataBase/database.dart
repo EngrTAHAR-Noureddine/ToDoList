@@ -4,7 +4,9 @@ import 'dart:io';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:todolist/Models/goal_model.dart';
 import 'package:todolist/Models/task_model.dart';
+import 'package:todolist/Models/user_model.dart';
 
 class DBProvider {
   DBProvider._();
@@ -35,9 +37,39 @@ class DBProvider {
           "status TEXT,"
           "frequency TEXT,"
           "date TEXT,"
-          "time TEXT"
+          "time TEXT,"
+          "goal TEXT,"
+          "dateReminder TEXT,"
+          "timeReminder TEXT"
+          ")");
+
+      await db.execute("CREATE TABLE Goal ("
+          "id INTEGER PRIMARY KEY,"
+          "goal TEXT,"
+          "reason TEXT,"
+          "note TEXT"
+          ")");
+      await db.execute("CREATE TABLE Draft  ("
+          "id INTEGER PRIMARY KEY,"
+          "task TEXT,"
+          "category TEXT,"
+          "note TEXT,"
+          "status TEXT,"
+          "frequency TEXT,"
+          "date TEXT,"
+          "time TEXT,"
+          "dateReminder TEXT,"
+          "timeReminder TEXT"
+          ")");
+      await db.execute("CREATE TABLE User  ("
+          "id INTEGER PRIMARY KEY,"
+          "darkMode TEXT,"
+          "passWord TEXT,"
+          "linkAgenda TEXT"
           ")");
     });
+
+
   }
 
 //insert new task
@@ -86,10 +118,10 @@ class DBProvider {
     return list;
   }
   //get all task by date
-  ///date form : yyyy-mm-dd-hh-mm
-  Future<List<Task>> getByDate(String date) async {
+  ///date form : yyyy-mm-dd
+  Future<List<Task>> getByDate(String date,String dateReminder) async {
     final db = await database;
-    var res = await db.query("Task", where: "date = ?", whereArgs: [date]);
+    var res = await db.query("Task", where: "date = ? OR dateReminder = ?", whereArgs: [date,dateReminder]);
     List<Task> list =
     res.isNotEmpty ? res.map((c) => Task.fromMap(c)).toList() : [];
     return list;
@@ -106,10 +138,10 @@ class DBProvider {
     return list;
   }
 //update task
-  updateTask(Task newClient) async {
+  updateTask(Task newTask) async {
     final db = await database;
-    var res = await db.update("Task", newClient.toMap(),
-        where: "id = ?", whereArgs: [newClient.id]);
+    var res = await db.update("Task", newTask.toMap(),
+        where: "id = ?", whereArgs: [newTask.id]);
     return res;
   }
 
@@ -133,6 +165,72 @@ class DBProvider {
     } catch(error){
       throw Exception('DbBase.cleanDatabase: ' + error.toString());
     }
+  }
+
+//***************************************  Goal ***********
+//insert new Goal
+  newGoal(Goal newGoal) async {
+    final db = await database;
+    var res = await db.insert("Goal", newGoal.toMap());
+    return res;
+  }
+//get all Goals
+  Future<List<Goal>> getAllGoals() async {
+    final db = await database;
+    var res = await db.query("Goal");
+    List<Goal> list =
+    res.isNotEmpty ? res.map((c) => Goal.fromMap(c)).toList() : [];
+    return list;
+  }
+//update Goal
+  updateGoal(Goal newGoal) async {
+    final db = await database;
+    var res = await db.update("Goal", newGoal.toMap(),
+        where: "id = ?", whereArgs: [newGoal.id]);
+    return res;
+  }
+
+
+  // delete Goal
+  deleteGoal(int id) async {
+    final db = await database;
+    db.delete("Goal", where: "id = ?", whereArgs: [id]);
+  }
+// delete all
+  deleteAllGoal() async {
+    final db = await database;
+    //db.rawDelete("Delete * from History");
+    try{
+
+      await db.transaction((txn) async {
+        var batch = txn.batch();
+        batch.delete("Goal");
+        await batch.commit();
+      });
+    } catch(error){
+      throw Exception('DbBase.cleanDatabase: ' + error.toString());
+    }
+  }
+
+  //*************************** User *********
+//insert new User
+  newUser(User newGoal) async {
+    final db = await database;
+    var res = await db.insert("User", newGoal.toMap());
+    return res;
+  }
+//update User
+  updateUser(User newUser) async {
+    final db = await database;
+    var res = await db.update("User", newUser.toMap(),
+        where: "id = ?", whereArgs: [newUser.id]);
+    return res;
+  }
+  // get User with id
+  getUser(int id) async {
+    final db = await database;
+    var res =await  db.query("User", where: "id = ?", whereArgs: [id]);
+    return res.isNotEmpty ? Task.fromMap(res.first) : Null ;
   }
 
 }

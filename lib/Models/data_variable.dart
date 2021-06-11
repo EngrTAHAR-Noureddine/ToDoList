@@ -9,6 +9,7 @@ class Variables{
 
   int _idOfList;
   List<String> _categories =[];
+  List<String> status = ["Important", "Temporary","Less important","In progress","Finished","Voluntary"];
   ///have : today, tomorrow, Temporary(is status)
   Map<String,int> _tasks;
 
