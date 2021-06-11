@@ -106,7 +106,7 @@ class _AddNewTasksState extends State<AddNewTasks> {
                 itemBuilder: (context) {
                   var list = List<PopupMenuEntry<int>>();
 
-                  List ItemUnit = [1,2,3,4,6,7,8,9,10];
+                  List ItemUnit = [1,2,3,4,6,"7",8,"9","10"];
                   ItemUnit.forEach((element) {
 
                     list.add(
