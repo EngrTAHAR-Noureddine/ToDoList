@@ -43,7 +43,9 @@ class _CategoryLayoutState extends State<CategoryLayout> {
     List<Map> list = await DBProvider.db.getCategories();
 
     List<Category> listCat = list.map((c) => Category.fromMap(c)).toList();
-
+    List<String> Categorieslist = [];
+    listCat.forEach((element) { Categorieslist.add(element.category); });
+    Variables().setCat(Categorieslist);
     return (listCat.isNotEmpty)?listCat:[];
   }
 

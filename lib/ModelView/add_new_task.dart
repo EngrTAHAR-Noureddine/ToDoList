@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:todolist/Models/data_variable.dart';
 
 class AddNewTasks extends StatefulWidget {
 
@@ -8,7 +9,8 @@ class AddNewTasks extends StatefulWidget {
 }
 
 class _AddNewTasksState extends State<AddNewTasks> {
-  bool b= false;
+  String _categorySelected = "Category";
+  bool _addCategory = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,120 +41,341 @@ class _AddNewTasksState extends State<AddNewTasks> {
           scrollDirection: Axis.vertical,
           children: [
             Container(
-              height: 70,
+              height: 100,
               width: MediaQuery.of(context).size.width,
               color: Colors.white,
               margin: EdgeInsets.all(2),
-              child:TextField(
-                textAlign: TextAlign.left,
-                style: TextStyle(fontSize: 18,color: Theme.of(context).floatingActionButtonTheme.backgroundColor ),
-                maxLines: 1,
-                maxLength: 100,
-                showCursor: true,
+              padding: EdgeInsets.only(left: 10),
+              child:Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Align(
 
-                controller: TextEditingController(),
-                autofocus: false,
-                minLines: 1,
-                keyboardType: TextInputType.text,
-
-                decoration: InputDecoration(
-                  alignLabelWithHint: true,
-                    prefixIcon: Icon(Icons.task),
-                    labelText: "Task name",
-                  labelStyle: TextStyle(fontSize: 16,color: Theme.of(context).floatingActionButtonTheme.backgroundColor ),
-
-                  counterStyle: TextStyle(
-                    height: double.minPositive,
+                      child: Text("Task name :",style:TextStyle(color:Color(0xFF979DB0),fontWeight:FontWeight.bold ,fontSize:20,fontFamily: "Roboto"),),
+                      alignment: Alignment.centerLeft
                   ),
-                  counterText: "",
-                  focusedBorder:OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
+                  TextField(
+                    textAlign: TextAlign.left,
+                    style: TextStyle(fontSize: 18,color: Theme.of(context).floatingActionButtonTheme.backgroundColor ),
+                    maxLines: 1,
+                    maxLength: 100,
+                    showCursor: true,
 
-                    borderSide: BorderSide(
-                      color: Theme.of(context).floatingActionButtonTheme.backgroundColor,
-                      width: 1,
-                      style: BorderStyle.solid,
-                    ),
-                  ),
-                  hintText: "Task name",
-                  hintStyle: TextStyle(color: Theme.of(context).floatingActionButtonTheme.backgroundColor),
+                    controller: TextEditingController(),
+                    autofocus: false,
+                    minLines: 1,
+                    keyboardType: TextInputType.text,
 
-                  enabledBorder:  OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
+                    decoration: InputDecoration(
+                      alignLabelWithHint: true,
+                        prefixIcon: Icon(Icons.task),
+                        labelText: "Task name",
+                      labelStyle: TextStyle(fontSize: 16,color: Theme.of(context).floatingActionButtonTheme.backgroundColor ),
 
-                    borderSide: BorderSide(
-                      color: Theme.of(context).splashColor,
-                      width: 1,
-                      style: BorderStyle.solid,
-                    ),
-                  ),
-
-                ),
-                toolbarOptions: ToolbarOptions(
-                  cut: true,
-                  copy: true,
-                  selectAll: true,
-                  paste: true,
-                ),
-              ),
-            ),
-            Container(
-              height: 70,
-              width: MediaQuery.of(context).size.width,
-              color:(b)? Colors.blue:Colors.amberAccent,
-              margin: EdgeInsets.all(2),
-              child:  PopupMenuButton<int>(
-
-                itemBuilder: (context) {
-                  var list = List<PopupMenuEntry<int>>();
-
-                  List ItemUnit = [1,2,3,4,6,"7",8,"9","10"];
-                  ItemUnit.forEach((element) {
-
-                    list.add(
-                      PopupMenuItem(
-                        child: Text(element.toString()),
-                        value: ItemUnit.indexOf(element),
+                      counterStyle: TextStyle(
+                        height: double.minPositive,
                       ),
-                    );
+                      counterText: "",
+                      focusedBorder:OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
 
-                  });
+                        borderSide: BorderSide(
+                          color: Theme.of(context).floatingActionButtonTheme.backgroundColor,
+                          width: 1,
+                          style: BorderStyle.solid,
+                        ),
+                      ),
+                      hintText: "Task name",
+                      hintStyle: TextStyle(color: Theme.of(context).floatingActionButtonTheme.backgroundColor),
 
-                  return list;
-                },
-                // initialValue: indexFromUnit,
-                onCanceled: () {
-                  print("You have canceled the menu.");
-                },
-                onSelected: (value) {
-                  print("You have canceled the menu.");
-                },
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
 
-                child: Container(
-                  margin: EdgeInsets.only(bottom: 10),
-                  decoration: ShapeDecoration(
-                    color: Color(0xFFF4F4F4),
+                        borderSide: BorderSide(
+                          color: Theme.of(context).floatingActionButtonTheme.backgroundColor,
+                          width: 1,
+                          style: BorderStyle.solid,
+                        ),
+                      ),
 
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)
+                    ),
+                    toolbarOptions: ToolbarOptions(
+                      cut: true,
+                      copy: true,
+                      selectAll: true,
+                      paste: true,
                     ),
                   ),
-                  child: ListTile(
-                    trailing: Icon(Icons.keyboard_arrow_down_rounded , color: Color(0xFF363636),),
-                    title: RichText(
-                        softWrap: true,
-                        text: TextSpan(text: "fromUnit" , style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal , color: Color(0xFF363636), ))),
+                ],
+              ),
+            ),
+            Container(
+              height: 100,
+              width: MediaQuery.of(context).size.width,
+              color: Theme.of(context).backgroundColor,
+              margin: EdgeInsets.all(2),
+              padding: EdgeInsets.only(left: 10),
+              child:  Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Align(
 
+                      child: Text("Category :",style:TextStyle(color:Color(0xFF979DB0),fontWeight:FontWeight.bold ,fontSize:20,fontFamily: "Roboto"),),
+                  alignment: Alignment.centerLeft
                   ),
-                ),
+                  ListTile(
+                    contentPadding: EdgeInsets.symmetric(vertical: 0.0, horizontal:
+                    0.0),
+                    dense: true,
+                    trailing: CircleAvatar(
+                      backgroundColor: (!_addCategory)?Colors.blue:Colors.redAccent,
+
+                      radius: 25,
+
+                      child: IconButton(
+                          icon:Icon((!_addCategory)?Icons.add_rounded:Icons.close_rounded),
+                          color : Colors.white,
+                          iconSize:25,
+
+                        padding: EdgeInsets.all(0),
+                        onPressed: (){
+                            setState(() {
+                              _addCategory = !_addCategory;
+
+                            });
+                        },
+                        alignment: Alignment.center,
+
+
+                      ),
+                    ),
+                    horizontalTitleGap: null,
+                    visualDensity: VisualDensity.standard,
+                    title: (!_addCategory)?PopupMenuButton<int>(
+                              color: Theme.of(context).cardColor,
+                      padding: EdgeInsets.zero,
+                      elevation: 4,
+
+                      itemBuilder: (context) {
+                        var list = List<PopupMenuEntry<int>>();
+
+                        List<String> itemCategories = (Variables().getCat().isNotEmpty)?Variables().getCat():[" "];
+                        setState(() {
+                          _categorySelected = itemCategories[0];
+                        });
+                        itemCategories.forEach((element) {
+
+                          list.add(
+                            PopupMenuItem(
+                              padding: EdgeInsets.all(0),
+
+                              child: Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  height: 50,
+                                  margin: EdgeInsets.all(10),
+                                  padding: EdgeInsets.all(10),
+                                  alignment: Alignment.centerLeft,
+                                  decoration: ShapeDecoration(
+                                    color: Theme.of(context).accentColor,
+
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(20)
+                                    ),
+                                  ),
+                                  child: Text(element.toString(),style:TextStyle(color:Theme.of(context).floatingActionButtonTheme.focusColor ,fontSize:16,fontFamily: "Roboto"),)),
+                              value: itemCategories.indexOf(element),
+                            ),
+                          );
+
+                        });
+
+                        return list;
+                      },
+                      // initialValue: indexFromUnit,
+                      onCanceled: () {
+                        print("You have canceled the menu.");
+                      },
+                      onSelected: (value) {
+                      setState(() {
+                        _categorySelected = Variables().getCat()[value];
+                      });
+                      },
+
+                      child: Container(
+                        margin: EdgeInsets.all(0),
+                        decoration: ShapeDecoration(
+                          color: Theme.of(context).accentColor,//Color(0xFFF4F4F4),
+
+                          shape: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+
+                            borderSide: BorderSide(
+                              color: Theme.of(context).floatingActionButtonTheme.backgroundColor,
+                              width: 1,
+                              style: BorderStyle.solid,
+                            ),
+                          ),
+                        ),
+                        child: ListTile(
+
+                          trailing: Icon(Icons.keyboard_arrow_down_rounded , color: Color(0xFF363636),),
+                          title: RichText(
+                              softWrap: true,
+                              text: TextSpan(text: _categorySelected , style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal , color: Color(0xFF363636), ))),
+
+                        ),
+                      ),
+                    ):TextField(
+                      textAlign: TextAlign.left,
+                      style: TextStyle(fontSize: 18,color: Theme.of(context).floatingActionButtonTheme.backgroundColor ),
+                      maxLines: 1,
+                      maxLength: 20,
+                      showCursor: true,
+
+                      controller: TextEditingController(),
+                      autofocus: false,
+                      minLines: 1,
+                      keyboardType: TextInputType.text,
+
+                      decoration: InputDecoration(
+                        alignLabelWithHint: true,
+                        prefixIcon: Icon(Icons.category),
+                        labelText: "Category name",
+                        labelStyle: TextStyle(fontSize: 16,color: Theme.of(context).floatingActionButtonTheme.backgroundColor ),
+
+                        counterStyle: TextStyle(
+                          height: double.minPositive,
+                        ),
+                        counterText: "",
+
+                        focusedBorder:OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+
+                          borderSide: BorderSide(
+                            color: Theme.of(context).floatingActionButtonTheme.backgroundColor,
+                            width: 1,
+                            style: BorderStyle.solid,
+                          ),
+                        ),
+                        hintText: "Category name",
+                        hintStyle: TextStyle(color: Theme.of(context).floatingActionButtonTheme.backgroundColor),
+
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+
+                          borderSide: BorderSide(
+                            color: Theme.of(context).floatingActionButtonTheme.backgroundColor,
+                            width: 1,
+                            style: BorderStyle.solid,
+                          ),
+                        ),
+
+                      ),
+                      toolbarOptions: ToolbarOptions(
+                        cut: true,
+                        copy: true,
+                        selectAll: true,
+                        paste: true,
+                      ),
+                    ),
+                  ),
+                ],
               ),
 
             ),
             Container(
-              height: 70,
+              height: 100,
               width: MediaQuery.of(context).size.width,
-              color: Colors.blue,
+              color: Theme.of(context).backgroundColor,
               margin: EdgeInsets.all(2),
+              padding: EdgeInsets.only(left: 10),
+              child:  Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Align(
+
+                      child: Text("Status :",style:TextStyle(color:Color(0xFF979DB0),fontWeight:FontWeight.bold ,fontSize:20,fontFamily: "Roboto"),),
+                      alignment: Alignment.centerLeft
+                  ),
+                   PopupMenuButton<int>(
+                      color: Theme.of(context).cardColor,
+                      padding: EdgeInsets.zero,
+                      elevation: 4,
+
+                      itemBuilder: (context) {
+                        var list = List<PopupMenuEntry<int>>();
+
+                        List<String> itemStatus = ["Important", "Temporary","Less important",];
+
+                        itemStatus.forEach((element) {
+
+                          list.add(
+                            PopupMenuItem(
+                              padding: EdgeInsets.all(0),
+
+                              child: Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  height: 50,
+                                  margin: EdgeInsets.all(10),
+                                  padding: EdgeInsets.all(10),
+                                  alignment: Alignment.centerLeft,
+                                  decoration: ShapeDecoration(
+                                    color: Theme.of(context).accentColor,
+
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(20)
+                                    ),
+                                  ),
+                                  child: Text(element.toString(),style:TextStyle(color:Theme.of(context).floatingActionButtonTheme.focusColor ,fontSize:16,fontFamily: "Roboto"),)),
+                              value: itemStatus.indexOf(element),
+                            ),
+                          );
+
+                        });
+
+                        return list;
+                      },
+                      // initialValue: indexFromUnit,
+                      onCanceled: () {
+                        print("You have canceled the menu.");
+                      },
+                      onSelected: (value) {
+                        setState(() {
+                          _categorySelected = Variables().getCat()[value];
+                        });
+                      },
+
+                      child: Container(
+                        margin: EdgeInsets.all(0),
+                        decoration: ShapeDecoration(
+                          color: Theme.of(context).accentColor,//Color(0xFFF4F4F4),
+
+                          shape: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+
+                            borderSide: BorderSide(
+                              color: Theme.of(context).floatingActionButtonTheme.backgroundColor,
+                              width: 1,
+                              style: BorderStyle.solid,
+                            ),
+                          ),
+                        ),
+                        child: ListTile(
+
+                          trailing: Icon(Icons.keyboard_arrow_down_rounded , color: Color(0xFF363636),),
+                          title: RichText(
+                              softWrap: true,
+                              text: TextSpan(text: _categorySelected , style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal , color: Color(0xFF363636), ))),
+
+                        ),
+                      ),
+                    )
+
+                ],
+              ),
 
             ),
             Container(

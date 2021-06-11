@@ -8,8 +8,8 @@ class Variables{
   Variables._internal();
 
   int _idOfList;
-  List<String> _categories;
-  ///have : today, tomorrow, temporary(is status)
+  List<String> _categories =[];
+  ///have : today, tomorrow, Temporary(is status)
   Map<String,int> _tasks;
 
   setTask(String name, int value){
