@@ -310,7 +310,7 @@ class _AddNewTasksState extends State<AddNewTasks> {
                         var list = List<PopupMenuEntry<int>>();
 
                         List<String> itemStatus = Variables().status;
-
+                        itemStatus.removeWhere((element) => element == "Finished");
                         itemStatus.forEach((element) {
 
                           list.add(
