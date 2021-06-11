@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:todolist/Models/draft_model.dart';
 import 'package:todolist/Models/goal_model.dart';
 import 'package:todolist/Models/task_model.dart';
 import 'package:todolist/Models/user_model.dart';
@@ -231,6 +232,59 @@ class DBProvider {
     final db = await database;
     var res =await  db.query("User", where: "id = ?", whereArgs: [id]);
     return res.isNotEmpty ? Task.fromMap(res.first) : Null ;
+  }
+
+//******************************** Draft ****************
+
+//insert new Draft
+  newDraft(Draft newDraft) async {
+    final db = await database;
+    var res = await db.insert("Draft", newDraft.toMap());
+    return res;
+  }
+  // get Draft with id
+  getDraft(int id) async {
+    final db = await database;
+    var res =await  db.query("Draft", where: "id = ?", whereArgs: [id]);
+    return res.isNotEmpty ? Task.fromMap(res.first) : Null ;
+  }
+
+  //get all Drafts
+  Future<List<Draft>> getAllDraft() async {
+    final db = await database;
+    var res = await db.query("Draft");
+    List<Draft> list =
+    res.isNotEmpty ? res.map((c) => Draft.fromMap(c)).toList() : [];
+    return list;
+  }
+//update Draft
+  updateDraft(Draft newDraft) async {
+    final db = await database;
+    var res = await db.update("Draft", newDraft.toMap(),
+        where: "id = ?", whereArgs: [newDraft.id]);
+    return res;
+  }
+
+  // delete Draft
+  deleteDraft(int id) async {
+    final db = await database;
+    db.delete("Draft", where: "id = ?", whereArgs: [id]);
+  }
+
+// delete all Draft
+  deleteAllDrafts() async {
+    final db = await database;
+    //db.rawDelete("Delete * from History");
+    try{
+
+      await db.transaction((txn) async {
+        var batch = txn.batch();
+        batch.delete("Draft");
+        await batch.commit();
+      });
+    } catch(error){
+      throw Exception('DbBase.cleanDatabase: ' + error.toString());
+    }
   }
 
 }

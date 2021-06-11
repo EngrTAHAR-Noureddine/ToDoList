@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:todolist/Models/data_variable.dart';
+import 'package:todolist/Models/draft_model.dart';
 
 class AddNewTasks extends StatefulWidget {
 
@@ -9,7 +10,14 @@ class AddNewTasks extends StatefulWidget {
 }
 
 class _AddNewTasksState extends State<AddNewTasks> {
+
   final _formKey = GlobalKey<FormState>();
+  TextEditingController _taskName = new TextEditingController();
+  TextEditingController _addCategoryText =new TextEditingController();
+  TextEditingController _addFrequencyText =new TextEditingController();
+  TextEditingController _addNoteText =new TextEditingController();
+
+
   String _categorySelected = "Category";
   String _statusSelected = "Status";
   String _frequencySelected = "Once";
@@ -103,7 +111,11 @@ class _AddNewTasksState extends State<AddNewTasks> {
           iconTheme: IconThemeData(color: Color(0xFF8F8FA8) ),
           leading:  CloseButton(
             color: Colors.blue,
-            onPressed: (){print("close widget ;) coco"); Navigator.pop(context);},
+            onPressed: (){
+              Draft taskAsDraft = new Draft(task: );
+
+              Navigator.pop(context);
+              },
           ),
           actions: [
             Container(
@@ -125,13 +137,14 @@ class _AddNewTasksState extends State<AddNewTasks> {
           key: _formKey,
           child: Container(
             color: Theme.of(context).backgroundColor,
+            padding: EdgeInsets.only(right: 10),
             child: ListView(
               scrollDirection: Axis.vertical,
               children: [
                 Container(
                   height: 100,
                   width: MediaQuery.of(context).size.width,
-                  color: Colors.white,
+                  color: Theme.of(context).backgroundColor,
                   margin: EdgeInsets.all(2),
                   padding: EdgeInsets.only(left: 10),
                   child:Column(
@@ -144,14 +157,19 @@ class _AddNewTasksState extends State<AddNewTasks> {
                           alignment: Alignment.centerLeft
                       ),
                       TextFormField(
-
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter some text';
+                          }
+                          return null;
+                        },
                         textAlign: TextAlign.left,
                         style: TextStyle(fontSize: 18,color: Theme.of(context).floatingActionButtonTheme.backgroundColor ),
                         maxLines: 1,
                         maxLength: 100,
                         showCursor: true,
 
-                        controller: TextEditingController(),
+                        controller: _taskName,
                         autofocus: false,
                         minLines: 1,
                         keyboardType: TextInputType.text,
@@ -159,7 +177,7 @@ class _AddNewTasksState extends State<AddNewTasks> {
                         decoration: InputDecoration(
 
                           alignLabelWithHint: true,
-                            prefixIcon: Icon(Icons.task),
+                            prefixIcon: Icon(Icons.task,color: Theme.of(context).floatingActionButtonTheme.backgroundColor),
                             labelText: "Task name",
                           labelStyle: TextStyle(fontSize: 16,color: Theme.of(context).floatingActionButtonTheme.backgroundColor ),
 
@@ -251,10 +269,8 @@ class _AddNewTasksState extends State<AddNewTasks> {
                           itemBuilder: (context) {
                             var list = List<PopupMenuEntry<int>>();
 
-                            List<String> itemCategories = (Variables().getCat().isNotEmpty)?Variables().getCat():[" "];
-                            setState(() {
-                              _categorySelected = itemCategories[0];
-                            });
+                            List<String> itemCategories = (Variables().getCat().isNotEmpty)?Variables().getCat():[];
+
                             itemCategories.forEach((element) {
 
                               list.add(
@@ -310,28 +326,34 @@ class _AddNewTasksState extends State<AddNewTasks> {
                             ),
                             child: ListTile(
 
-                              trailing: Icon(Icons.keyboard_arrow_down_rounded , color: Color(0xFF363636),),
+                              trailing: Icon(Icons.keyboard_arrow_down_rounded , color:  Theme.of(context).floatingActionButtonTheme.backgroundColor,),
                               title: RichText(
                                   softWrap: true,
-                                  text: TextSpan(text: _categorySelected , style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal , color: Color(0xFF363636), ))),
+                                  text: TextSpan(text: _categorySelected , style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal , color: Theme.of(context).floatingActionButtonTheme.backgroundColor, ))),
 
                             ),
                           ),
-                        ):TextField(
+                        ):TextFormField(
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter some text';
+                            }
+                            return null;
+                          },
                           textAlign: TextAlign.left,
                           style: TextStyle(fontSize: 18,color: Theme.of(context).floatingActionButtonTheme.backgroundColor ),
                           maxLines: 1,
                           maxLength: 20,
                           showCursor: true,
 
-                          controller: TextEditingController(),
+                          controller: _addCategoryText,
                           autofocus: false,
                           minLines: 1,
                           keyboardType: TextInputType.text,
 
                           decoration: InputDecoration(
                             alignLabelWithHint: true,
-                            prefixIcon: Icon(Icons.category),
+                            prefixIcon: Icon(Icons.category,color: Theme.of(context).floatingActionButtonTheme.backgroundColor),
                             labelText: "Category name",
                             labelStyle: TextStyle(fontSize: 16,color: Theme.of(context).floatingActionButtonTheme.backgroundColor ),
 
@@ -455,10 +477,10 @@ class _AddNewTasksState extends State<AddNewTasks> {
                             ),
                             child: ListTile(
 
-                              trailing: Icon(Icons.keyboard_arrow_down_rounded , color: Color(0xFF363636),),
+                              trailing: Icon(Icons.keyboard_arrow_down_rounded , color: Theme.of(context).floatingActionButtonTheme.backgroundColor,),
                               title: RichText(
                                   softWrap: true,
-                                  text: TextSpan(text: _statusSelected , style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal , color: Color(0xFF363636), ))),
+                                  text: TextSpan(text: _statusSelected , style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal ,color: Theme.of(context).floatingActionButtonTheme.backgroundColor, ))),
 
                             ),
                           ),
@@ -578,28 +600,28 @@ class _AddNewTasksState extends State<AddNewTasks> {
                             ),
                             child: ListTile(
 
-                              trailing: Icon(Icons.keyboard_arrow_down_rounded , color: Color(0xFF363636),),
+                              trailing: Icon(Icons.keyboard_arrow_down_rounded , color: Theme.of(context).floatingActionButtonTheme.backgroundColor,),
                               title: RichText(
                                   softWrap: true,
-                                  text: TextSpan(text: _frequencySelected , style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal , color: Color(0xFF363636), ))),
+                                  text: TextSpan(text: _frequencySelected , style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal , color: Theme.of(context).floatingActionButtonTheme.backgroundColor, ))),
 
                             ),
                           ),
-                        ):TextField(
+                        ):TextFormField(
                           textAlign: TextAlign.left,
                           style: TextStyle(fontSize: 18,color: Theme.of(context).floatingActionButtonTheme.backgroundColor ),
                           maxLines: 1,
                           maxLength: 20,
                           showCursor: true,
 
-                          controller: TextEditingController(),
+                          controller: _addFrequencyText,
                           autofocus: false,
                           minLines: 1,
                           keyboardType: TextInputType.number,
 
                           decoration: InputDecoration(
                             alignLabelWithHint: true,
-                            prefixIcon: Icon(Icons.category),
+                            prefixIcon: Icon(Icons.calendar_today,color: Theme.of(context).floatingActionButtonTheme.backgroundColor),
                             labelText: "Days number",
                             labelStyle: TextStyle(fontSize: 16,color: Theme.of(context).floatingActionButtonTheme.backgroundColor ),
 
@@ -675,7 +697,7 @@ class _AddNewTasksState extends State<AddNewTasks> {
                                     ),
                                     color: Theme.of(context).accentColor,
                                     child:
-                                    Text(selectedDate.day.toString()+"/"+selectedDate.month.toString()+"/"+selectedDate.year.toString() ,style: TextStyle(color:Theme.of(context).floatingActionButtonTheme.focusColor ,fontSize:20,fontFamily: "Roboto"),),
+                                    Text(selectedDate.day.toString()+"/"+selectedDate.month.toString()+"/"+selectedDate.year.toString() ,style: TextStyle(color: Theme.of(context).floatingActionButtonTheme.backgroundColor ,fontSize:20,fontFamily: "Roboto"),),
 
                                   ),),
                               SizedBox(
@@ -695,7 +717,7 @@ class _AddNewTasksState extends State<AddNewTasks> {
                                   ),
                                   color: Theme.of(context).accentColor,
                                   child:
-                                  Text(_time.toString() ,style: TextStyle(color:Theme.of(context).floatingActionButtonTheme.focusColor ,fontSize:20,fontFamily: "Roboto"),),
+                                  Text(_time.toString() ,style: TextStyle(color: Theme.of(context).floatingActionButtonTheme.backgroundColor ,fontSize:20,fontFamily: "Roboto"),),
 
                                 ),),
                             ],
@@ -736,7 +758,7 @@ class _AddNewTasksState extends State<AddNewTasks> {
                                   ),
                                   color: Theme.of(context).accentColor,
                                   child:
-                                  Text(selectedReminder.day.toString()+"/"+selectedReminder.month.toString()+"/"+selectedReminder.year.toString() ,style: TextStyle(color:Theme.of(context).floatingActionButtonTheme.focusColor ,fontSize:20,fontFamily: "Roboto"),),
+                                  Text(selectedReminder.day.toString()+"/"+selectedReminder.month.toString()+"/"+selectedReminder.year.toString() ,style: TextStyle(color: Theme.of(context).floatingActionButtonTheme.backgroundColor ,fontSize:20,fontFamily: "Roboto"),),
 
                                 ),),
                               SizedBox(
@@ -756,7 +778,7 @@ class _AddNewTasksState extends State<AddNewTasks> {
                                   ),
                                   color: Theme.of(context).accentColor,
                                   child:
-                                  Text(_timeR.toString() ,style: TextStyle(color:Theme.of(context).floatingActionButtonTheme.focusColor ,fontSize:20,fontFamily: "Roboto"),),
+                                  Text(_timeR.toString() ,style: TextStyle(color: Theme.of(context).floatingActionButtonTheme.backgroundColor ,fontSize:20,fontFamily: "Roboto"),),
 
                                 ),),
                             ],
@@ -787,14 +809,14 @@ class _AddNewTasksState extends State<AddNewTasks> {
                     maxLength: 100,
                     showCursor: true,
 
-                    controller: TextEditingController(),
+                    controller: _addNoteText,
                     autofocus: false,
                     minLines: 5,
                     keyboardType: TextInputType.text,
 
                     decoration: InputDecoration(
                       alignLabelWithHint: true,
-                      prefixIcon: Icon(Icons.note_add),
+                      prefixIcon: Icon(Icons.note_add,color: Theme.of(context).floatingActionButtonTheme.backgroundColor),
                       labelText: "Note",
                       labelStyle: TextStyle(fontSize: 16,color: Theme.of(context).floatingActionButtonTheme.backgroundColor ),
 
