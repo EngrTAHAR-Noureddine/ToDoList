@@ -14,6 +14,64 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  final TextEditingController _textEditingController = TextEditingController();
+
+
+  Future<void> showInformationDialog(BuildContext context) async {
+    return await showDialog(
+        context: context,
+        builder: (context) {
+          bool isChecked = false;
+          return StatefulBuilder(builder: (context, setState) {
+            return AlertDialog(
+              content: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TextFormField(
+                        controller: _textEditingController,
+                        validator: (value) {
+                          return value.isNotEmpty ? null : "Enter any text";
+                        },
+                        decoration:
+                        InputDecoration(hintText: "Please Enter Text"),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("Choice Box"),
+                          Checkbox(
+                              value: isChecked,
+                              onChanged: (checked) {
+                                setState(() {
+                                  isChecked = checked;
+                                });
+                              })
+                        ],
+                      )
+                    ],
+                  )),
+              title: Text('Stateful Dialog'),
+              actions: <Widget>[
+                InkWell(
+                  child: Text('OK   '),
+                  onTap: () {
+                    if (_formKey.currentState.validate()) {
+                      // Do something like updating SharedPreferences or User Settings etc.
+                      Navigator.of(context).pop();
+                    }
+                  },
+                ),
+              ],
+            );
+          });
+        });
+  }
+
+
   @override
   Widget build(BuildContext context) {
    /* SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -64,20 +122,16 @@ class _HomeState extends State<Home> {
             elevation: 0,
             child: Icon(Icons.add ,color: Theme.of(context).splashColor,),
             backgroundColor: Theme.of(context).primaryColor,
-            onPressed: (){
+            onPressed: () async {
+
               Navigator.push(
                 context,
                 MaterialPageRoute<void>(
-                  builder: (BuildContext context) => FullScreenDialog(),
+                  builder: (BuildContext context) => AddNewTasks(),
                   fullscreenDialog: true,
                 ),
               );
-             /*return  Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AddNewTasks(),
-                ),
-              );*/
+
 
             },
           ),
@@ -100,36 +154,5 @@ class _HomeState extends State<Home> {
   }
 }
 
-class FullScreenDialog extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        brightness: Theme.of(context).primaryColorBrightness,
-        backgroundColor: Theme.of(context).backgroundColor,
-        elevation: 0,
-        iconTheme: IconThemeData(color: Color(0xFF8F8FA8) ),
-        actions: [
-          Container(
-            margin: EdgeInsets.only(right: 20),
-            child: Align(
-                alignment: Alignment.center,
-                child: Text("Save",
-                              style: TextStyle(
-                                        color:Color(0xFF8F8FA8) ,
-                                        fontSize:20,
-                                        fontFamily: "Roboto"),)
-            ),
-          ),
 
-        ],
-        title: Text('Add New Task',style: TextStyle(color:Color(0xFF979DB0)),),
-      ),
-      body:Container(
-        color: Theme.of(context).backgroundColor,
-        
-      ),
-    );
-  }
-}
 
