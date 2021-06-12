@@ -29,7 +29,6 @@ class _AddNewTasksState extends State<AddNewTasks> {
             return AlertDialog(
               backgroundColor:Theme.of(context).floatingActionButtonTheme.hoverColor,
 
-              // Color(0xFF262626),//Theme.of(context).backgroundColor,
               shape: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10.0),
               ),
@@ -414,7 +413,12 @@ bool enabled = true;
 
                                   itemBuilder: (context) {
                                     if ((Variables().getCat().isNotEmpty)) {
-                                      itemCategories.addAll(Variables().getCat());
+                                      Variables().getCat().forEach((element) {
+                                        if(!itemCategories.contains(element)){
+                                          itemCategories.add(element);
+                                        }
+                                      });
+
                                     }
 
                                     return itemCategories
