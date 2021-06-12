@@ -111,6 +111,12 @@ bool enabled = true;
   Future<Null> _selectTimeReminder(BuildContext context) async {
     String _hour, _minute;
     final TimeOfDay picked = await showTimePicker(
+      builder: (BuildContext context, Widget child) {
+        return Theme(
+          data: Variables().mode(context),
+          child: child,
+        );
+      },
       context: context,
       initialTime: selectedTimeReminder,
     );
@@ -128,6 +134,12 @@ bool enabled = true;
 
   _selectReminder(BuildContext context) async {
     final DateTime picked = await showDatePicker(
+      builder: (BuildContext context, Widget child) {
+        return Theme(
+          data: Variables().mode(context),
+          child: child,
+        );
+      },
       context: context,
       initialDate: selectedReminder, // Refer step 1
       firstDate: DateTime(2000),
