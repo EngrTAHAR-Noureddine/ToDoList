@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:todolist/DataBase/database.dart';
 import 'package:todolist/Models/data_variable.dart';
 import 'package:todolist/Models/draft_model.dart';
+import 'package:todolist/Models/task_model.dart';
 
 class AddNewTasks extends StatefulWidget {
 
@@ -16,6 +18,7 @@ class _AddNewTasksState extends State<AddNewTasks> {
   TextEditingController _addCategoryText =new TextEditingController();
   TextEditingController _addFrequencyText =new TextEditingController();
   TextEditingController _addNoteText =new TextEditingController();
+  TextEditingController _addGoal =new TextEditingController();
 
 
   String _categorySelected = "Category";
@@ -43,7 +46,7 @@ class _AddNewTasksState extends State<AddNewTasks> {
         selectedTimeReminder = picked;
         _hour = selectedTimeReminder.hour.toString();
         _minute = selectedTimeReminder.minute.toString();
-        _timeR = _hour + ' : ' + _minute;
+        _timeR = _hour + ':' + _minute;
 
       });
   }
@@ -74,7 +77,7 @@ class _AddNewTasksState extends State<AddNewTasks> {
         selectedTime = picked;
         _hour = selectedTime.hour.toString();
         _minute = selectedTime.minute.toString();
-        _time = _hour + ' : ' + _minute;
+        _time = _hour + ':' + _minute;
 
   });
         }
@@ -99,7 +102,20 @@ class _AddNewTasksState extends State<AddNewTasks> {
 
     return WillPopScope (
       onWillPop: () async{
-        print("close add ok -------------");
+        Draft taskAsDraft = new Draft(
+            task:_taskName.text,
+            timeReminder: _timeR,
+            dateReminder:selectedReminder.day.toString()+"/"+selectedReminder.month.toString()+"/"+selectedReminder.year.toString(),
+            category: _categorySelected,
+            frequency: _addFrequencyText.text,
+            date: selectedDate.day.toString()+"/"+selectedDate.month.toString()+"/"+selectedDate.year.toString(),
+            note: _addNoteText.text,
+            status: _statusSelected,
+            goal: _addGoal.text,
+            time: _time
+        );
+        DBProvider.db.newDraft(taskAsDraft);
+
         Navigator.pop(context);
         return false;
       },
@@ -112,7 +128,19 @@ class _AddNewTasksState extends State<AddNewTasks> {
           leading:  CloseButton(
             color: Colors.blue,
             onPressed: (){
-              Draft taskAsDraft = new Draft(task: );
+              Draft taskAsDraft = new Draft(
+                  task:_taskName.text,
+                  timeReminder: _timeR,
+                  dateReminder:selectedReminder.day.toString()+"/"+selectedReminder.month.toString()+"/"+selectedReminder.year.toString(),
+                  category: _categorySelected,
+                frequency: _addFrequencyText.text,
+                date: selectedDate.day.toString()+"/"+selectedDate.month.toString()+"/"+selectedDate.year.toString(),
+                note: _addNoteText.text,
+                status: _statusSelected,
+                goal: _addGoal.text,
+                time: _time
+              );
+              DBProvider.db.newDraft(taskAsDraft);
 
               Navigator.pop(context);
               },
@@ -120,13 +148,43 @@ class _AddNewTasksState extends State<AddNewTasks> {
           actions: [
             Container(
               margin: EdgeInsets.only(right: 20),
-              child: Align(
-                  alignment: Alignment.center,
-                  child: Text("Save",
-                    style: TextStyle(
-                        color:Color(0xFF8F8FA8) ,
-                        fontSize:20,
-                        fontFamily: "Roboto"),)
+              child: MaterialButton(
+                onPressed: (){
+                  if (_formKey.currentState.validate()) {
+                    Task task = new Task(
+                        task:_taskName.text,
+                        timeReminder: _timeR,
+                        dateReminder:selectedReminder.day.toString()+"/"+selectedReminder.month.toString()+"/"+selectedReminder.year.toString(),
+                        category: _categorySelected,
+                        frequency: _addFrequencyText.text,
+                        date: selectedDate.day.toString()+"/"+selectedDate.month.toString()+"/"+selectedDate.year.toString(),
+                        note: _addNoteText.text,
+                        status: _statusSelected,
+                        goal: _addGoal.text,
+                        time: _time
+                    );
+                    DBProvider.db.newTask(task);
+
+                    _formKey.currentState.save();
+
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(SnackBar(content: Text('Processing Data')));
+                    Navigator.pop(context);
+                    // 3
+
+                  }
+                },
+                color: Colors.transparent,
+                elevation: 0,
+
+                      child: Align(
+                          alignment: Alignment.center,
+                          child: Text("Save",
+                            style: TextStyle(
+                                color:Color(0xFF8F8FA8) ,
+                                fontSize:20,
+                                fontFamily: "Roboto"),)
+                ),
               ),
             ),
 
