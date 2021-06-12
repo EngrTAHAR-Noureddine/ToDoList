@@ -56,43 +56,7 @@ class _AddNewTasksState extends State<AddNewTasks> {
                       if (_formKeyDialogCat.currentState.validate()) {
                         setState((){
                           itemCategories.add(_textEditingController.text);
-                        list.add(
-                            PopupMenuItem(
-                              padding: EdgeInsets.all(0),
-
-                              child: StatefulBuilder(
-                                  builder: (BuildContext context, StateSetter setState) {
-                                    return Container(
-                                        width: MediaQuery
-                                            .of(context)
-                                            .size
-                                            .width,
-                                        height: 50,
-                                        margin: EdgeInsets.all(10),
-                                        padding: EdgeInsets.all(10),
-                                        alignment: Alignment.centerLeft,
-                                        decoration: ShapeDecoration(
-                                          color: Theme
-                                              .of(context)
-                                              .accentColor,
-
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius
-                                                  .circular(20)
-                                          ),
-                                        ),
-                                        child: Text(_textEditingController.text.toString(),
-                                          style: TextStyle(color: Theme
-                                              .of(context)
-                                              .floatingActionButtonTheme
-                                              .focusColor,
-                                              fontSize: 16,
-                                              fontFamily: "Roboto"),)
-
-                                    );
-                                  }),
-                              value: itemCategories.indexOf(_textEditingController.text)+1,
-                            ),);
+                          _categorySelected = _textEditingController.text;
                        });
                         Navigator.of(context).pop();
 
@@ -112,12 +76,15 @@ class _AddNewTasksState extends State<AddNewTasks> {
             );
           });
         });
+
+  setState(() { });
   }
 
 
   var list = List<PopupMenuEntry<int>>();
 
-  List<String> itemCategories =[];
+  List<String> itemCategories =["Add New Category"];
+
   final _formKey = GlobalKey<FormState>();
   FocusScopeNode currentFocus =new FocusScopeNode();
   TextEditingController _taskName = new TextEditingController();
@@ -175,6 +142,12 @@ bool enabled = true;
   Future<Null> _selectTime(BuildContext context) async {
     String _hour, _minute;
     final TimeOfDay picked = await showTimePicker(
+      builder: (BuildContext context, Widget child) {
+        return Theme(
+          data: Variables().mode(context),
+          child: child,
+        );
+      },
       context: context,
       initialTime: selectedTime,
     );
@@ -192,6 +165,12 @@ bool enabled = true;
 
   _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
+      builder: (BuildContext context, Widget child) {
+        return Theme(
+          data: Variables().mode(context),
+          child: child,
+        );
+      },
       context: context,
       initialDate: selectedDate, // Refer step 1
       firstDate: DateTime(2000),
@@ -390,338 +369,275 @@ bool enabled = true;
                   Container(
                   //  height: 100,
                     width: MediaQuery.of(context).size.width,
-                    color: Theme.of(context).backgroundColor,
-                    margin: EdgeInsets.only(top:5,bottom: 10),
-                    padding: EdgeInsets.only(left: 10,right:10),
-                    child:   ListTile(
-                          contentPadding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
-                          dense: true,
-                          visualDensity: VisualDensity.standard,
-                          title: 
-                            /*:TextFormField(
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter some text';
-                              }
-                              return null;
-                            },
-                            textAlign: TextAlign.left,
-                            style: TextStyle(fontSize: 18,color: Theme.of(context).floatingActionButtonTheme.backgroundColor ),
-                            maxLines: 1,
-                            maxLength: 20,
-                            showCursor: true,
 
-                            controller: _addCategoryText,
-                            autofocus: false,
-                            minLines: 1,
-                            keyboardType: TextInputType.text,
+                    margin: EdgeInsets.only(top:5,bottom: 10,left:10,right: 10),
+                    padding: EdgeInsets.all(10),
 
-                            decoration: InputDecoration(
-                              alignLabelWithHint: true,
-                              prefixIcon: Icon(Icons.category,color: Theme.of(context).floatingActionButtonTheme.backgroundColor),
-                              labelText: "Category name",
-                              labelStyle: TextStyle(fontSize: 16,color: Theme.of(context).floatingActionButtonTheme.backgroundColor ),
+                    decoration: ShapeDecoration(
+                      //color: Theme.of(context).backgroundColor,
+                      color: Theme.of(context).accentColor,//Color(0xFFF4F4F4),
 
-                              counterStyle: TextStyle(
-                                height: double.minPositive,
-                              ),
-                              counterText: "",
+                      shape: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
 
-                              focusedBorder:OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-
-                                borderSide: BorderSide(
-                                  color: Theme.of(context).floatingActionButtonTheme.backgroundColor,
-                                  width: 1,
-                                  style: BorderStyle.solid,
-                                ),
-                              ),
-                              hintText: "Category name",
-                              hintStyle: TextStyle(color: Color(0xFFB8B8B8)),
-
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-
-                                borderSide: BorderSide(
-                                  color: Theme.of(context).floatingActionButtonTheme.backgroundColor,
-                                  width: 1,
-                                  style: BorderStyle.solid,
-                                ),
-                              ),
-
-                            ),
-                            toolbarOptions: ToolbarOptions(
-                              cut: true,
-                              copy: true,
-                              selectAll: true,
-                              paste: true,
-                            ),
-                          ),*/
+                        borderSide: BorderSide(
+                          color: Theme.of(context).floatingActionButtonTheme.backgroundColor,
+                          width: 1,
+                          style: BorderStyle.solid,
                         ),
+                      ),
+                    ),
+                    child:   PopupMenuButton(
+                                  color: Theme.of(context).cardColor,
+
+                                 // padding: EdgeInsets.zero,
+                                  shape:RoundedRectangleBorder(
+                                      side: BorderSide(width: 1,style: BorderStyle.solid,color: Theme.of(context).floatingActionButtonTheme.backgroundColor,),
+                                      borderRadius: BorderRadius.circular(5)),
+                                  elevation: 4,
+
+                                  itemBuilder: (context) {
+                                    if ((Variables().getCat().isNotEmpty)) {
+                                      itemCategories.addAll(Variables().getCat());
+                                    }
+
+                                    return itemCategories
+                                        .map((item) => PopupMenuItem(
+
+                                        height: 40,
+                                        padding:EdgeInsets.all(5),
+                                       // enabled: false,
+                                        value: itemCategories.indexOf(item),
+                                        child: StatefulBuilder(
+
+                                            builder: (BuildContext context, StateSetter setState) {
+                                              return Container(
+                                                  width: MediaQuery.of(context).size.width,
+                                                  height: 40,
+                                                  margin: EdgeInsets.all(0),
+                                                  padding: EdgeInsets.only(left:10,top: 5,bottom: 5,right: 5),
+                                                  alignment: Alignment.centerLeft,
+                                                  decoration: ShapeDecoration(
+                                                    color: Theme.of(context).accentColor,
+
+                                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                                                  ),
+                                                  child: Text(
+                                                    item.toString(),
+                                                    style: TextStyle(color: Theme.of(context).floatingActionButtonTheme.focusColor,
+                                                        fontSize: 12,
+                                                        fontFamily: "Roboto"),
+                                                  )
+
+                                              );
+                                            }
+                                        )
+                                    )
+                                    ).toList();
+                                  },
+                                onSelected: (value) async{
+                                  if(value==0){return await showInformationDialog(context);}
+                                  if(value!=0){
+                                    setState(() {
+                                      _categorySelected = itemCategories[value];
+                                    });}
+                                },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text( _categorySelected , style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal , color: Theme.of(context).floatingActionButtonTheme.backgroundColor,)),
+                                  Icon(Icons.keyboard_arrow_down_rounded , color:  Theme.of(context).floatingActionButtonTheme.backgroundColor,),
+
+                                ],
+                              ),
+                          ),
+
 
                   ),
-                  /*     Container(
-                    child: Text("Status :",style:TextStyle(color:Color(0xFF979DB0),fontWeight:FontWeight.bold ,fontSize:20,fontFamily: "Roboto"),),
-                    alignment: Alignment.centerLeft,),
+                  Container(
+                    child: Text("Status :",style:TextStyle(color:Color(0xFF979DB0),fontWeight:FontWeight.bold ,fontSize:16,fontFamily: "Roboto"),),
+                    alignment: Alignment.centerLeft,
+                      ),
                   Container(
                     //height: 100,
                     width: MediaQuery.of(context).size.width,
-                    color: Theme.of(context).backgroundColor,
-                    //margin: EdgeInsets.all(2),
-                    padding: EdgeInsets.only(left: 10),
-                    child:  PopupMenuButton<int>(
-                       color: Theme.of(context).cardColor,
-                       padding: EdgeInsets.zero,
-                       elevation: 4,
 
-                       itemBuilder: (context) {
-                         var list = List<PopupMenuEntry<int>>();
+                    margin: EdgeInsets.only(top:5,bottom: 10,left:10,right: 10),
+                    padding: EdgeInsets.all(10),
 
-                         List<String> itemStatus = Variables().status;
-                         itemStatus.removeWhere((element) => element == "Finished");
-                         itemStatus.forEach((element) {
+                    decoration: ShapeDecoration(
 
-                           list.add(
-                             PopupMenuItem(
-                               padding: EdgeInsets.all(0),
+                      color: Theme.of(context).accentColor,
+                      shape: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
 
-                               child: Container(
-                                   width: MediaQuery.of(context).size.width,
-                                   height: 50,
-                                   margin: EdgeInsets.all(10),
-                                   padding: EdgeInsets.all(10),
-                                   alignment: Alignment.centerLeft,
-                                   decoration: ShapeDecoration(
-                                     color: Theme.of(context).accentColor,
+                        borderSide: BorderSide(
+                          color: Theme.of(context).floatingActionButtonTheme.backgroundColor,
+                          width: 1,
+                          style: BorderStyle.solid,
+                        ),
+                      ),
+                    ),
+                    child:   PopupMenuButton(
+                      color: Theme.of(context).cardColor,
 
-                                     shape: RoundedRectangleBorder(
-                                         borderRadius: BorderRadius.circular(20)
-                                     ),
-                                   ),
-                                   child: Text(element.toString(),style:TextStyle(color:Theme.of(context).floatingActionButtonTheme.focusColor ,fontSize:16,fontFamily: "Roboto"),)),
-                               value: itemStatus.indexOf(element),
-                             ),
-                           );
+                      // padding: EdgeInsets.zero,
+                      shape:RoundedRectangleBorder(
+                          side: BorderSide(width: 1,style: BorderStyle.solid,color: Theme.of(context).floatingActionButtonTheme.backgroundColor,),
+                          borderRadius: BorderRadius.circular(5)),
+                      elevation: 4,
 
-                         });
+                      itemBuilder: (context) {
+                        List<String> itemStatus = Variables().status;
+                        itemStatus.removeWhere((element) => element == "Finished");
+                        return itemStatus
+                            .map((item) => PopupMenuItem(
 
-                         return list;
-                       },
-                       // initialValue: indexFromUnit,
-                       onCanceled: () {
-                         print("You have canceled the menu.");
-                       },
-                       onSelected: (value) {
-                         setState(() {
-                           _statusSelected = Variables().status[value];
-                         });
-                       },
+                            height: 40,
+                            padding:EdgeInsets.all(5),
+                            // enabled: false,
+                            value: itemStatus.indexOf(item),
+                            child: StatefulBuilder(
 
-                       child: Container(
-                         margin: EdgeInsets.all(0),
-                         decoration: ShapeDecoration(
-                           color: Theme.of(context).accentColor,//Color(0xFFF4F4F4),
+                                builder: (BuildContext context, StateSetter setState) {
+                                  return Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      height: 40,
+                                      margin: EdgeInsets.all(0),
+                                      padding: EdgeInsets.only(left:10,top: 5,bottom: 5,right: 5),
+                                      alignment: Alignment.centerLeft,
+                                      decoration: ShapeDecoration(
+                                        color: Theme.of(context).accentColor,
 
-                           shape: OutlineInputBorder(
-                             borderRadius: BorderRadius.circular(10.0),
+                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                                      ),
+                                      child: Text(
+                                        item.toString(),
+                                        style: TextStyle(color: Theme.of(context).floatingActionButtonTheme.focusColor,
+                                            fontSize: 12,
+                                            fontFamily: "Roboto"),
+                                      )
 
-                             borderSide: BorderSide(
-                               color: Theme.of(context).floatingActionButtonTheme.backgroundColor,
-                               width: 1,
-                               style: BorderStyle.solid,
-                             ),
-                           ),
-                         ),
-                         child: ListTile(
+                                  );
+                                }
+                            )
+                        )
+                        ).toList();
+                      },
+                      onSelected: (value) async{
 
-                           trailing: Icon(Icons.keyboard_arrow_down_rounded , color: Theme.of(context).floatingActionButtonTheme.backgroundColor,),
-                           title: RichText(
-                               softWrap: true,
-                               text: TextSpan(text: _statusSelected , style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal ,color: Theme.of(context).floatingActionButtonTheme.backgroundColor, ))),
+                          setState(() {
+                            _statusSelected = Variables().status[value];
+                          });
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text( _statusSelected , style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal , color: Theme.of(context).floatingActionButtonTheme.backgroundColor,)),
+                          Icon(Icons.keyboard_arrow_down_rounded , color:  Theme.of(context).floatingActionButtonTheme.backgroundColor,),
 
-                         ),
-                       ),
-                     ),
+                        ],
+                      ),
+                    ),
 
                   ),
                   Container(
-                      child: Text("Frequency :",style:TextStyle(color:Color(0xFF979DB0),fontWeight:FontWeight.bold ,fontSize:20,fontFamily: "Roboto"),),
+                      child: Text("Frequency :",style:TextStyle(color:Color(0xFF979DB0),fontWeight:FontWeight.bold ,fontSize:16,fontFamily: "Roboto"),),
                       alignment: Alignment.centerLeft,
                   ),
                   Container(
-                   //height: 100,
-                    width: MediaQuery.of(context).size.width,
-                    color: Theme.of(context).backgroundColor,
-                    //margin: EdgeInsets.all(2),
-                    padding: EdgeInsets.only(left: 10),
-                    child:  ListTile(
-                      contentPadding: EdgeInsets.symmetric(vertical: 0.0, horizontal:
-                      0.0),
-                      dense: true,
-                      trailing: CircleAvatar(
-                        backgroundColor: (!_addDaysfrequency)?Colors.blue:Colors.redAccent,
+                      width: MediaQuery.of(context).size.width,
 
-                        radius: 25,
+                      margin: EdgeInsets.only(top:5,bottom: 10,left:10,right: 10),
+                      padding: EdgeInsets.all(10),
 
-                        child: IconButton(
-                          icon:Icon((!_addDaysfrequency)?Icons.date_range:Icons.close_rounded),
-                          color : Colors.white,
-                          iconSize:25,
+                      decoration: ShapeDecoration(
+                        //color: Theme.of(context).backgroundColor,
+                        color: Theme.of(context).accentColor,//Color(0xFFF4F4F4),
 
-                          padding: EdgeInsets.all(0),
-                          onPressed: (){
-                            setState(() {
-                              _addDaysfrequency = !_addDaysfrequency;
+                        shape: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
 
-                            });
-                          },
-                          alignment: Alignment.center,
-
-
+                          borderSide: BorderSide(
+                            color: Theme.of(context).floatingActionButtonTheme.backgroundColor,
+                            width: 1,
+                            style: BorderStyle.solid,
+                          ),
                         ),
                       ),
-                      horizontalTitleGap: null,
-                      visualDensity: VisualDensity.standard,
-                      title: (!_addDaysfrequency)?PopupMenuButton<int>(
+                      child:   PopupMenuButton(
                         color: Theme.of(context).cardColor,
-                        padding: EdgeInsets.zero,
+
+                        // padding: EdgeInsets.zero,
+                        shape:RoundedRectangleBorder(
+                            side: BorderSide(width: 1,style: BorderStyle.solid,color: Theme.of(context).floatingActionButtonTheme.backgroundColor,),
+                            borderRadius: BorderRadius.circular(5)),
                         elevation: 4,
 
                         itemBuilder: (context) {
-                          var list = List<PopupMenuEntry<int>>();
+                          List<String> itemFrequencies = Variables().frequency;
+                          return itemFrequencies
+                              .map((item) => PopupMenuItem(
 
-                          List<String> itemCategories = Variables().frequency;
-                          setState(() {
-                            _frequencySelected = itemCategories[0];
-                          });
-                          itemCategories.forEach((element) {
+                              height: 40,
+                              padding:EdgeInsets.all(5),
+                              // enabled: false,
+                              value: itemFrequencies.indexOf(item),
+                              child: StatefulBuilder(
 
-                            list.add(
-                              PopupMenuItem(
-                                padding: EdgeInsets.all(0),
+                                  builder: (BuildContext context, StateSetter setState) {
+                                    return Container(
+                                        width: MediaQuery.of(context).size.width,
+                                        height: 40,
+                                        margin: EdgeInsets.all(0),
+                                        padding: EdgeInsets.only(left:10,top: 5,bottom: 5,right: 5),
+                                        alignment: Alignment.centerLeft,
+                                        decoration: ShapeDecoration(
+                                          color: Theme.of(context).accentColor,
 
-                                child: Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    height: 50,
-                                    margin: EdgeInsets.all(10),
-                                    padding: EdgeInsets.all(10),
-                                    alignment: Alignment.centerLeft,
-                                    decoration: ShapeDecoration(
-                                      color: Theme.of(context).accentColor,
+                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                                        ),
+                                        child: Text(
+                                          item.toString(),
+                                          style: TextStyle(color: Theme.of(context).floatingActionButtonTheme.focusColor,
+                                              fontSize: 12,
+                                              fontFamily: "Roboto"),
+                                        )
 
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(20)
-                                      ),
-                                    ),
-                                    child: Text(element.toString(),style:TextStyle(color:Theme.of(context).floatingActionButtonTheme.focusColor ,fontSize:16,fontFamily: "Roboto"),)),
-                                value: itemCategories.indexOf(element),
-                              ),
-                            );
-
-                          });
-
-                          return list;
-                        },
-                        // initialValue: indexFromUnit,
-                        onCanceled: () {
-                          print("You have canceled the menu.");
+                                    );
+                                  }
+                              )
+                          )
+                          ).toList();
                         },
                         onSelected: (value) {
                           setState(() {
                             _frequencySelected = Variables().frequency[value];
                           });
                         },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text( _frequencySelected , style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal , color: Theme.of(context).floatingActionButtonTheme.backgroundColor,)),
+                            Icon(Icons.keyboard_arrow_down_rounded , color:  Theme.of(context).floatingActionButtonTheme.backgroundColor,),
 
-                        child: Container(
-                          margin: EdgeInsets.all(0),
-                          decoration: ShapeDecoration(
-                            color: Theme.of(context).accentColor,//Color(0xFFF4F4F4),
-
-                            shape: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-
-                              borderSide: BorderSide(
-                                color: Theme.of(context).floatingActionButtonTheme.backgroundColor,
-                                width: 1,
-                                style: BorderStyle.solid,
-                              ),
-                            ),
-                          ),
-                          child: ListTile(
-
-                            trailing: Icon(Icons.keyboard_arrow_down_rounded , color: Theme.of(context).floatingActionButtonTheme.backgroundColor,),
-                            title: RichText(
-                                softWrap: true,
-                                text: TextSpan(text: _frequencySelected , style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal , color: Theme.of(context).floatingActionButtonTheme.backgroundColor, ))),
-
-                          ),
-                        ),
-                      ):TextFormField(
-                        textAlign: TextAlign.left,
-                        style: TextStyle(fontSize: 18,color: Theme.of(context).floatingActionButtonTheme.backgroundColor ),
-                        maxLines: 1,
-                        maxLength: 20,
-                        showCursor: true,
-
-                        controller: _addFrequencyText,
-                        autofocus: false,
-                        minLines: 1,
-                        keyboardType: TextInputType.number,
-
-                        decoration: InputDecoration(
-                          alignLabelWithHint: true,
-                          prefixIcon: Icon(Icons.calendar_today,color: Theme.of(context).floatingActionButtonTheme.backgroundColor),
-                          labelText: "Days number",
-                          labelStyle: TextStyle(fontSize: 16,color: Theme.of(context).floatingActionButtonTheme.backgroundColor ),
-
-                          counterStyle: TextStyle(
-                            height: double.minPositive,
-                          ),
-                          counterText: "",
-
-                          focusedBorder:OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-
-                            borderSide: BorderSide(
-                              color: Theme.of(context).floatingActionButtonTheme.backgroundColor,
-                              width: 1,
-                              style: BorderStyle.solid,
-                            ),
-                          ),
-                          hintText: "Days number",
-                          hintStyle: TextStyle(color: Color(0xFFB8B8B8)),
-
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-
-                            borderSide: BorderSide(
-                              color: Theme.of(context).floatingActionButtonTheme.backgroundColor,
-                              width: 1,
-                              style: BorderStyle.solid,
-                            ),
-                          ),
-
-                        ),
-                        toolbarOptions: ToolbarOptions(
-                          cut: true,
-                          copy: true,
-                          selectAll: true,
-                          paste: true,
+                          ],
                         ),
                       ),
-                    ),
-
                   ),
                   Container(
-                    child: Text("Date Of Task :",style:TextStyle(color:Color(0xFF979DB0),fontWeight:FontWeight.bold ,fontSize:20,fontFamily: "Roboto"),),
+                    child: Text("Date Of Task :",style:TextStyle(color:Color(0xFF979DB0),fontWeight:FontWeight.bold ,fontSize:16,fontFamily: "Roboto"),),
                     alignment: Alignment.centerLeft,
                   ),
-                  Container(
+                Container(
                           //height: 100,
                           width: MediaQuery.of(context).size.width,
                           color: Theme.of(context).backgroundColor,
                           //margin: EdgeInsets.all(2),
-                          padding: EdgeInsets.only(left: 10),
+                          padding: EdgeInsets.only(left: 10,right: 10),
                           child:  Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -729,44 +645,44 @@ bool enabled = true;
                               Expanded(
                                   flex: 1,
                                   child:MaterialButton(
-                                      height: 50,
+                                      height: 40,
                                     onPressed: () => _selectDate(context),
                                     colorBrightness:Theme.of(context).primaryColorBrightness,
-                                    padding: EdgeInsets.only(left: 10),
+                                    //padding: EdgeInsets.only(left: 10),
                                     elevation: 2,
                                     shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(5)
                                     ),
                                     color: Theme.of(context).accentColor,
                                     child:
-                                    Text(selectedDate.day.toString()+"/"+selectedDate.month.toString()+"/"+selectedDate.year.toString() ,style: TextStyle(color: Theme.of(context).floatingActionButtonTheme.backgroundColor ,fontSize:20,fontFamily: "Roboto"),),
+                                    Text(selectedDate.day.toString()+"/"+selectedDate.month.toString()+"/"+selectedDate.year.toString() ,style: TextStyle(color: Theme.of(context).floatingActionButtonTheme.backgroundColor ,fontSize:14,fontFamily: "Roboto"),),
 
                                   ),),
                               SizedBox(
                                 width: 5,
-                                height: 50,
+                                height: 40,
                               ),
                               Expanded(
 
                                 child:MaterialButton(
-                                  height: 50,
+                                  height: 40,
                                   onPressed: () => _selectTime(context),
                                   colorBrightness:Theme.of(context).primaryColorBrightness,
-                                  padding: EdgeInsets.only(left: 10),
+                                 // padding: EdgeInsets.only(left: 10),
                                   elevation: 2,
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(5)
                                   ),
                                   color: Theme.of(context).accentColor,
                                   child:
-                                  Text(_time.toString() ,style: TextStyle(color: Theme.of(context).floatingActionButtonTheme.backgroundColor ,fontSize:20,fontFamily: "Roboto"),),
+                                  Text(_time.toString() ,style: TextStyle(color: Theme.of(context).floatingActionButtonTheme.backgroundColor ,fontSize:14,fontFamily: "Roboto"),),
 
                                 ),),
                             ],
                           )
 
                   ),
-                  Container(
+         /*         Container(
                       height: 100,
                       width: MediaQuery.of(context).size.width,
                       color: Theme.of(context).backgroundColor,

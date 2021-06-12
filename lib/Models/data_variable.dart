@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class Variables{
   static final Variables _singleton = Variables._internal();
 
@@ -13,6 +15,22 @@ class Variables{
   List<String> frequency = ["Once","Daily","weekly","monthly"];
   ///have : today, tomorrow, Temporary(is status)
   Map<String,int> _tasks;
+
+  ThemeData mode(context){
+    var brightness = MediaQuery.of(context).platformBrightness;
+    bool darkModeOn = brightness == Brightness.dark;
+
+
+    if(!darkModeOn){
+      return ThemeData.light().copyWith(
+        colorScheme: ColorScheme.light(),
+      );
+    }else{
+      return ThemeData.dark().copyWith(
+        colorScheme: ColorScheme.dark(),
+      );
+    }
+  }
 
   setTask(String name, int value){
     this._tasks[name]=value;
