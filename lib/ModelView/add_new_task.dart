@@ -17,7 +17,7 @@ class _AddNewTasksState extends State<AddNewTasks> {
 
 
 
-  Future<void> showInformationDialog(BuildContext context) async {
+  Future<void> showDialogToAddCategory(BuildContext context) async {
     final TextEditingController _textEditingController = TextEditingController();
     final GlobalKey<FormState> _formKeyDialogCat = GlobalKey<FormState>();
 
@@ -27,6 +27,12 @@ class _AddNewTasksState extends State<AddNewTasks> {
         builder: (context) {
           return StatefulBuilder(builder: (context, setState) {
             return AlertDialog(
+              backgroundColor:Theme.of(context).floatingActionButtonTheme.hoverColor,
+
+              // Color(0xFF262626),//Theme.of(context).backgroundColor,
+              shape: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
               content: Form(
                   key: _formKeyDialogCat,
                   child: Column(
@@ -38,39 +44,35 @@ class _AddNewTasksState extends State<AddNewTasks> {
                           return value.isNotEmpty ? null : "Enter category";
                         },
                         decoration:
-                        InputDecoration(hintText: "Please Enter category"),
+                        InputDecoration(hintText: "Please Enter category",hintStyle: TextStyle(color: Color(0xFFB8B8B8))),
                       ),
 
                     ],
                   )),
-              title: Text('Add Category'),
+              title: Text('Add Category',style: TextStyle(color: Color(0xFF979DB0) ),),
               actions: <Widget>[
-                Container(
-                  color :Colors.red,
-                  width: 50,
-                  height: 50,
-                  child: InkWell(
-                    child: Text('OK   '),
+                MaterialButton(
 
-                    onTap: () {
-                      if (_formKeyDialogCat.currentState.validate()) {
-                        setState((){
-                          itemCategories.add(_textEditingController.text);
-                          _categorySelected = _textEditingController.text;
-                       });
-                        Navigator.of(context).pop();
+                  onPressed:() {
+                  if (_formKeyDialogCat.currentState.validate()) {
+                  setState((){
+                  itemCategories.add(_textEditingController.text);
+                  _categorySelected = _textEditingController.text;
+                  });
+                  Navigator.of(context).pop();
 
-                      }
-                    },
-                  ),
-                ),
-                SizedBox(width: 20,),
-                InkWell(
-                  child: Text('Cancel   '),
-                  onTap: () {
-                    Navigator.of(context).pop();
-
+                  }
                   },
+
+                  child: Text('OK',style: TextStyle(color:Color(0xFF979DB0)),),
+                ),
+
+                MaterialButton(
+                child: Text('Cancel',style:TextStyle(color: Color(0xFF979DB0) )),
+                onPressed: () {
+                  Navigator.of(context).pop();
+
+                },
                 ),
               ],
             );
@@ -81,14 +83,13 @@ class _AddNewTasksState extends State<AddNewTasks> {
   }
 
 
-  var list = List<PopupMenuEntry<int>>();
+
 
   List<String> itemCategories =["Add New Category"];
 
   final _formKey = GlobalKey<FormState>();
-  FocusScopeNode currentFocus =new FocusScopeNode();
+  FocusScopeNode currentFocus =new FocusScopeNode();//Goal
   TextEditingController _taskName = new TextEditingController();
-  TextEditingController _addCategoryText =new TextEditingController();
   TextEditingController _addFrequencyText =new TextEditingController();
   TextEditingController _addNoteText =new TextEditingController();
   TextEditingController _addGoal =new TextEditingController();
@@ -97,8 +98,7 @@ bool enabled = true;
   String _categorySelected = "Category";
   String _statusSelected = "Status";
   String _frequencySelected = "Once";
-  bool _addCategory = false;
-  bool _addDaysfrequency = false;
+
   DateTime selectedDate = DateTime.now();
   TimeOfDay selectedTime = TimeOfDay(hour: 00, minute: 00);
   String  _time= DateTime.now().hour.toString()+":"+DateTime.now().minute.toString();
@@ -223,7 +223,7 @@ bool enabled = true;
           elevation: 0,
           iconTheme: IconThemeData(color: Color(0xFF8F8FA8) ),
           leading:  CloseButton(
-            color: Colors.blue,
+            color: Color(0xFF8F8FA8),
             onPressed: (){
               Draft taskAsDraft = new Draft(
                   task:_taskName.text,
@@ -244,7 +244,7 @@ bool enabled = true;
           ),
           actions: [
             Container(
-              margin: EdgeInsets.only(right: 20),
+
               child: MaterialButton(
                 onPressed: (){
                   if (_formKey.currentState.validate()) {
@@ -276,7 +276,7 @@ bool enabled = true;
                 elevation: 0,
 
                       child: Align(
-                          alignment: Alignment.center,
+                          alignment: Alignment.centerRight,
                           child: Text("Save",
                             style: TextStyle(
                                 color:Color(0xFF8F8FA8) ,
@@ -452,7 +452,7 @@ bool enabled = true;
                                     ).toList();
                                   },
                                 onSelected: (value) async{
-                                  if(value==0){return await showInformationDialog(context);}
+                                  if(value==0){return await showDialogToAddCategory(context);}
                                   if(value!=0){
                                     setState(() {
                                       _categorySelected = itemCategories[value];
@@ -647,6 +647,82 @@ bool enabled = true;
                           ],
                         ),
                       ),
+                  ),
+                  /* Goal text */
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    child:Text("Goal :",style:TextStyle(color:Color(0xFF979DB0),fontWeight:FontWeight.bold ,fontSize:16,fontFamily: "Roboto"),),
+                  ),
+                  /* Goal field form text */
+                  Container(
+                    // height: 70,
+                    width: MediaQuery.of(context).size.width,
+                    color: Theme.of(context).backgroundColor,
+                    margin: EdgeInsets.only(top:5,bottom: 10),
+                    padding: EdgeInsets.only(left: 10, right: 10,),
+                    child:TextFormField(
+
+                      // focusNode: currentFocus,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter some text';
+                        }
+                        return null;
+                      },
+                      textAlign: TextAlign.left,
+                      style: TextStyle(fontSize: 14,color: Theme.of(context).floatingActionButtonTheme.backgroundColor ),
+                      maxLines: 1,
+                      maxLength: 100,
+                      showCursor: true,
+
+                      controller: _addGoal,
+                      autofocus: false,
+
+
+                      minLines: 1,
+                      keyboardType: TextInputType.text,
+
+                      decoration: InputDecoration(
+                        isDense: true,
+                        contentPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+                        alignLabelWithHint: false,
+                        prefixIcon: Icon(Icons.adjust,color: Theme.of(context).floatingActionButtonTheme.backgroundColor),
+                        labelText: null,
+
+                        counterStyle: TextStyle(
+                          height: double.minPositive,
+                        ),
+                        counterText: "",
+                        focusedBorder:OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+
+                          borderSide: BorderSide(
+                            color: Theme.of(context).floatingActionButtonTheme.backgroundColor,
+                            width: 1,
+                            style: BorderStyle.solid,
+                          ),
+                        ),
+                        hintText: "for reason..!",
+                        hintStyle: TextStyle(color: Color(0xFFB8B8B8)),
+
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+
+                          borderSide: BorderSide(
+                            color: Theme.of(context).floatingActionButtonTheme.backgroundColor,
+                            width: 1,
+                            style: BorderStyle.solid,
+                          ),
+                        ),
+
+                      ),
+                      toolbarOptions: ToolbarOptions(
+                        cut: true,
+                        copy: true,
+                        selectAll: true,
+                        paste: true,
+                      ),
+                    ),
                   ),
                   /* Date Of Task Text */
                   Container(
