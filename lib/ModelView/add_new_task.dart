@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:todolist/DataBase/database.dart';
@@ -13,6 +14,110 @@ class AddNewTasks extends StatefulWidget {
 
 class _AddNewTasksState extends State<AddNewTasks> {
 
+
+
+
+  Future<void> showInformationDialog(BuildContext context) async {
+    final TextEditingController _textEditingController = TextEditingController();
+    final GlobalKey<FormState> _formKeyDialogCat = GlobalKey<FormState>();
+
+
+    return await showDialog(
+        context: context,
+        builder: (context) {
+          return StatefulBuilder(builder: (context, setState) {
+            return AlertDialog(
+              content: Form(
+                  key: _formKeyDialogCat,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TextFormField(
+                        controller: _textEditingController,
+                        validator: (value) {
+                          return value.isNotEmpty ? null : "Enter category";
+                        },
+                        decoration:
+                        InputDecoration(hintText: "Please Enter category"),
+                      ),
+
+                    ],
+                  )),
+              title: Text('Add Category'),
+              actions: <Widget>[
+                Container(
+                  color :Colors.red,
+                  width: 50,
+                  height: 50,
+                  child: InkWell(
+                    child: Text('OK   '),
+
+                    onTap: () {
+                      if (_formKeyDialogCat.currentState.validate()) {
+                        setState((){
+                          itemCategories.add(_textEditingController.text);
+                        list.add(
+                            PopupMenuItem(
+                              padding: EdgeInsets.all(0),
+
+                              child: StatefulBuilder(
+                                  builder: (BuildContext context, StateSetter setState) {
+                                    return Container(
+                                        width: MediaQuery
+                                            .of(context)
+                                            .size
+                                            .width,
+                                        height: 50,
+                                        margin: EdgeInsets.all(10),
+                                        padding: EdgeInsets.all(10),
+                                        alignment: Alignment.centerLeft,
+                                        decoration: ShapeDecoration(
+                                          color: Theme
+                                              .of(context)
+                                              .accentColor,
+
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius
+                                                  .circular(20)
+                                          ),
+                                        ),
+                                        child: Text(_textEditingController.text.toString(),
+                                          style: TextStyle(color: Theme
+                                              .of(context)
+                                              .floatingActionButtonTheme
+                                              .focusColor,
+                                              fontSize: 16,
+                                              fontFamily: "Roboto"),)
+
+                                    );
+                                  }),
+                              value: itemCategories.indexOf(_textEditingController.text)+1,
+                            ),);
+                       });
+                        Navigator.of(context).pop();
+
+                      }
+                    },
+                  ),
+                ),
+                SizedBox(width: 20,),
+                InkWell(
+                  child: Text('Cancel   '),
+                  onTap: () {
+                    Navigator.of(context).pop();
+
+                  },
+                ),
+              ],
+            );
+          });
+        });
+  }
+
+
+  var list = List<PopupMenuEntry<int>>();
+
+  List<String> itemCategories =[];
   final _formKey = GlobalKey<FormState>();
   FocusScopeNode currentFocus =new FocusScopeNode();
   TextEditingController _taskName = new TextEditingController();
@@ -291,123 +396,9 @@ bool enabled = true;
                     child:   ListTile(
                           contentPadding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
                           dense: true,
-                          /*trailing: MaterialButton(
-                            color: (!_addCategory)?Colors.blue:Colors.redAccent,
-                            child: Icon((!_addCategory)?Icons.add_rounded:Icons.close_rounded,color:Colors.white,size:15),
-                              onPressed: (){
-                                  setState(() {
-                                    _addCategory = !_addCategory;
-
-                                  });
-                              },
-                          ),*/
-                          horizontalTitleGap: null,
                           visualDensity: VisualDensity.standard,
-                          title: (!_addCategory)?PopupMenuButton<int>(
-                                    color: Theme.of(context).cardColor,
-                            padding: EdgeInsets.zero,
-                            elevation: 4,
-
-                            itemBuilder: (context) {
-                              var list = List<PopupMenuEntry<int>>();
-
-                              List<String> itemCategories = (Variables().getCat().isNotEmpty)?Variables().getCat():[];
-
-                              itemCategories.forEach((element) {
-
-                                list.add(
-                                  PopupMenuItem(
-                                    padding: EdgeInsets.all(0),
-
-                                    child: Container(
-                                        width: MediaQuery.of(context).size.width,
-                                        height: 50,
-                                        margin: EdgeInsets.all(10),
-                                        padding: EdgeInsets.all(10),
-                                        alignment: Alignment.centerLeft,
-                                        decoration: ShapeDecoration(
-                                          color: Theme.of(context).accentColor,
-
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(20)
-                                          ),
-                                        ),
-                                        child: Text(element.toString(),style:TextStyle(color:Theme.of(context).floatingActionButtonTheme.focusColor ,fontSize:16,fontFamily: "Roboto"),)),
-                                    value: itemCategories.indexOf(element),
-                                  ),
-                                );
-
-                              });
-                              list.add(
-                                PopupMenuItem(
-                                  padding: EdgeInsets.all(0),
-                                  enabled: enabled,
-                                  child: Container(
-                                      width: MediaQuery.of(context).size.width,
-                                      height: 50,
-                                      margin: EdgeInsets.all(10),
-                                      padding: EdgeInsets.all(10),
-                                      alignment: Alignment.centerLeft,
-                                      decoration: ShapeDecoration(
-                                        color: Theme.of(context).accentColor,
-
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(20)
-                                        ),
-                                      ),
-                                      child: MaterialButton(
-                                          onPressed: (){
-                                            setState(() {
-                                              _addCategory = !_addCategory;
-
-                                            });
-                                            Navigator.pop(context);
-                                          },
-                                          elevation: 0,
-                                          color: Colors.transparent,
-
-                                          child: Text("Add Category",style:TextStyle(color:Theme.of(context).floatingActionButtonTheme.focusColor ,fontSize:16,fontFamily: "Roboto"),))),
-                                  value: itemCategories.length,
-                                ),
-                              );
-
-                              return list;
-                            },
-                            // initialValue: indexFromUnit,
-                            onCanceled: () {
-                              print("You have canceled the menu.");
-                            },
-                            onSelected: (value) {
-                            setState(() {
-                              _categorySelected = Variables().getCat()[value];
-                            });
-                            },
-
-                            child: Container(
-                              margin: EdgeInsets.all(0),
-                              decoration: ShapeDecoration(
-                                color: Theme.of(context).accentColor,//Color(0xFFF4F4F4),
-
-                                shape: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10.0),
-
-                                  borderSide: BorderSide(
-                                    color: Theme.of(context).floatingActionButtonTheme.backgroundColor,
-                                    width: 1,
-                                    style: BorderStyle.solid,
-                                  ),
-                                ),
-                              ),
-                              child: ListTile(
-
-                                trailing: Icon(Icons.keyboard_arrow_down_rounded , color:  Theme.of(context).floatingActionButtonTheme.backgroundColor,),
-                                title: RichText(
-                                    softWrap: true,
-                                    text: TextSpan(text: _categorySelected , style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal , color: Theme.of(context).floatingActionButtonTheme.backgroundColor, ))),
-
-                              ),
-                            ),
-                          ):TextFormField(
+                          title: 
+                            /*:TextFormField(
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'Please enter some text';
@@ -465,7 +456,7 @@ bool enabled = true;
                               selectAll: true,
                               paste: true,
                             ),
-                          ),
+                          ),*/
                         ),
 
                   ),
