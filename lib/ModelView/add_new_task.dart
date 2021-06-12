@@ -301,10 +301,12 @@ bool enabled = true;
               child: ListView(
                 scrollDirection: Axis.vertical,
                 children: [
+                  /* Task Name text */
                   Container(
                     alignment: Alignment.centerLeft,
                     child:Text("Task name :",style:TextStyle(color:Color(0xFF979DB0),fontWeight:FontWeight.bold ,fontSize:16,fontFamily: "Roboto"),),
                   ),
+                  /* Task Name field form text */
                   Container(
                    // height: 70,
                     width: MediaQuery.of(context).size.width,
@@ -375,9 +377,11 @@ bool enabled = true;
                       ),
                     ),
                   ),
+                  /* Category text */
                   Container(
                     child: Text("Category :",style:TextStyle(color:Color(0xFF979DB0),fontWeight:FontWeight.bold ,fontSize:16,fontFamily: "Roboto"),),
                   ),
+                  /* Category PopMenuButton  */
                   Container(
                   //  height: 100,
                     width: MediaQuery.of(context).size.width,
@@ -467,10 +471,12 @@ bool enabled = true;
 
 
                   ),
+                  /* Status Text*/
                   Container(
                     child: Text("Status :",style:TextStyle(color:Color(0xFF979DB0),fontWeight:FontWeight.bold ,fontSize:16,fontFamily: "Roboto"),),
                     alignment: Alignment.centerLeft,
                       ),
+                  /* Status PopMenu Button */
                   Container(
                     //height: 100,
                     width: MediaQuery.of(context).size.width,
@@ -555,10 +561,12 @@ bool enabled = true;
                     ),
 
                   ),
+                  /* Frequency Text */
                   Container(
                       child: Text("Frequency :",style:TextStyle(color:Color(0xFF979DB0),fontWeight:FontWeight.bold ,fontSize:16,fontFamily: "Roboto"),),
                       alignment: Alignment.centerLeft,
                   ),
+                  /* Frequency PopMenu Button */
                   Container(
                       width: MediaQuery.of(context).size.width,
 
@@ -640,139 +648,137 @@ bool enabled = true;
                         ),
                       ),
                   ),
+                  /* Date Of Task Text */
                   Container(
                     child: Text("Date Of Task :",style:TextStyle(color:Color(0xFF979DB0),fontWeight:FontWeight.bold ,fontSize:16,fontFamily: "Roboto"),),
                     alignment: Alignment.centerLeft,
                   ),
-                Container(
-                          //height: 100,
-                          width: MediaQuery.of(context).size.width,
-                          color: Theme.of(context).backgroundColor,
-                          //margin: EdgeInsets.all(2),
-                          padding: EdgeInsets.only(left: 10,right: 10),
-                          child:  Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                  flex: 1,
-                                  child:MaterialButton(
-                                      height: 40,
-                                    onPressed: () => _selectDate(context),
-                                    colorBrightness:Theme.of(context).primaryColorBrightness,
-                                    //padding: EdgeInsets.only(left: 10),
-                                    elevation: 2,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(5)
-                                    ),
-                                    color: Theme.of(context).accentColor,
-                                    child:
-                                    Text(selectedDate.day.toString()+"/"+selectedDate.month.toString()+"/"+selectedDate.year.toString() ,style: TextStyle(color: Theme.of(context).floatingActionButtonTheme.backgroundColor ,fontSize:14,fontFamily: "Roboto"),),
-
-                                  ),),
-                              SizedBox(
-                                width: 5,
-                                height: 40,
-                              ),
-                              Expanded(
-
-                                child:MaterialButton(
-                                  height: 40,
-                                  onPressed: () => _selectTime(context),
-                                  colorBrightness:Theme.of(context).primaryColorBrightness,
-                                 // padding: EdgeInsets.only(left: 10),
-                                  elevation: 2,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5)
-                                  ),
-                                  color: Theme.of(context).accentColor,
-                                  child:
-                                  Text(_time.toString() ,style: TextStyle(color: Theme.of(context).floatingActionButtonTheme.backgroundColor ,fontSize:14,fontFamily: "Roboto"),),
-
-                                ),),
-                            ],
-                          )
-
-                  ),
-         /*         Container(
-                      height: 100,
-                      width: MediaQuery.of(context).size.width,
-                      color: Theme.of(context).backgroundColor,
-                      margin: EdgeInsets.all(2),
-                      padding: EdgeInsets.only(left: 10),
-                      child:  Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Align(
-
-                                child: Text("Date Of Reminder :",style:TextStyle(color:Color(0xFF979DB0),fontWeight:FontWeight.bold ,fontSize:20,fontFamily: "Roboto"),),
-                                alignment: Alignment.centerLeft
-                            ),
-                            Row(
+                  /* Show Date & Time pickers Widgets */
+                  Container(
+                            //height: 100,
+                            width: MediaQuery.of(context).size.width,
+                            color: Theme.of(context).backgroundColor,
+                            //margin: EdgeInsets.all(2),
+                            margin: EdgeInsets.only(top:5,bottom: 10),
+                            padding: EdgeInsets.only(left: 10, right: 10,),
+                            child:  Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Expanded(
-                                  flex: 1,
-                                  child:MaterialButton(
-                                    height: 50,
-                                    onPressed: () => _selectReminder(context),
-                                    colorBrightness:Theme.of(context).primaryColorBrightness,
-                                    padding: EdgeInsets.only(left: 10),
-                                    elevation: 2,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(5)
-                                    ),
-                                    color: Theme.of(context).accentColor,
-                                    child:
-                                    Text(selectedReminder.day.toString()+"/"+selectedReminder.month.toString()+"/"+selectedReminder.year.toString() ,style: TextStyle(color: Theme.of(context).floatingActionButtonTheme.backgroundColor ,fontSize:20,fontFamily: "Roboto"),),
+                                    flex: 1,
+                                    child:MaterialButton(
+                                        height: 40,
+                                      onPressed: () => _selectDate(context),
+                                      colorBrightness:Theme.of(context).primaryColorBrightness,
+                                      //padding: EdgeInsets.only(left: 10),
+                                      elevation: 2,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(5)
+                                      ),
+                                      color: Theme.of(context).accentColor,
+                                      child:
+                                      Text(selectedDate.day.toString()+"/"+selectedDate.month.toString()+"/"+selectedDate.year.toString() ,style: TextStyle(color: Theme.of(context).floatingActionButtonTheme.backgroundColor ,fontSize:14,fontFamily: "Roboto"),),
 
-                                  ),),
+                                    ),),
                                 SizedBox(
                                   width: 5,
-                                  height: 50,
+                                  height: 40,
                                 ),
                                 Expanded(
 
                                   child:MaterialButton(
-                                    height: 50,
-                                    onPressed: () => _selectTimeReminder(context),
+                                    height: 40,
+                                    onPressed: () => _selectTime(context),
                                     colorBrightness:Theme.of(context).primaryColorBrightness,
-                                    padding: EdgeInsets.only(left: 10),
+                                   // padding: EdgeInsets.only(left: 10),
                                     elevation: 2,
                                     shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(5)
                                     ),
                                     color: Theme.of(context).accentColor,
                                     child:
-                                    Text(_timeR.toString() ,style: TextStyle(color: Theme.of(context).floatingActionButtonTheme.backgroundColor ,fontSize:20,fontFamily: "Roboto"),),
+                                    Text(_time.toString() ,style: TextStyle(color: Theme.of(context).floatingActionButtonTheme.backgroundColor ,fontSize:14,fontFamily: "Roboto"),),
 
                                   ),),
                               ],
                             )
 
-                          ])
-
-                  ),
+                    ),
+                  /* Date Of Reminder Text*/
                   Container(
-                      height: 20,
-                      width: MediaQuery.of(context).size.width,
-                      color: Theme.of(context).backgroundColor,
-                      margin: EdgeInsets.all(10),
-                      padding: EdgeInsets.only(left: 10),
-                      child: Text("Note :",style:TextStyle(color:Color(0xFF979DB0),fontWeight:FontWeight.bold ,fontSize:20,fontFamily: "Roboto"),),
+
+                      child: Text("Date Of Reminder :",style:TextStyle(color:Color(0xFF979DB0),fontWeight:FontWeight.bold ,fontSize:16,fontFamily: "Roboto"),),
                       alignment: Alignment.centerLeft
                   ),
+                  /* Show Date & Time Pickers Widgets */
                   Container(
-                    height: 100,
+                    //height: 100,
+                      width: MediaQuery.of(context).size.width,
+                      color: Theme.of(context).backgroundColor,
+                      //margin: EdgeInsets.all(2),
+                      margin: EdgeInsets.only(top:5,bottom: 10),
+                      padding: EdgeInsets.only(left: 10, right: 10,),
+                      child:  Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child:MaterialButton(
+                              height: 40,
+                              onPressed: () => _selectReminder(context),
+                              colorBrightness:Theme.of(context).primaryColorBrightness,
+                              //padding: EdgeInsets.only(left: 10),
+                              elevation: 2,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5)
+                              ),
+                              color: Theme.of(context).accentColor,
+                              child:
+                              Text(selectedReminder.day.toString()+"/"+selectedReminder.month.toString()+"/"+selectedReminder.year.toString()  ,style: TextStyle(color: Theme.of(context).floatingActionButtonTheme.backgroundColor ,fontSize:14,fontFamily: "Roboto"),),
+
+                            ),),
+                          SizedBox(
+                            width: 5,
+                            height: 40,
+                          ),
+                          Expanded(
+
+                            child:MaterialButton(
+                              height: 40,
+                              onPressed: () => _selectTimeReminder(context),
+                              colorBrightness:Theme.of(context).primaryColorBrightness,
+                              // padding: EdgeInsets.only(left: 10),
+                              elevation: 2,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5)
+                              ),
+                              color: Theme.of(context).accentColor,
+                              child:
+                              Text( _timeR.toString() ,style: TextStyle(color: Theme.of(context).floatingActionButtonTheme.backgroundColor ,fontSize:14,fontFamily: "Roboto"),),
+
+                            ),),
+                        ],
+                      )
+
+                  ),
+                  /* Note  Text */
+                  Container(
+
+                      child: Text("Note :",style:TextStyle(color:Color(0xFF979DB0),fontWeight:FontWeight.bold ,fontSize:16,fontFamily: "Roboto"),),
+                      alignment: Alignment.centerLeft
+                  ),
+                  /* Note Text Form Field */
+                  Container(
                     width: MediaQuery.of(context).size.width,
                     color: Theme.of(context).backgroundColor,
-                    margin: EdgeInsets.all(2),
-                    padding: EdgeInsets.only(left: 10),
+                    //margin: EdgeInsets.all(2),
+                    margin: EdgeInsets.only(top:5,bottom: 10),
+                    padding: EdgeInsets.only(left: 10, right: 10,),
                     child: TextField(
                       textAlign: TextAlign.left,
-                      style: TextStyle(fontSize: 18,color: Theme.of(context).floatingActionButtonTheme.backgroundColor ),
+                      style: TextStyle(fontSize: 14,color: Theme.of(context).floatingActionButtonTheme.backgroundColor ),
                       maxLines: 5,
                       maxLength: 100,
                       showCursor: true,
@@ -783,10 +789,9 @@ bool enabled = true;
                       keyboardType: TextInputType.text,
 
                       decoration: InputDecoration(
-                        alignLabelWithHint: true,
-                        prefixIcon: Icon(Icons.note_add,color: Theme.of(context).floatingActionButtonTheme.backgroundColor),
-                        labelText: "Note",
-                        labelStyle: TextStyle(fontSize: 16,color: Theme.of(context).floatingActionButtonTheme.backgroundColor ),
+
+                        labelText: null,
+
 
                         counterStyle: TextStyle(
                           height: double.minPositive,
@@ -801,7 +806,7 @@ bool enabled = true;
                             style: BorderStyle.solid,
                           ),
                         ),
-                        hintText: "Note",
+                        hintText: "Note...",
                         hintStyle: TextStyle(color: Color(0xFFB8B8B8)),
 
                         enabledBorder: OutlineInputBorder(
@@ -823,7 +828,7 @@ bool enabled = true;
                       ),
                     ),
                   ),
-*/
+
 
                 ],
               ),
