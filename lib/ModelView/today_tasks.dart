@@ -16,22 +16,22 @@ bool isExpanded;
     this.task= task;
     this.isExpanded = false;
   }
- dynamic getColor(){
+ Widget getIcon(){
     switch(this.task.status){
       case "Important": /*C00000*/
-        return Color(0xFFC00000);
+        return Icon(Icons.circle_rounded,color: Color(0xFFC00000),);
         break;
       case "Less important": /* ff4500 */
-        return Color(0xFFFF4500);
+        return Icon(Icons.circle_rounded,color: Color(0xFFFF4500));
               break;
-      case "Finished":
-        return Color(0xFF00B98C);
+      case "Finished"://00B98C
+        return Icon(Icons.check_circle_outline_sharp,color: Color(0xFF6D6E70));
         break;
       case "Voluntary": /* 6D6E70 */
-        return Color(0xFF6D6E70);
+        return Icon(Icons.circle_rounded,color: Color(0xFF6D6E70));
           break;
       default : /* In progress  0269CA */
-        return Color(0xFF0269CA);
+        return Icon(Icons.circle_rounded,color: Color(0xFF0269CA));
         break;
 
     }
@@ -79,6 +79,7 @@ class _TodayTasksState extends State<TodayTasks> {
                 return ExpansionPanel(
                   headerBuilder: (BuildContext context, bool isExpanded) {
                     return ListTile(
+                      leading: item.getIcon(),
                       title: Text(item.task.task),
                     );
                   },
