@@ -78,13 +78,13 @@ class _AddNewTasksState extends State<AddNewTasks> {
           });
         });
 
-  setState(() { });
+
   }
 
 
 
 
-  List<String> itemCategories =["Add New Category"];
+  List<String> itemCategories =["Add New Category","Temporary"];
 
   final _formKey = GlobalKey<FormState>();
   FocusScopeNode currentFocus =new FocusScopeNode();//Goal
@@ -95,7 +95,7 @@ class _AddNewTasksState extends State<AddNewTasks> {
 
 bool enabled = true;
   String _categorySelected = "Category";
-  String _statusSelected = "Status";
+  String _statusSelected = "Voluntary";
   String _frequencySelected = "Once";
 
   DateTime selectedDate = DateTime.now();
@@ -198,6 +198,7 @@ bool enabled = true;
 
     return WillPopScope (
       onWillPop: () async{
+        if(_categorySelected =="Category") _categorySelected = "Temporary";
         Draft taskAsDraft = new Draft(
             task:_taskName.text,
             timeReminder: _timeR,
@@ -224,6 +225,7 @@ bool enabled = true;
           leading:  CloseButton(
             color: Color(0xFF8F8FA8),
             onPressed: (){
+              if(_categorySelected =="Category") _categorySelected = "Temporary";
               Draft taskAsDraft = new Draft(
                   task:_taskName.text,
                   timeReminder: _timeR,
@@ -247,6 +249,7 @@ bool enabled = true;
               child: MaterialButton(
                 onPressed: (){
                   if (_formKey.currentState.validate()) {
+                    if(_categorySelected =="Category") _categorySelected = "Temporary";
                     Task task = new Task(
                         task:_taskName.text,
                         timeReminder: _timeR,

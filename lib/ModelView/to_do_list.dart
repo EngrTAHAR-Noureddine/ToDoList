@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:todolist/ModelView/today_tasks.dart';
+import 'package:todolist/Models/data_variable.dart';
 import 'package:todolist/View/category_view.dart';
 
 class ToDoList extends StatefulWidget {
@@ -12,32 +13,26 @@ class ToDoList extends StatefulWidget {
 class _ToDoListState extends State<ToDoList> {
   @override
   Widget build(BuildContext context) {
-    bool isLarge ;
+
 
     return OrientationBuilder(builder: (context, orientation) {
-            isLarge =  (orientation == Orientation.portrait);
-            return (isLarge)?
+            Variables().isLarge =  (orientation == Orientation.portrait);
+            return (Variables().isLarge)?
             Column(
               children: [
-                CategoryLayout(isLarge:isLarge),
-                Expanded(child: TodayTasks(isLarge:isLarge)),
+                CategoryLayout(),
+                Expanded(child: TodayTasks()),
               ],
             )
                 :
             Row(
               children: [
-                CategoryLayout(isLarge:isLarge),
-                Expanded(child: TodayTasks(isLarge:isLarge)),
+                CategoryLayout(),
+                Expanded(child: TodayTasks()),
               ],
             )
             ;
-      /*ListView(
-              scrollDirection: Axis.vertical,
-              children: [
-                CategoryLayout(isLarge:isLarge),
-                TodayTasks(isLarge:isLarge),
-              ],
-            );*/
+
     });
   }
 }

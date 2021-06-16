@@ -8,10 +8,10 @@ class Variables{
   }
 
   Variables._internal();
-
+bool isLarge;
   int _idOfList;
   List<String> _categories =[];
-  List<String> status = ["Important", "Temporary","Less important","In progress","Finished","Voluntary"];
+  List<String> status = ["Important","Less important","In progress","Finished","Voluntary"];
   List<String> frequency = ["Once","Daily","weekly","monthly"];
   ///have : today, tomorrow, Temporary(is status)
   Map<String,int> _tasks;

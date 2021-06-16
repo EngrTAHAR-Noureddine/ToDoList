@@ -119,7 +119,7 @@ class DBProvider {
     return list;
   }
   //get all task by date
-  ///date form : yyyy-mm-dd
+  ///date form :selectedDate.day.toString()+"/"+selectedDate.month.toString()+"/"+selectedDate.year.toString()
   Future<List<Task>> getByDate(String date,String dateReminder) async {
     final db = await database;
     var res = await db.query("Task", where: "date = ? OR dateReminder = ?", whereArgs: [date,dateReminder]);
