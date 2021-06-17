@@ -52,6 +52,8 @@ class _TodayTasksState extends State<TodayTasks> {
     return (list.isEmpty)?[]:list;
   }
 
+
+/*
   Widget panel(Item item){
     return Column(
       children: [
@@ -87,7 +89,7 @@ class _TodayTasksState extends State<TodayTasks> {
     );
   }
 
-
+*/
 
   Widget pageViewToDay(){
     return Container(
@@ -101,11 +103,29 @@ class _TodayTasksState extends State<TodayTasks> {
               });
               print(items);
 
-              return ListView(
-                children: items.map((item){
-                  return panel(item);
-                }).toList(),
-              );
+              return ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  itemCount: items.length,
+                  itemBuilder: (BuildContext context, int index){
+                    return Card(
+                      child: ExpansionTile(
+                        textColor: Colors.black,
+                        iconColor: Colors.black,
+                        title: Text(
+                          items[index].task.task,
+                          style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500,color: Colors.black),
+                        ),
+                        children: <Widget>[
+                          ListTile(
+                            title: Text(
+                              items[index].task.date,
+                              style: TextStyle(fontWeight: FontWeight.w700),
+                            ),
+                          )
+                        ],
+                      ),
+                    );
+                  });
 
             }
 
