@@ -123,8 +123,10 @@ class DBProvider {
   Future<List<Task>> getByDate(String date,String dateReminder) async {
     final db = await database;
     var res = await db.query("Task", where: "date = ? OR dateReminder = ?", whereArgs: [date,dateReminder]);
+
     List<Task> list =
     res.isNotEmpty ? res.map((c) => Task.fromMap(c)).toList() : [];
+
     return list;
   }
 

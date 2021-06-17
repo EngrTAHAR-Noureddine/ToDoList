@@ -48,7 +48,7 @@ class _TodayTasksState extends State<TodayTasks> {
     String date = dateNow.day.toString()+"/"+dateNow.month.toString()+"/"+dateNow.year.toString();
     List<Task> list = await DBProvider.db.getByDate(date, date);
 
-   // setState(() {});
+    //setState(() {});
     return (list.isEmpty)?[]:list;
   }
 
@@ -111,9 +111,24 @@ class _TodayTasksState extends State<TodayTasks> {
                       child: ExpansionTile(
                         textColor: Colors.black,
                         iconColor: Colors.black,
-                        title: Text(
-                          items[index].task.task,
-                          style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500,color: Colors.black),
+                        backgroundColor: Colors.orangeAccent,
+                        collapsedBackgroundColor: Colors.blueAccent,
+                        title: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.green,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black,
+                                spreadRadius: 4,
+                                blurRadius: 5,
+                                offset: Offset(0.3,0.4)
+                              )
+                            ]
+                          ),
+                          child: Text(
+                            items[index].task.task,
+                            style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500,color: Colors.black),
+                          ),
                         ),
                         children: <Widget>[
                           ListTile(
