@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:todolist/DataBase/database.dart';
-import 'package:todolist/Models/data_variable.dart';
 import 'package:todolist/Models/task_model.dart';
 
 class TodayTasks extends StatefulWidget {
@@ -16,6 +15,9 @@ bool isExpanded;
     this.task= task;
     this.isExpanded = false;
   }
+
+
+
  Widget getIcon(){
     switch(this.task.status){
       case "Important": /*C00000*/
@@ -39,69 +41,85 @@ bool isExpanded;
 }
 
 class _TodayTasksState extends State<TodayTasks> {
-  bool _isLarge;
 
-
-  @override
-  void initState() {
-
-    _isLarge = Variables().isLarge;
-  }
-  @override
-  Widget build(BuildContext context) {
-    initState();
- Future<List<Task>> getListTaskToday()async{
+  Future<List<Task>> getListTaskToday()async{
 
     DateTime dateNow = DateTime.now();
- String date = dateNow.day.toString()+"/"+dateNow.month.toString()+"/"+dateNow.year.toString();
+    String date = dateNow.day.toString()+"/"+dateNow.month.toString()+"/"+dateNow.year.toString();
     List<Task> list = await DBProvider.db.getByDate(date, date);
 
-  setState(() {});
-   return (list.isEmpty)?[]:list;
- }
-    Widget pageViewToDay(){
-      return FutureBuilder(
+   // setState(() {});
+    return (list.isEmpty)?[]:list;
+  }
+
+  Widget panel(Item item){
+    return Column(
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            color: Colors.white54
+          ),
+          child: ListTile(
+            leading: item.getIcon(),
+            title: Text(item.task.task, style: TextStyle(color: Colors.black),),
+            trailing:Icon( (item.isExpanded)?Icons.keyboard_arrow_down_outlined:Icons.keyboard_arrow_up_outlined, color: Colors.black,),
+          onTap: (){
+             setState(() {
+               print("inside panel : "+item.task.task+" => "+item.isExpanded.toString());
+               item.isExpanded = !item.isExpanded;
+
+               print("inside panel : "+item.task.task+" => "+item.isExpanded.toString());
+             });
+          },
+          ),
+        ),
+        (item.isExpanded)?
+        Container(child: ListTile(
+          title: Text("Note : " ,style: TextStyle(color: Colors.red),),
+          subtitle: Container(
+            height: 120,
+            child: Text((item.task.note.isEmpty)?"add note ...!": item.task.note),
+          ),
+        ))
+            :Container(),
+      ],
+    );
+  }
+
+
+
+  Widget pageViewToDay(){
+    return Container(
+      child: FutureBuilder(
           future: getListTaskToday(),
           builder: (context,AsyncSnapshot snapshot){
-            if(snapshot.hasData){
+            if(snapshot.hasData) {
               List<Task> list = snapshot.data;
-           List<Item> items  = List<Item>.generate(list.length, (int index) {
+              List<Item> items = List<Item>.generate(list.length, (int index) {
                 return Item(list[index]);
               });
+              print(items);
 
-            return ExpansionPanelList(
-              expansionCallback: (int index, bool isExpanded) {
-                setState(() {
-                  items[index].isExpanded = !isExpanded;
-                });
-              },
-              children: items.map<ExpansionPanel>((Item item) {
-                return ExpansionPanel(
-                  headerBuilder: (BuildContext context, bool isExpanded) {
-                    return ListTile(
-                      leading: item.getIcon(),
-                      title: Text(item.task.task),
-                    );
-                  },
-                  body: ListTile(
-                      title: Text(item.task.note),
-                      subtitle: const Text('To delete this panel, tap the trash can icon'),
-                      trailing: const Icon(Icons.delete),
-                      onTap: () {
-                        setState(() {
-                          items.removeWhere((Item currentItem) => item == currentItem);
-                        });
-                      }
-                  ),
-                  isExpanded: item.isExpanded,
-                );
-              }).toList(),
-            );
+              return ListView(
+                children: items.map((item){
+                  return panel(item);
+                }).toList(),
+              );
 
-          }else return Container();
+            }
 
-          });
-    }
+              return Center(child: Text("Take a break now you have no tasks"),);
+          }),
+    );
+  }
+
+
+
+  @override
+  Widget build(BuildContext context) {
+
+
 
     return PageView(
       children: <Widget>[

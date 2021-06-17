@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'ToDoList',
-      theme: ThemeData(
+      theme: ThemeData( //ADADAD
         primaryColor: Color(0xFF2643C4), //1
         primaryColorLight: Colors.white, //2
         primaryColorDark: Color(0xFFE6FFFB), //3
