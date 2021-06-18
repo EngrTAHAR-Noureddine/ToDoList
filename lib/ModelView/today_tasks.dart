@@ -61,64 +61,177 @@ class _TodayTasksState extends State<TodayTasks> {
   Widget pageViewToDay(){
     return Container(
       color: Theme.of(context).backgroundColor,
-      child: FutureBuilder(
-          future: getListTaskToday(),
-          builder: (context,AsyncSnapshot snapshot){
-            if(snapshot.hasData) {
-              List<Task> list = snapshot.data;
-              List<Item> items = List<Item>.generate(list.length, (int index) {
-                return Item(list[index]);
-              });
-              print(items);
+      child: Column(
+        children: [
+          Container(
+            margin: EdgeInsets.all(10),
+            child: Row(
+              children: [
+                Text("TODAY'S TASKS",style: TextStyle(color:Color(0xFF979DB0),fontSize: 20,),),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Container(
+              color: Theme.of(context).backgroundColor,
+              child: FutureBuilder(
+                  future: getListTaskToday(),
+                  builder: (context,AsyncSnapshot snapshot){
+                    if(snapshot.hasData) {
+                      List<Task> list = snapshot.data;
+                      List<Item> items = List<Item>.generate(list.length, (int index) {
+                        return Item(list[index]);
+                      });
+                      print(items);
 
-              return RefreshIndicator(
-                onRefresh: ()async{
-                  setState(() {});
-                },
-                child: ListView.builder(
-                    scrollDirection: Axis.vertical,
-                    itemCount: items.length,
-                    itemBuilder: (BuildContext context, int index){
-                      return Container(
-                      margin: EdgeInsets.all(5),
+                      return RefreshIndicator(
+                        onRefresh: ()async{
+                          setState(() {});
+                        },
+                        backgroundColor: Theme.of(context).backgroundColor,
+                        color: Theme.of(context).primaryColor,
+                        child: ListView.builder(
+                            scrollDirection: Axis.vertical,
+                            itemCount: items.length,
+                            padding: EdgeInsets.all(5),
+                            itemBuilder: (BuildContext context, int index){
+                              return Container(
+                              margin: EdgeInsets.all(5),
+                                child: custom.ExpansionTile(
 
-                        child: custom.ExpansionTile(
+                                  iconColor: Color(0xFFA5ABBD),
+                                  backgroundColor: Theme.of(context).backgroundColor,
+                                  headerBackgroundColor: Theme.of(context).primaryColorLight,
+                                  leading: items[index].getIcon(),
 
-                          iconColor: Color(0xFFA5ABBD),
-                          backgroundColor: Theme.of(context).backgroundColor,
-                          headerBackgroundColor: Theme.of(context).primaryColorLight,
-                          leading: items[index].getIcon(),
+                                  title: Text(
+                                    items[index].task.task,
+                                    style: TextStyle(fontSize: 18.0,color: Theme.of(context).floatingActionButtonTheme.focusColor,),
+                                  ),
+                                  children: <Widget>[
 
-                          title: Text(
-                            items[index].task.task,
-                            style: TextStyle(fontSize: 18.0,color: Theme.of(context).floatingActionButtonTheme.focusColor,),
-                          ),
-                          children: <Widget>[
+                                    ListTile(
+                                      title: Text(
+                                        "Note : ",
+                                        style: TextStyle(fontWeight: FontWeight.normal , color: Color(0xFF979DB0)),
+                                      ),
+                                      subtitle: Container(
+                                        height: 120,
+                                        child: Text(
+                                          (items[index].task.note.isEmpty)?"Add a note...":items[index].task.note,
+                                          style: TextStyle(fontWeight: FontWeight.w700 , color:Theme.of(context).floatingActionButtonTheme.backgroundColor),
+                                        ),
+                                      ),
 
-                            ListTile(
-                              title: Text(
-                                "Note : ",
-                                style: TextStyle(fontWeight: FontWeight.w700 , color: Color(0xFF979DB0)),
-                              ),
-                              subtitle: Container(
-                                height: 120,
-                                child: Text(
-                                  (items[index].task.note.isEmpty)?"Add a note...":items[index].task.note,
-                                  style: TextStyle(fontWeight: FontWeight.w700 , color:Theme.of(context).floatingActionButtonTheme.backgroundColor),
+                                    )
+                                  ],
                                 ),
-                              ),
-
-                            )
-                          ],
-                        ),
+                              );
+                            }),
                       );
-                    }),
-              );
 
-            }
+                    }
 
-              return Center(child: Text("Take a break now you have no tasks"),);
-          }),
+                      return Center(child: Text("Take a break now you have no tasks",  style: TextStyle(fontWeight: FontWeight.normal , color: Color(0xFF979DB0)),),);
+                  }),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+///******************************************************************* TOMORROW **********************
+  Future<List<Task>> getListTaskTomorrow()async{
+
+    DateTime dateNow = DateTime.now();
+    DateTime tomorrow = DateTime(dateNow.year, dateNow.month, dateNow.day + 1);
+    String date = tomorrow.day.toString()+"/"+tomorrow.month.toString()+"/"+tomorrow.year.toString();
+
+    List<Task> list = await DBProvider.db.getByDate(date, date);
+
+    //setState(() {});
+    return (list.isEmpty)?[]:list;
+  }
+  Widget pageViewTomorrow(){
+    return Container(
+      color: Theme.of(context).backgroundColor,
+      child: Column(
+        children: [
+          Container(
+            margin: EdgeInsets.all(10),
+            child: Row(
+              children: [
+                Text("TOMORROW'S TASKS",style: TextStyle(color:Color(0xFF979DB0),fontSize: 20,),),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Container(
+              color: Theme.of(context).backgroundColor,
+              child: FutureBuilder(
+                  future: getListTaskTomorrow(),
+                  builder: (context,AsyncSnapshot snapshot){
+                    if(snapshot.hasData) {
+                      List<Task> list = snapshot.data;
+                      List<Item> items = List<Item>.generate(list.length, (int index) {
+                        return Item(list[index]);
+                      });
+                      print(items);
+
+                      return RefreshIndicator(
+                        onRefresh: ()async{
+                          setState(() {});
+                        },
+                        backgroundColor: Theme.of(context).backgroundColor,
+                        color: Theme.of(context).primaryColor,
+                        child: ListView.builder(
+                            scrollDirection: Axis.vertical,
+                            itemCount: items.length,
+                            padding: EdgeInsets.all(5),
+                            itemBuilder: (BuildContext context, int index){
+                              return Container(
+                                margin: EdgeInsets.all(5),
+                                child: custom.ExpansionTile(
+
+                                  iconColor: Color(0xFFA5ABBD),
+                                  backgroundColor: Theme.of(context).backgroundColor,
+                                  headerBackgroundColor: Theme.of(context).primaryColorLight,
+                                  leading: items[index].getIcon(),
+
+                                  title: Text(
+                                    items[index].task.task,
+                                    style: TextStyle(fontSize: 18.0,color: Theme.of(context).floatingActionButtonTheme.focusColor,),
+                                  ),
+                                  children: <Widget>[
+
+                                    ListTile(
+                                      title: Text(
+                                        "Note : ",
+                                        style: TextStyle(fontWeight: FontWeight.normal , color: Color(0xFF979DB0)),
+                                      ),
+                                      subtitle: Container(
+                                        height: 120,
+                                        child: Text(
+                                          (items[index].task.note.isEmpty)?"Add a note...":items[index].task.note,
+                                          style: TextStyle(fontWeight: FontWeight.w700 , color:Theme.of(context).floatingActionButtonTheme.backgroundColor),
+                                        ),
+                                      ),
+
+                                    )
+                                  ],
+                                ),
+                              );
+                            }),
+                      );
+
+                    }
+
+                    return Center(child: Text("Take a break now you have no tasks",  style: TextStyle(fontWeight: FontWeight.normal , color: Color(0xFF979DB0)),),);
+                  }),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -132,9 +245,7 @@ class _TodayTasksState extends State<TodayTasks> {
     return PageView(
       children: <Widget>[
         pageViewToDay(),
-        Container(
-          color: Colors.cyan,
-        ),
+        pageViewTomorrow(),
 
       ],
     );
