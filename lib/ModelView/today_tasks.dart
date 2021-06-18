@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:todolist/DataBase/database.dart';
+import 'package:todolist/Models/provider_class.dart';
 import 'package:todolist/Models/task_model.dart';
 import 'package:todolist/Models/custom_expansion_tile.dart' as custom;
 class TodayTasks extends StatefulWidget {
@@ -327,47 +329,47 @@ class _TodayTasksState extends State<TodayTasks> {
     );
   }
  ///*************************************************************************************
-  PageController _controller=PageController(initialPage: 0);
- bool addpage=false;
+  //PageController _controller=PageController(initialPage: 0);
+ bool _ishe=false;
  String category;
   @override
   Widget build(BuildContext context) {
 
+//TODO na7i provider se  dir setState
+/// provider tchangi we tfawet les variables sans changer the widgets
+    /// tsema ra7 tna7iha men l7sab , makhadmetlekch
+    ///
+    return ChangeNotifierProvider<ProviderClass>(
+        create: (context) => ProviderClass(),
+        child: Builder(
+        builder: (context) {
+
+                 return   PageView(
+                   scrollDirection: Axis.horizontal,
+                   onPageChanged: (index){
+                           print("inside pageview : "+ ProviderClass().categoryName());
+
+                       if(ProviderClass().categoryName()!="click_button"){
+                         ProviderClass().controller.jumpToPage(0);
+                         ProviderClass().setCategory("click_button");
+                       }
 
 
-    return Column(
-      children: [
-        MaterialButton(
-          child: Text("click"),
-          onPressed: (){
-            setState(() {
-            //  _controller=PageController(initialPage: 0);
-              _controller.jumpToPage(0);
-              addpage=true;
-            });
-          },
-        ),
-        Expanded(
-          child: PageView(
-            scrollDirection: Axis.horizontal,
-            onPageChanged: (index){
+                       print("outside setstate : "+ ProviderClass().categoryName());
 
-              setState(() {
-                if(addpage)  _controller.jumpToPage(0);
-                addpage = false;
+                   },
+                   controller: ProviderClass().controller,
+                   children: <Widget>[
+                     ProviderClass().her(),//pageViewCategory(category),
+                     pageViewToDay(),
+                     pageViewTomorrow(),
 
-              });
-            },
-            controller: _controller,
-            children: <Widget>[
-              if(addpage)pageViewCategory(category),
-              pageViewToDay(),
-              pageViewTomorrow(),
-
-            ],
-          ),
-        ),
-      ],
+                   ],
+                 );
+        }
+        )
     );
+
+
   }
 }

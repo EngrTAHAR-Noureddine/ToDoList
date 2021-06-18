@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todolist/DataBase/database.dart';
 import 'package:todolist/Models/data_variable.dart';
+import 'package:todolist/Models/provider_class.dart';
 import 'package:todolist/Models/task_model.dart';
 class CategoryBuilder extends StatefulWidget {
 
@@ -93,7 +94,10 @@ class _CategoryBuilderState extends State<CategoryBuilder> {
                                       ),
                                       child: MaterialButton(
 
-                                        onPressed: (){},
+                                        onPressed: (){
+                                          print(list[index].category);
+                                          ProviderClass().setCategory(list[index].category);
+                                        },
                                         colorBrightness:Theme.of(context).primaryColorBrightness,
                                         padding: EdgeInsets.only(left: 10),
                                         elevation: 3,
