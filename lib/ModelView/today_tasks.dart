@@ -21,19 +21,19 @@ bool isExpanded;
  Widget getIcon(){
     switch(this.task.status){
       case "Important": /*C00000*/
-        return Icon(Icons.circle_rounded,color: Color(0xFFC00000),);
+        return Icon(Icons.radio_button_off_rounded,color: Color(0xFFC00000),);
         break;
       case "Less important": /* ff4500 */
-        return Icon(Icons.circle_rounded,color: Color(0xFFFF4500));
+        return Icon(Icons.radio_button_off_rounded,color: Color(0xFFFF4500));
               break;
       case "Finished"://00B98C
-        return Icon(Icons.check_circle_outline_sharp,color: Color(0xFF6D6E70));
+        return Icon(Icons.task_alt_rounded,color: Color(0xFF6D6E70));
         break;
       case "Voluntary": /* 6D6E70 */
-        return Icon(Icons.circle_rounded,color: Color(0xFF6D6E70));
+        return Icon(Icons.radio_button_off_rounded,color: Color(0xFF6D6E70));
           break;
       default : /* In progress  0269CA */
-        return Icon(Icons.circle_rounded,color: Color(0xFF0269CA));
+        return Icon(Icons.radio_button_off_rounded,color: Color(0xFF0269CA));
         break;
 
     }
