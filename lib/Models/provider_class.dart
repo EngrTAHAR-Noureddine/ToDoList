@@ -12,12 +12,30 @@ class ProviderClass extends ChangeNotifier{
   String _category = "click_button";
   PageController controller = PageController(initialPage: 0);
 
+
+  List listWidgets =[Container(color:Colors.blue),Container(color:Colors.red)];
+
   void setCategory(String cat){
     if(cat.isNotEmpty) {
       this._category = cat;
       controller.jumpToPage(0);
     }
     notifyListeners();
+  }
+
+  void setWidget(){
+    this.listWidgets[0] = Container(color:Colors.yellowAccent);
+    print("length in set widget : "+this.listWidgets.length.toString());
+    //ProviderClass().controller.jumpToPage(0);
+    notifyListeners();
+  }
+  void removewidget(){
+    if(this._category!="click_button") {
+      this._category = "click_button";
+      this.listWidgets[0] = Container(color:Colors.blue);
+
+      notifyListeners();
+    }
   }
 
   String categoryName(){ return _category;}

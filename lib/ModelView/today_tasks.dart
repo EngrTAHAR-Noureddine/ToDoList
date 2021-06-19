@@ -344,27 +344,31 @@ class _TodayTasksState extends State<TodayTasks> {
         child: Builder(
         builder: (context) {
 
-                 return   PageView(
+                 return   PageView.builder(
+                   itemCount: ProviderClass().listWidgets.length,
+
                    scrollDirection: Axis.horizontal,
                    onPageChanged: (index){
                            print("inside pageview : "+ ProviderClass().categoryName());
 
                        if(ProviderClass().categoryName()!="click_button"){
-                         ProviderClass().controller.jumpToPage(0);
-                         ProviderClass().setCategory("click_button");
+
+                         ProviderClass().removewidget();
+                        // ProviderClass().controller.jumpToPage(0);
+                         print("length in set widget : "+ProviderClass().listWidgets.length.toString());
                        }
-
-
-                       print("outside setstate : "+ ProviderClass().categoryName());
-
+                       
                    },
                    controller: ProviderClass().controller,
-                   children: <Widget>[
-                     ProviderClass().her(),//pageViewCategory(category),
+                   itemBuilder: (context, index){
+                     return ProviderClass().listWidgets[index];
+                   },
+             /*      children: <Widget>[
+                     if(ProviderClass().categoryName()!="click_button")Container(color:Colors.blue),//pageViewCategory(category),
                      pageViewToDay(),
                      pageViewTomorrow(),
 
-                   ],
+                   ],*/
                  );
         }
         )

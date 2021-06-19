@@ -97,6 +97,8 @@ class _CategoryBuilderState extends State<CategoryBuilder> {
                                         onPressed: (){
                                           print(list[index].category);
                                           ProviderClass().setCategory(list[index].category);
+                                          ProviderClass().setWidget();
+
                                         },
                                         colorBrightness:Theme.of(context).primaryColorBrightness,
                                         padding: EdgeInsets.only(left: 10),
