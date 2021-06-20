@@ -95,9 +95,8 @@ class _CategoryBuilderState extends State<CategoryBuilder> {
                                       child: MaterialButton(
 
                                         onPressed: (){
-                                          print(list[index].category);
-                                          ProviderClass().setCategory(list[index].category);
-                                          ProviderClass().setWidget();
+
+                                          ProviderClass().setWidget("pop");
 
                                         },
                                         colorBrightness:Theme.of(context).primaryColorBrightness,

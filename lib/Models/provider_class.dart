@@ -9,45 +9,29 @@ class ProviderClass extends ChangeNotifier{
 
   ProviderClass._internal();
 
-  String _category = "click_button";
+
   PageController controller = PageController(initialPage: 0);
 
 
   List listWidgets =[Container(color:Colors.blue),Container(color:Colors.red)];
 
-  void setCategory(String cat){
-    if(cat.isNotEmpty) {
-      this._category = cat;
-      controller.jumpToPage(0);
-      notifyListeners();
-    }
 
-  }
 
-  void setWidget(){
-    this.listWidgets[0] = Container(color:Colors.yellowAccent);
-    print("inside setwidget length in set widget : "+this.listWidgets.length.toString());
-
+  void setWidget(name){
+    this.listWidgets.insert(0,Container(color:Colors.yellowAccent));
+    this.controller.jumpToPage(0);
     notifyListeners();
   }
-  void replaceWidget(){
+
+  void removeWidget(){
 
 
-      this.listWidgets[0] = Container(color:Colors.green);
-
+      this.listWidgets.removeAt(0);
+        this.controller.jumpToPage(0);
       notifyListeners();
 
   }
 
-  String categoryName(){ return _category;}
 
-  Widget her(){
-    print(this._category);
-    if(this._category!="click_button"){
-    return Container(color:Colors.blue);
-    }
-    else return Container(color:Colors.red);
-
-  }
 
 }

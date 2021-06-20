@@ -346,22 +346,17 @@ class _TodayTasksState extends State<TodayTasks> {
 
           scrollDirection: Axis.horizontal,
 
-          onPageChanged: (index){
-            print("before if in onpagechange : "+ value.categoryName());
 
-            if(value.categoryName()!="click_button"){
-              value.setCategory("click_button");
-              value.replaceWidget();
-
-
-              print("inside if of onpagechange length in set widget : "+value.listWidgets.length.toString());
-            }
-            print("after if in onpagechange : "+ value.categoryName());
-
-          },
           controller: value.controller,
           itemBuilder: (context, index){
             return value.listWidgets[index];
+          },
+          onPageChanged: (index){
+
+           if(index>0)
+            if(value.listWidgets.length>2) value.removeWidget();
+
+
           },
           /*      children: <Widget>[
                      if(ProviderClass().categoryName()!="click_button")Container(color:Colors.blue),//pageViewCategory(category),
