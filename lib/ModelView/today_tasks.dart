@@ -336,42 +336,42 @@ class _TodayTasksState extends State<TodayTasks> {
   Widget build(BuildContext context) {
 
 //TODO na7i provider se  dir setState
-/// provider tchangi we tfawet les variables sans changer the widgets
-    /// tsema ra7 tna7iha men l7sab , makhadmetlekch
+/// 7awess 3la algo bayna we chaba hadi خطأ
     ///
-    return ChangeNotifierProvider<ProviderClass>(
-        create: (context) => ProviderClass(),
-        child: Builder(
-        builder: (context) {
 
-                 return   PageView.builder(
-                   itemCount: ProviderClass().listWidgets.length,
+    return Consumer<ProviderClass>(
+      builder: (context, value, child) {
+        return PageView.builder(
+          itemCount: value.listWidgets.length,
 
-                   scrollDirection: Axis.horizontal,
-                   onPageChanged: (index){
-                           print("inside pageview : "+ ProviderClass().categoryName());
+          scrollDirection: Axis.horizontal,
 
-                       if(ProviderClass().categoryName()!="click_button"){
+          onPageChanged: (index){
+            print("before if in onpagechange : "+ value.categoryName());
 
-                         ProviderClass().removewidget();
-                        // ProviderClass().controller.jumpToPage(0);
-                         print("length in set widget : "+ProviderClass().listWidgets.length.toString());
-                       }
-                       
-                   },
-                   controller: ProviderClass().controller,
-                   itemBuilder: (context, index){
-                     return ProviderClass().listWidgets[index];
-                   },
-             /*      children: <Widget>[
+            if(value.categoryName()!="click_button"){
+              value.setCategory("click_button");
+              value.replaceWidget();
+
+
+              print("inside if of onpagechange length in set widget : "+value.listWidgets.length.toString());
+            }
+            print("after if in onpagechange : "+ value.categoryName());
+
+          },
+          controller: value.controller,
+          itemBuilder: (context, index){
+            return value.listWidgets[index];
+          },
+          /*      children: <Widget>[
                      if(ProviderClass().categoryName()!="click_button")Container(color:Colors.blue),//pageViewCategory(category),
                      pageViewToDay(),
                      pageViewTomorrow(),
 
                    ],*/
-                 );
-        }
-        )
+        );
+      },
+
     );
 
 
