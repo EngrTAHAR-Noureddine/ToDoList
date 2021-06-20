@@ -96,7 +96,7 @@ class _CategoryBuilderState extends State<CategoryBuilder> {
 
                                         onPressed: (){
 
-                                          ProviderClass().setWidget("pop");
+                                          ProviderClass().setWidget(list[index].category);
 
                                         },
                                         colorBrightness:Theme.of(context).primaryColorBrightness,

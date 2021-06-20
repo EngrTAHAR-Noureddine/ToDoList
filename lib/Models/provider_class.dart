@@ -13,23 +13,20 @@ class ProviderClass extends ChangeNotifier{
   PageController controller = PageController(initialPage: 0);
 
 
-  List listWidgets =[Container(color:Colors.blue),Container(color:Colors.red)];
+  List<String> listWidgets =["TODAY","TOMORROW"];
 
 
 
   void setWidget(name){
-    this.listWidgets.insert(0,Container(color:Colors.yellowAccent));
+    this.listWidgets.insert(0,name);
     this.controller.jumpToPage(0);
     notifyListeners();
   }
 
   void removeWidget(){
-
-
       this.listWidgets.removeAt(0);
         this.controller.jumpToPage(0);
       notifyListeners();
-
   }
 
 

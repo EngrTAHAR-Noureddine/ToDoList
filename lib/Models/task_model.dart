@@ -1,5 +1,9 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:todolist/DataBase/database.dart';
+
 Task taskFromJson(String str) {
   final jsonData = json.decode(str);
   return Task.fromMap(jsonData);
@@ -100,4 +104,74 @@ class Category {
     "category": category,
 
   };
+}
+
+class Item {
+  Task task;
+  bool isExpanded;
+
+
+  Item(Task task){
+    this.task= task;
+    this.isExpanded = false;
+  }
+
+
+
+  Widget getIcon(){
+    switch(this.task.status){
+      case "Important": /*C00000*/
+        return Icon(Icons.radio_button_off_rounded,color: Color(0xFFC00000),);
+        break;
+      case "Less important": /* ff4500 */
+        return Icon(Icons.radio_button_off_rounded,color: Color(0xFFFF4500));
+        break;
+      case "Finished"://00B98C
+        return Icon(Icons.task_alt_rounded,color: Color(0xFF6D6E70));
+        break;
+      case "Voluntary": /* 6D6E70 */
+        return Icon(Icons.radio_button_off_rounded,color: Color(0xFF6D6E70));
+        break;
+      default : /* In progress  0269CA */
+        return Icon(Icons.radio_button_off_rounded,color: Color(0xFF0269CA));
+        break;
+
+    }
+  }
+
+}
+
+class TaskFunctions{
+  static final TaskFunctions _singleton = TaskFunctions._internal();
+
+  factory TaskFunctions() {
+    return _singleton;
+  }
+
+  TaskFunctions._internal();
+
+
+  Future<List<Item>> getList(String name)async{
+    DateTime dateNow = DateTime.now();
+    List<Task> list =[];
+    DateTime tomorrow = DateTime(dateNow.year, dateNow.month, dateNow.day + 1);
+    String date ;
+    switch(name){
+      case "TODAY":
+                    date = dateNow.day.toString()+"/"+dateNow.month.toString()+"/"+dateNow.year.toString();
+                    list = await DBProvider.db.getByDate(date, date);
+                    break;
+      case "TOMORROW":
+                      date = tomorrow.day.toString()+"/"+tomorrow.month.toString()+"/"+tomorrow.year.toString();
+                      list = await DBProvider.db.getByDate(date, date);
+                      break;
+      default : list = await DBProvider.db.getCategory(name);  break;
+    }
+
+    List<Item> items =  (list.isEmpty)?[]:List<Item>.generate(list.length, (int index) {
+    return Item(list[index]);
+    });
+    return items;
+  }
+
 }

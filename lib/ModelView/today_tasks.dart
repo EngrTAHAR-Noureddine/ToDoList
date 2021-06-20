@@ -10,44 +10,14 @@ class TodayTasks extends StatefulWidget {
   _TodayTasksState createState() => _TodayTasksState();
 }
 
-class Item{
-Task task;
-bool isExpanded;
-  Item(Task task){
-    this.task= task;
-    this.isExpanded = false;
-  }
 
-
-
- Widget getIcon(){
-    switch(this.task.status){
-      case "Important": /*C00000*/
-        return Icon(Icons.radio_button_off_rounded,color: Color(0xFFC00000),);
-        break;
-      case "Less important": /* ff4500 */
-        return Icon(Icons.radio_button_off_rounded,color: Color(0xFFFF4500));
-              break;
-      case "Finished"://00B98C
-        return Icon(Icons.task_alt_rounded,color: Color(0xFF6D6E70));
-        break;
-      case "Voluntary": /* 6D6E70 */
-        return Icon(Icons.radio_button_off_rounded,color: Color(0xFF6D6E70));
-          break;
-      default : /* In progress  0269CA */
-        return Icon(Icons.radio_button_off_rounded,color: Color(0xFF0269CA));
-        break;
-
-    }
-  }
-}
 
 class _TodayTasksState extends State<TodayTasks> {
 
 
 
 
-
+/*
   Future<List<Task>> getListTaskToday()async{
 
     DateTime dateNow = DateTime.now();
@@ -58,8 +28,8 @@ class _TodayTasksState extends State<TodayTasks> {
     return (list.isEmpty)?[]:list;
   }
 
-
-
+*/
+/*
   Widget pageViewToDay(){
     return Container(
       color: Theme.of(context).backgroundColor,
@@ -141,9 +111,8 @@ class _TodayTasksState extends State<TodayTasks> {
         ],
       ),
     );
-  }
-///******************************************************************* TOMORROW **********************
-  Future<List<Task>> getListTaskTomorrow()async{
+  }*/
+ /* Future<List<Task>> getListTaskTomorrow()async{
 
     DateTime dateNow = DateTime.now();
     DateTime tomorrow = DateTime(dateNow.year, dateNow.month, dateNow.day + 1);
@@ -152,7 +121,8 @@ class _TodayTasksState extends State<TodayTasks> {
     List<Task> list = await DBProvider.db.getByDate(date, date);
 
     return (list.isEmpty)?[]:list;
-  }
+  }*/
+  /*
   Widget pageViewTomorrow(){
     return Container(
       color: Theme.of(context).backgroundColor,
@@ -236,17 +206,17 @@ class _TodayTasksState extends State<TodayTasks> {
     );
   }
 
-
-  ///***************************** get with category ************************************
-  Future<List<Task>> getListTaskCategory(String category)async{
+*/
+ /* Future<List<Task>> getListTaskCategory(String category)async{
 
 
     List<Task> list = await DBProvider.db.getCategory(category);
 
     return (list.isEmpty)?[]:list;
-  }
+  }*/
 
   Widget pageViewCategory(String category){
+
     return Container(
       color: Theme.of(context).backgroundColor,
       child: Column(
@@ -255,7 +225,7 @@ class _TodayTasksState extends State<TodayTasks> {
             margin: EdgeInsets.all(10),
             child: Row(
               children: [
-                Text("TOMORROW'S TASKS",style: TextStyle(color:Color(0xFF979DB0),fontSize: 20,),),
+                Text(category+"'S TASKS",style: TextStyle(color:Color(0xFF979DB0),fontSize: 20,),),
               ],
             ),
           ),
@@ -263,14 +233,16 @@ class _TodayTasksState extends State<TodayTasks> {
             child: Container(
               color: Theme.of(context).backgroundColor,
               child: FutureBuilder(
-                  future: getListTaskCategory(category),
+                  future: TaskFunctions().getList(category),
                   builder: (context,AsyncSnapshot snapshot){
+                    print(snapshot.hasData);
+                    print(snapshot.data);
+                    print(snapshot.hasError);
+                    print(snapshot.error);
+
                     if(snapshot.hasData) {
-                      List<Task> list = snapshot.data;
-                      List<Item> items = List<Item>.generate(list.length, (int index) {
-                        return Item(list[index]);
-                      });
-                      print(items);
+
+                      List<Item> items = snapshot.data;
 
                       return RefreshIndicator(
                         onRefresh: ()async{
@@ -278,7 +250,9 @@ class _TodayTasksState extends State<TodayTasks> {
                         },
                         backgroundColor: Theme.of(context).backgroundColor,
                         color: Theme.of(context).primaryColor,
-                        child: ListView.builder(
+                        child:(items.isEmpty)?Center(
+                          child: Text("Take a break now you have no tasks",  style: TextStyle(fontWeight: FontWeight.normal , color: Color(0xFF979DB0)),),)
+                            : ListView.builder(
                             scrollDirection: Axis.vertical,
                             itemCount: items.length,
                             padding: EdgeInsets.all(5),
@@ -329,41 +303,23 @@ class _TodayTasksState extends State<TodayTasks> {
     );
   }
  ///*************************************************************************************
-  //PageController _controller=PageController(initialPage: 0);
- bool _ishe=false;
- String category;
+
   @override
   Widget build(BuildContext context) {
 
-//TODO na7i provider se  dir setState
-/// 7awess 3la algo bayna we chaba hadi خطأ
-    ///
 
     return Consumer<ProviderClass>(
       builder: (context, value, child) {
         return PageView.builder(
           itemCount: value.listWidgets.length,
-
           scrollDirection: Axis.horizontal,
-
-
           controller: value.controller,
           itemBuilder: (context, index){
-            return value.listWidgets[index];
+            return pageViewCategory(value.listWidgets[index]);
           },
           onPageChanged: (index){
-
-           if(index>0)
-            if(value.listWidgets.length>2) value.removeWidget();
-
-
+           if(index>0) if(value.listWidgets.length>2) value.removeWidget();
           },
-          /*      children: <Widget>[
-                     if(ProviderClass().categoryName()!="click_button")Container(color:Colors.blue),//pageViewCategory(category),
-                     pageViewToDay(),
-                     pageViewTomorrow(),
-
-                   ],*/
         );
       },
 
