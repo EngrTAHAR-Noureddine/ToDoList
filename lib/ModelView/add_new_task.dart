@@ -7,7 +7,24 @@ import 'package:todolist/Models/draft_model.dart';
 import 'package:todolist/Models/task_model.dart';
 
 class AddNewTasks extends StatefulWidget {
-
+ int id;
+  String task;
+  String category;
+  String note;
+  String status;
+  String frequency;
+  String date;
+  String time;
+  String dateReminder;
+  String timeReminder;
+  String goal;
+  AddNewTasks({ this.goal,
+                this.category,this.note,
+                this.task,this.date,
+                this.status,this.frequency,
+                this.dateReminder,this.timeReminder,
+                this.time, this.id
+              });
   @override
   _AddNewTasksState createState() => _AddNewTasksState();
 }
@@ -102,9 +119,9 @@ class _AddNewTasksState extends State<AddNewTasks> {
   TextEditingController _addGoal =new TextEditingController();
 
 bool enabled = true;
-  String _categorySelected = "Category";
-  String _statusSelected = "Voluntary";
-  String _frequencySelected = "Once";
+  String _categorySelected;
+  String _statusSelected ;
+  String _frequencySelected;
 
   DateTime selectedDate = DateTime.now();
   TimeOfDay selectedTime = TimeOfDay(hour: 00, minute: 00);
@@ -200,10 +217,38 @@ bool enabled = true;
         selectedDate = picked;
       });
   }
+  List<String> _part =[];
+  @override
+  void initState() {
+
+   if((widget.task!=null)&&(widget.task.isNotEmpty))_taskName.text = widget.task;
+  if((widget.timeReminder!=null)&&(widget.timeReminder.isNotEmpty)) _timeR = widget.timeReminder;
+
+   _categorySelected =((widget.category!=null)&&(widget.category.isNotEmpty))? widget.category:"Category";
+
+   _frequencySelected =((widget.frequency!=null)&&(widget.frequency.isNotEmpty))? widget.frequency:"Once";
+
+   if((widget.dateReminder!=null)&&(widget.dateReminder.isNotEmpty)){
+     _part= widget.dateReminder.split("/");
+    selectedReminder = DateTime(int.parse(_part[2]),int.parse(_part[1]),int.parse(_part[0]));
+   }
+
+   if((widget.date!=null)&&(widget.date.isNotEmpty)){
+     _part= widget.date.split("/");
+     selectedDate = DateTime(int.parse(_part[2]),int.parse(_part[1]),int.parse(_part[0]));
+   }
+
+    if((widget.note!=null)&&(widget.note.isNotEmpty)) _addNoteText.text = widget.note;
+
+     _statusSelected =((widget.status!=null)&&(widget.status.isNotEmpty))? widget.status:"Voluntary";
+
+   if((widget.goal!=null)&&(widget.goal.isNotEmpty))_addGoal.text = widget.goal;
+    if((widget.time!=null)&&(widget.time.isNotEmpty)) _time =widget.time ;
+  }
 
   @override
   Widget build(BuildContext context) {
-
+    initState();
     return WillPopScope (
       onWillPop: () async{
         if(_categorySelected =="Category") _categorySelected = "Temporary";
@@ -219,7 +264,7 @@ bool enabled = true;
             goal: _addGoal.text,
             time: _time
         );
-        DBProvider.db.newDraft(taskAsDraft);
+        if(_taskName.text.isNotEmpty) DBProvider.db.newDraft(taskAsDraft);
 
         Navigator.pop(context);
         return false;
@@ -246,7 +291,8 @@ bool enabled = true;
                 goal: _addGoal.text,
                 time: _time
               );
-              DBProvider.db.newDraft(taskAsDraft);
+
+              if(_taskName.text.isNotEmpty) DBProvider.db.newDraft(taskAsDraft);
 
               Navigator.pop(context);
               },
@@ -270,8 +316,11 @@ bool enabled = true;
                         goal: _addGoal.text,
                         time: _time
                     );
-                    DBProvider.db.newTask(task);
-                    print(DBProvider.db.getAllTask());
+                    if(widget.id!=null){
+                      task.id = widget.id;
+                      DBProvider.db.updateTask(task);
+                    }else DBProvider.db.newTask(task);
+
 
                     _formKey.currentState.save();
 
@@ -361,6 +410,24 @@ bool enabled = true;
 
                           borderSide: BorderSide(
                             color: Theme.of(context).floatingActionButtonTheme.backgroundColor,
+                            width: 1,
+                            style: BorderStyle.solid,
+                          ),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+
+                          borderSide: BorderSide(
+                            color: Theme.of(context).errorColor,
+                            width: 1,
+                            style: BorderStyle.solid,
+                          ),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+
+                          borderSide: BorderSide(
+                            color: Theme.of(context).errorColor,
                             width: 1,
                             style: BorderStyle.solid,
                           ),
@@ -677,13 +744,6 @@ bool enabled = true;
                     padding: EdgeInsets.only(left: 10, right: 10,),
                     child:TextFormField(
 
-                      // focusNode: currentFocus,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter some text';
-                        }
-                        return null;
-                      },
                       textAlign: TextAlign.left,
                       style: TextStyle(fontSize: 14,color: Theme.of(context).floatingActionButtonTheme.backgroundColor ),
                       maxLines: 1,

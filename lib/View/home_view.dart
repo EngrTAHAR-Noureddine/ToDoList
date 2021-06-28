@@ -170,7 +170,7 @@ class _HomeState extends State<Home> {
               elevation: 0,
               child: Icon(Icons.add ,color: Theme.of(context).splashColor,),
               backgroundColor: Theme.of(context).primaryColor,
-              onPressed: () async {
+              onPressed: (){
 
                 Navigator.push(
                   context,

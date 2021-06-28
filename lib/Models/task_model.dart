@@ -108,12 +108,12 @@ class Category {
 
 class Item {
   Task task;
-  bool isExpanded;
+
 
 
   Item(Task task){
     this.task= task;
-    this.isExpanded = false;
+
   }
 
 
