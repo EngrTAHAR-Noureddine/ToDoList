@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
+import 'package:provider/provider.dart';
 import 'package:todolist/ModelView/add_new_task.dart';
 import 'dart:math' as math;
 
 import 'package:todolist/ModelView/body_model.dart';
+import 'package:todolist/Models/provider_home_class.dart';
+import 'package:todolist/View/switch_view.dart';
 
 
 
@@ -15,7 +18,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
- // final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final _advancedDrawerController = AdvancedDrawerController();
   void _handleMenuButtonPressed() {
     _advancedDrawerController.showDrawer();
@@ -27,7 +29,7 @@ class _HomeState extends State<Home> {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarIconBrightness: Theme.of(context).brightness,
     ));
-    return AdvancedDrawer(
+      return  AdvancedDrawer(
       backdropColor: Theme.of(context).primaryColor,
       controller: _advancedDrawerController,
       animationCurve: Curves.easeInOut,
@@ -57,17 +59,32 @@ class _HomeState extends State<Home> {
 
                 ):Container(),
                 ListTile(
-                  onTap: () {},
-                  leading: Icon(Icons.home),
+
+                  onTap: () {
+
+                    setState(() {
+                      ProviderHome().index=0;
+                    });
+                  },
+                  leading: Icon(Icons.task_alt_rounded),
                   title: Text('Tasks'),
                 ),
                 ListTile(
-                  onTap: () {},
+                  onTap: () {
+
+                    setState(() {
+                      ProviderHome().index=1;
+                    });
+                    },
                   leading: Icon(Icons.delete),
                   title: Text('Drafts'),
                 ),
                 ListTile(
-                  onTap: () {},
+                  onTap: () {
+                    setState(() {
+                      ProviderHome().index=2;
+                    });
+                    },
                   leading: Image.asset('assets/images/goal.png',color: Theme.of(context).splashColor,),
                   title: Text('Goals'),
                 ),
@@ -78,6 +95,7 @@ class _HomeState extends State<Home> {
                 ),
                 Spacer(),
                 MaterialButton(
+                  onPressed: (){},
                   child: DefaultTextStyle(
                     style: TextStyle(
                       fontSize: 12,
@@ -145,7 +163,7 @@ class _HomeState extends State<Home> {
               ),
             ],
           ),
-          body:ToDoListBody(),
+          body:ViewSwitch(),
 
 
             floatingActionButton: FloatingActionButton(
