@@ -1,18 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:todolist/ModelView/today_tasks.dart';
 import 'package:todolist/Models/data_variable.dart';
 import 'package:todolist/Models/provider_class.dart';
 import 'package:todolist/View/category_view.dart';
+import 'package:todolist/View/tasks_view.dart';
 
-class ToDoList extends StatefulWidget {
+class ToDoListBody extends StatefulWidget {
 
   @override
-  _ToDoListState createState() => _ToDoListState();
+  _ToDoListBodyState createState() => _ToDoListBodyState();
 }
 
-class _ToDoListState extends State<ToDoList> {
+class _ToDoListBodyState extends State<ToDoListBody> {
   @override
   Widget build(BuildContext context) {
 
@@ -27,14 +27,14 @@ class _ToDoListState extends State<ToDoList> {
             return (Variables().isLarge)?
             Column(
               children: [
-                CategoryLayout(),
+                CategoryView(),
                 Expanded(child: TodayTasks()),
               ],
             )
                 :
             Row(
               children: [
-                CategoryLayout(),
+                CategoryView(),
                 Expanded(child: TodayTasks()),
               ],
             )

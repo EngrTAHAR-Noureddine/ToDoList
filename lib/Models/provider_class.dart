@@ -13,7 +13,7 @@ class ProviderClass extends ChangeNotifier{
   PageController controller = PageController(initialPage: 0);
 
 
-  List<String> listWidgets =["TODAY","TOMORROW"];
+  List<String> listWidgets =["Today","Tomorrow"];
 
 
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todolist/ModelView/tasks_model.dart';
 
 class TodayTasks extends StatefulWidget {
 
@@ -10,6 +11,6 @@ class TodayTasks extends StatefulWidget {
 class _TodayTasksState extends State<TodayTasks> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return TasksModel();
   }
 }

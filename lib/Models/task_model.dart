@@ -157,11 +157,11 @@ class TaskFunctions{
     DateTime tomorrow = DateTime(dateNow.year, dateNow.month, dateNow.day + 1);
     String date ;
     switch(name){
-      case "TODAY":
+      case "Today":
                     date = dateNow.day.toString()+"/"+dateNow.month.toString()+"/"+dateNow.year.toString();
                     list = await DBProvider.db.getByDate(date, date);
                     break;
-      case "TOMORROW":
+      case "Tomorrow":
                       date = tomorrow.day.toString()+"/"+tomorrow.month.toString()+"/"+tomorrow.year.toString();
                       list = await DBProvider.db.getByDate(date, date);
                       break;

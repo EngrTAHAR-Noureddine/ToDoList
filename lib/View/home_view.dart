@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:todolist/ModelView/add_new_task.dart';
 import 'dart:math' as math;
 
-import 'package:todolist/ModelView/to_do_list.dart';
+import 'package:todolist/ModelView/body_model.dart';
 
 
 
@@ -20,15 +20,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-   /* SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      //Lets make the Status Bar Transparent
-      statusBarColor: Colors.blue,//Theme.of(context).backgroundColor,
-     systemNavigationBarColor: Colors.white,
-      //systemNavigationBarDividerColor: Colors.blue,
 
-      //Lets make the status bar icon brightness to bright
-      statusBarIconBrightness: Brightness.dark,
-    ));*/
     return Scaffold(
 
         appBar: AppBar(
@@ -63,7 +55,8 @@ class _HomeState extends State<Home> {
             ),
           ],
         ),
-          body: ToDoList(),
+        body: ToDoListBody(),
+
           floatingActionButton: FloatingActionButton(
             elevation: 0,
             child: Icon(Icons.add ,color: Theme.of(context).splashColor,),

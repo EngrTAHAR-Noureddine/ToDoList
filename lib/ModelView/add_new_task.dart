@@ -26,54 +26,62 @@ class _AddNewTasksState extends State<AddNewTasks> {
         context: context,
         builder: (context) {
           return StatefulBuilder(builder: (context, setState) {
-            return AlertDialog(
-              backgroundColor:Theme.of(context).floatingActionButtonTheme.hoverColor,
+            return SingleChildScrollView(
+              child:  AlertDialog(
+                backgroundColor:Theme.of(context).floatingActionButtonTheme.hoverColor,
 
-              shape: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              content: Form(
-                  key: _formKeyDialogCat,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      TextFormField(
-                        controller: _textEditingController,
-                        validator: (value) {
-                          return value.isNotEmpty ? null : "Enter category";
-                        },
-                        decoration:
-                        InputDecoration(hintText: "Please Enter category",hintStyle: TextStyle(color: Color(0xFFB8B8B8))),
-                      ),
-
-                    ],
-                  )),
-              title: Text('Add Category',style: TextStyle(color: Color(0xFF979DB0) ),),
-              actions: <Widget>[
-                MaterialButton(
-
-                  onPressed:() {
-                  if (_formKeyDialogCat.currentState.validate()) {
-                  setState((){
-                  itemCategories.add(_textEditingController.text);
-                  _categorySelected = _textEditingController.text;
-                  });
-                  Navigator.of(context).pop();
-
-                  }
+                shape: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                content: GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () {
+                    FocusScope.of(context).requestFocus(new FocusNode());
                   },
+                       child:  Form(
+                      key: _formKeyDialogCat,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          TextFormField(
+                            controller: _textEditingController,
+                            validator: (value) {
+                              return value.isNotEmpty ? null : "Enter category";
+                            },
+                            decoration:
+                            InputDecoration(hintText: "Please Enter category",hintStyle: TextStyle(color: Color(0xFFB8B8B8))),
+                          ),
 
-                  child: Text('OK',style: TextStyle(color:Color(0xFF979DB0)),),
+                        ],
+                      )),
                 ),
+                title: Text('Add Category',style: TextStyle(color: Color(0xFF979DB0) ),),
+                actions: <Widget>[
+                  MaterialButton(
 
-                MaterialButton(
-                child: Text('Cancel',style:TextStyle(color: Color(0xFF979DB0) )),
-                onPressed: () {
-                  Navigator.of(context).pop();
+                    onPressed:() {
+                    if (_formKeyDialogCat.currentState.validate()) {
+                    setState((){
+                    itemCategories.add(_textEditingController.text);
+                    _categorySelected = _textEditingController.text;
+                    });
+                    Navigator.of(context).pop();
 
-                },
-                ),
-              ],
+                    }
+                    },
+
+                    child: Text('OK',style: TextStyle(color:Color(0xFF979DB0)),),
+                  ),
+
+                  MaterialButton(
+                  child: Text('Cancel',style:TextStyle(color: Color(0xFF979DB0) )),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+
+                  },
+                  ),
+                ],
+              ),
             );
           });
         });

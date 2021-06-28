@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:todolist/ModelView/category_layout.dart';
+import 'package:todolist/ModelView/category_model.dart';
 
 
-class CategoryLayout extends StatefulWidget {
+class CategoryView extends StatefulWidget {
 
 
   @override
-  _CategoryLayoutState createState() => _CategoryLayoutState();
+  _CategoryViewState createState() => _CategoryViewState();
 }
 
-class _CategoryLayoutState extends State<CategoryLayout> {
+class _CategoryViewState extends State<CategoryView> {
 
 
 
