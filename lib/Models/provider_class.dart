@@ -18,7 +18,9 @@ class ProviderClass extends ChangeNotifier{
 
 
   void setWidget(name){
-    this.listWidgets.insert(0,name);
+    if(this.listWidgets.length>2){
+      this.listWidgets[0] = name;
+    } else this.listWidgets.insert(0,name);
     this.controller.jumpToPage(0);
     notifyListeners();
   }

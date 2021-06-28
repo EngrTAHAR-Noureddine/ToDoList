@@ -17,10 +17,7 @@ class _ToDoListBodyState extends State<ToDoListBody> {
   Widget build(BuildContext context) {
 
 
-    return ChangeNotifierProvider<ProviderClass>(
-        create: (context) => ProviderClass(),
-        child: Builder(
-        builder: (context) {
+
 
           return OrientationBuilder(builder: (context, orientation) {
             Variables().isLarge =  (orientation == Orientation.portrait);
@@ -40,7 +37,8 @@ class _ToDoListBodyState extends State<ToDoListBody> {
             )
             ;
 
-    });}
-    ));
+    });
+
+
   }
 }

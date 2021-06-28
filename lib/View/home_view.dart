@@ -29,7 +29,7 @@ class _HomeState extends State<Home> {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarIconBrightness: Theme.of(context).brightness,
     ));
-      return  AdvancedDrawer(
+      return   AdvancedDrawer(
       backdropColor: Theme.of(context).primaryColor,
       controller: _advancedDrawerController,
       animationCurve: Curves.easeInOut,
@@ -61,10 +61,12 @@ class _HomeState extends State<Home> {
                 ListTile(
 
                   onTap: () {
+                            setState(() {
+                              SwitchViews().index=0;
+                            });
 
-                    setState(() {
-                      ProviderHome().index=0;
-                    });
+
+
                   },
                   leading: Icon(Icons.task_alt_rounded),
                   title: Text('Tasks'),
@@ -72,18 +74,22 @@ class _HomeState extends State<Home> {
                 ListTile(
                   onTap: () {
 
-                    setState(() {
-                      ProviderHome().index=1;
-                    });
+                        setState(() {
+                          SwitchViews().index=1;
+                        });
+
+
                     },
                   leading: Icon(Icons.delete),
                   title: Text('Drafts'),
                 ),
                 ListTile(
                   onTap: () {
-                    setState(() {
-                      ProviderHome().index=2;
-                    });
+                      setState(() {
+                        SwitchViews().index=2;
+                      });
+
+
                     },
                   leading: Image.asset('assets/images/goal.png',color: Theme.of(context).splashColor,),
                   title: Text('Goals'),

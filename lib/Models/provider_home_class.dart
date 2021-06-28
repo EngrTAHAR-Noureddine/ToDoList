@@ -3,14 +3,14 @@ import 'package:todolist/ModelView/body_model.dart';
 import 'package:todolist/View/drafts_view.dart';
 import 'package:todolist/View/goal_view.dart';
 
-class ProviderHome extends ChangeNotifier{
-  static final ProviderHome _singleton = ProviderHome._internal();
+class SwitchViews{
+  static final SwitchViews _singleton = SwitchViews._internal();
 
-  factory ProviderHome() {
+  factory SwitchViews() {
     return _singleton;
   }
 
-  ProviderHome._internal();
+  SwitchViews._internal();
 
 
 
@@ -27,7 +27,8 @@ class ProviderHome extends ChangeNotifier{
 
   Widget returnWidget(){
 
-      return bodyWidgets[index];
+      return bodyWidgets[this.index];
+
   }
 
 
