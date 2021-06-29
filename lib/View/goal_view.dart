@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todolist/ModelView/goal_model.dart';
 
 class GoalView extends StatefulWidget {
   const GoalView({Key key}) : super(key: key);
@@ -10,10 +11,6 @@ class GoalView extends StatefulWidget {
 class _GoalViewState extends State<GoalView> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        color :Colors.green
-    );
+    return GoalModel();
   }
 }
