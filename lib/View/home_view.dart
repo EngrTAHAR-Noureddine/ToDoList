@@ -164,13 +164,7 @@ class _HomeState extends State<Home> {
                 );
               },
             ),
-          ), /*Builder(builder: (BuildContext context) {
-              return IconButton(
-                  icon: Icon(Icons.menu,color:Color(0xFF8F8FA8)),
-                  onPressed: () {
-                    Scaffold.of(context).openDrawer();
-                  });
-            }),*/
+          ),
           elevation: 0,
             actions: [
               IconButton(
@@ -195,8 +189,9 @@ class _HomeState extends State<Home> {
           body:ViewSwitch(),
 
 
-            floatingActionButton: FloatingActionButton(
+         floatingActionButton:(SwitchViews().index!=1)? FloatingActionButton(
               elevation: 0,
+
               child: Icon(Icons.add ,color: Theme.of(context).splashColor,),
               backgroundColor: Theme.of(context).primaryColor,
               onPressed: (){
@@ -211,7 +206,7 @@ class _HomeState extends State<Home> {
 
 
               },
-            ),
+            ):Container(),
 
 
       ),

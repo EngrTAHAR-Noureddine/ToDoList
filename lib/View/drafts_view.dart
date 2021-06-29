@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todolist/ModelView/draft_model.dart';
 
 
 class DraftsView extends StatefulWidget {
@@ -11,10 +12,6 @@ class DraftsView extends StatefulWidget {
 class _DraftsViewState extends State<DraftsView> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height,
-      width: MediaQuery.of(context).size.width,
-      color :Colors.purple
-    );
+    return DraftLists();
   }
 }
