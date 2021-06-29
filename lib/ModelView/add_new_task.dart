@@ -37,12 +37,6 @@ class _AddNewTasksState extends State<AddNewTasks> {
   Future<void> showDialogToAddCategory(BuildContext context) async {
     final TextEditingController _textEditingController = TextEditingController();
     final GlobalKey<FormState> _formKeyDialogCat = GlobalKey<FormState>();
-/*
-* showDialog(context: context, builder: (context){
-            return AlertDialog(
-*
-*
-* */
 
     return await showDialog(
         context: context,
@@ -175,17 +169,20 @@ bool enabled = true;
       context: context,
       initialDate: selectedReminder, // Refer step 1
       firstDate: DateTime(2000),
-      lastDate: DateTime(2025),
+      lastDate: DateTime(3000),
     );
+    DateTime dt ;
     if (picked != null && picked != selectedReminder)
+      dt = DateTime(picked.year,picked.month,picked.day,0,0,0,0,0);
       setState(() {
-        selectedReminder = picked;
+        selectedReminder = dt;
       });
   }
 
   Future<Null> _selectTime(BuildContext context) async {
     String _hour, _minute;
     final TimeOfDay picked = await showTimePicker(
+
       builder: (BuildContext context, Widget child) {
         return Theme(
           data: Variables().mode(context),
@@ -218,11 +215,13 @@ bool enabled = true;
       context: context,
       initialDate: selectedDate, // Refer step 1
       firstDate: DateTime(2000),
-      lastDate: DateTime(2025),
+      lastDate: DateTime(3000),
     );
+    DateTime dt ;
     if (picked != null && picked != selectedDate)
+       dt = DateTime(picked.year,picked.month,picked.day,0,0,0,0,0);
       setState(() {
-        selectedDate = picked;
+        selectedDate = dt;
       });
   }
   List<String> _part =[];
@@ -253,6 +252,8 @@ bool enabled = true;
    if((widget.goal!=null)&&(widget.goal.isNotEmpty))_addGoal.text = widget.goal;
     if((widget.time!=null)&&(widget.time.isNotEmpty)) _time =widget.time ;
   }
+
+  List<bool> _checkdate =[false,false,false]; /* test date selected with time now and the second for reminder date if before or after selecter date*/
 
   @override
   Widget build(BuildContext context) {
@@ -311,28 +312,84 @@ bool enabled = true;
               child: MaterialButton(
                 onPressed: (){
                   if (_formKey.currentState.validate()) {
-                    if(_categorySelected =="Category") _categorySelected = "Temporary";
-                    Task task = new Task(
-                        task:_taskName.text,
-                        timeReminder: _timeR,
-                        dateReminder:selectedReminder.day.toString()+"/"+selectedReminder.month.toString()+"/"+selectedReminder.year.toString(),
-                        category: _categorySelected,
-                        frequency: _addFrequencyText.text,
-                        date: selectedDate.day.toString()+"/"+selectedDate.month.toString()+"/"+selectedDate.year.toString(),
-                        note: _addNoteText.text,
-                        status: _statusSelected,
-                        goal: _addGoal.text,
-                        time: _time
-                    );
-                    if(task.task!=null && task.task.isNotEmpty) DBProvider.db.newTask(task);
+                      DateTime yesterday= DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day-1);
+                    if(selectedDate.isBefore(yesterday)){
+                     setState(() {
+                       _checkdate[0] = true;
+                       print("************* _checkdate[0] : "+_checkdate[0].toString());
+                     });
+                    }else {
+                      setState(() {
+                        _checkdate[0] = false;
+                        print("************* _checkdate[0] : "+_checkdate[0].toString());
+                      });
+                    }
+                     if(selectedReminder.isBefore(selectedDate)){
+                      setState(() {
+                        _checkdate[1] = true;
+                        print("************* _checkdate[1] inside isbefore  : "+_checkdate[1].toString());
+                      });
+                    }else {
+
+                       if((selectedDate.year == selectedReminder.year)&&(selectedDate.month == selectedReminder.month)&&(selectedDate.day == selectedReminder.day)){
+                         List<String> time1 = _time.split(":");
+                         List<String> time2 = _timeR.split(":");
+                         if(((int.parse(time1[0])*60+int.parse(time1[1]))-(int.parse(time2[0])*60+int.parse(time2[1])))<0){
+                           setState(() {
+                             _checkdate[1] = false;
+                             _checkdate[2] = true;
+                             print("************* _checkdate[2] : "+_checkdate[2].toString());
+                           });
+                         }else{
+                           setState(() {
+                             _checkdate[1] = false;
+                             _checkdate[2] = false;
+                             print("************* _checkdate[2] : "+_checkdate[2].toString());
+                           });
+                         }
+
+                       }else{
+                         setState(() {
+                           _checkdate[1] = false;
+                           _checkdate[2] = false;
+                           print("************* _checkdate[2] : "+_checkdate[2].toString());
+                         });
+                       }
 
 
-                    _formKey.currentState.save();
+                     }
+                     if(!_checkdate[0] && !_checkdate[1]&& !_checkdate[2]){
+                      _checkdate[0] = false;
+                      _checkdate[1] = false;
+                      _checkdate[2] = false;
+                      print("************* _checkdate[0] : "+_checkdate[0].toString());
+                      print("************* _checkdate[2] : "+_checkdate[2].toString());
+                      if(_categorySelected =="Category") _categorySelected = "Temporary";
+                      Task task = new Task(
+                          task:_taskName.text,
+                          timeReminder: _timeR,
+                          dateReminder:selectedReminder.day.toString()+"/"+selectedReminder.month.toString()+"/"+selectedReminder.year.toString(),
+                          category: _categorySelected,
+                          frequency: _addFrequencyText.text,
+                          date: selectedDate.day.toString()+"/"+selectedDate.month.toString()+"/"+selectedDate.year.toString(),
+                          note: _addNoteText.text,
+                          status: _statusSelected,
+                          goal: _addGoal.text,
+                          time: _time
+                      );
+                      if(task.task!=null && task.task.isNotEmpty) DBProvider.db.newTask(task);
 
-                    ScaffoldMessenger.of(context)
-                        .showSnackBar(SnackBar(content: Text('Processing Data')));
-                    Navigator.pop(context);
-                    // 3
+
+                      _formKey.currentState.save();
+
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(SnackBar(content: Text('Processing Data')));
+                      Navigator.pop(context);
+
+                    }
+
+
+
 
                   }
                 },
@@ -543,7 +600,6 @@ bool enabled = true;
                                   if(value!=0){
                                     setState(() {
                                       _categorySelected = itemCategories[value];
-                                      print("******************** category : "+_categorySelected.toString());
                                     });}
                                 },
                               child: Row(
@@ -826,6 +882,7 @@ bool enabled = true;
                                     flex: 1,
                                     child:MaterialButton(
                                         height: 40,
+
                                       onPressed: () => _selectDate(context),
                                       colorBrightness:Theme.of(context).primaryColorBrightness,
                                       //padding: EdgeInsets.only(left: 10),
@@ -862,6 +919,7 @@ bool enabled = true;
                             )
 
                     ),
+                  (_checkdate[0])?Text("date selected is false",style:TextStyle(color: Theme.of(context).errorColor,fontSize: 12)):Container(),
                   /* Date Of Reminder Text*/
                   Container(
 
@@ -920,6 +978,8 @@ bool enabled = true;
                       )
 
                   ),
+                  (_checkdate[1])?Text("date selected is before the selected date of task",style:TextStyle(color: Theme.of(context).errorColor,fontSize: 12))
+                      :(_checkdate[2])?Text("Time of reminder is less then the time selected",style:TextStyle(color: Theme.of(context).errorColor,fontSize: 12)):Container(),
                   /* Note  Text */
                   Container(
 
