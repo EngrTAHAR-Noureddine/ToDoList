@@ -127,7 +127,7 @@ class Item {
         return Icon(Icons.radio_button_off_rounded,color: Color(0xFFFF4500));
         break;
       case "Finished"://00B98C
-        return Icon(Icons.task_alt_rounded,color: Color(0xFF6D6E70));
+        return Icon(Icons.task_alt_rounded,color: Color(0xFF00B98C));
         break;
       case "Voluntary": /* 6D6E70 */
         return Icon(Icons.radio_button_off_rounded,color: Color(0xFF6D6E70));
