@@ -37,70 +37,78 @@ class _AddNewTasksState extends State<AddNewTasks> {
   Future<void> showDialogToAddCategory(BuildContext context) async {
     final TextEditingController _textEditingController = TextEditingController();
     final GlobalKey<FormState> _formKeyDialogCat = GlobalKey<FormState>();
-
+/*
+* showDialog(context: context, builder: (context){
+            return AlertDialog(
+*
+*
+* */
 
     return await showDialog(
         context: context,
         builder: (context) {
-          return StatefulBuilder(builder: (context, setState) {
-            return SingleChildScrollView(
-              child:  AlertDialog(
-                backgroundColor:Theme.of(context).floatingActionButtonTheme.hoverColor,
+          return   Center(
+            child: SingleChildScrollView(
 
-                shape: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                content: GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onTap: () {
-                    FocusScope.of(context).requestFocus(new FocusNode());
-                  },
-                       child:  Form(
-                      key: _formKeyDialogCat,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          TextFormField(
-                            controller: _textEditingController,
-                            validator: (value) {
-                              return value.isNotEmpty ? null : "Enter category";
-                            },
-                            decoration:
-                            InputDecoration(hintText: "Please Enter category",hintStyle: TextStyle(color: Color(0xFFB8B8B8))),
-                          ),
+              child: AlertDialog(
+                    backgroundColor:Theme.of(context).floatingActionButtonTheme.hoverColor,
 
-                        ],
-                      )),
-                ),
-                title: Text('Add Category',style: TextStyle(color: Color(0xFF979DB0) ),),
-                actions: <Widget>[
-                  MaterialButton(
+                    shape: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    content: GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () {
+                        FocusScope.of(context).requestFocus(new FocusNode());
+                      },
+                           child:   Form(
+                          key: _formKeyDialogCat,
+                          child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                TextFormField(
+                                  controller: _textEditingController,
+                                  validator: (value) {
+                                    return value.isNotEmpty ? null : "Enter category";
+                                  },
+                                  decoration:
+                                  InputDecoration(hintText: "Please Enter category",hintStyle: TextStyle(color: Color(0xFFB8B8B8))),
+                                ),
 
-                    onPressed:() {
-                    if (_formKeyDialogCat.currentState.validate()) {
-                    setState((){
-                    itemCategories.add(_textEditingController.text);
-                    _categorySelected = _textEditingController.text;
-                    });
-                    Navigator.of(context).pop();
+                              ],
+                          )),
 
-                    }
-                    },
+                    ),
+                    title: Text('Add Category',style: TextStyle(color: Color(0xFF979DB0) ),),
+                    actions: <Widget>[
+                      MaterialButton(
 
-                    child: Text('OK',style: TextStyle(color:Color(0xFF979DB0)),),
+                        onPressed:() {
+                        if (_formKeyDialogCat.currentState.validate()) {
+                        setState((){
+                        itemCategories.add(_textEditingController.text);
+                        _categorySelected = _textEditingController.text;
+                        });
+                        Navigator.of(context).pop();
+
+                        }
+                        },
+
+                        child: Text('OK',style: TextStyle(color:Color(0xFF979DB0)),),
+                      ),
+
+                      MaterialButton(
+                      child: Text('Cancel',style:TextStyle(color: Color(0xFF979DB0) )),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+
+                      },
+                      ),
+                    ],
                   ),
+            ),
+          );
 
-                  MaterialButton(
-                  child: Text('Cancel',style:TextStyle(color: Color(0xFF979DB0) )),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-
-                  },
-                  ),
-                ],
-              ),
-            );
-          });
         });
 
 
@@ -224,9 +232,9 @@ bool enabled = true;
    if((widget.task!=null)&&(widget.task.isNotEmpty))_taskName.text = widget.task;
   if((widget.timeReminder!=null)&&(widget.timeReminder.isNotEmpty)) _timeR = widget.timeReminder;
 
-   _categorySelected =((widget.category!=null)&&(widget.category.isNotEmpty))? widget.category:"Category";
+   _categorySelected =((widget.category!=null)&&(widget.category.isNotEmpty))? widget.category:(_categorySelected!=null && _categorySelected.isNotEmpty)?_categorySelected:"Category";
 
-   _frequencySelected =((widget.frequency!=null)&&(widget.frequency.isNotEmpty))? widget.frequency:"Once";
+   _frequencySelected =((widget.frequency!=null)&&(widget.frequency.isNotEmpty))? widget.frequency:(_frequencySelected!=null && _frequencySelected.isNotEmpty)?_frequencySelected:"Once";
 
    if((widget.dateReminder!=null)&&(widget.dateReminder.isNotEmpty)){
      _part= widget.dateReminder.split("/");
@@ -240,7 +248,7 @@ bool enabled = true;
 
     if((widget.note!=null)&&(widget.note.isNotEmpty)) _addNoteText.text = widget.note;
 
-     _statusSelected =((widget.status!=null)&&(widget.status.isNotEmpty))? widget.status:"Voluntary";
+     _statusSelected =((widget.status!=null)&&(widget.status.isNotEmpty))? widget.status:(_statusSelected!=null && _statusSelected.isNotEmpty)?_statusSelected:"Voluntary";
 
    if((widget.goal!=null)&&(widget.goal.isNotEmpty))_addGoal.text = widget.goal;
     if((widget.time!=null)&&(widget.time.isNotEmpty)) _time =widget.time ;
@@ -264,7 +272,7 @@ bool enabled = true;
             goal: _addGoal.text,
             time: _time
         );
-        if(_taskName.text.isNotEmpty) DBProvider.db.newDraft(taskAsDraft);
+        if((taskAsDraft.task.isNotEmpty) && (taskAsDraft.task!=null)) DBProvider.db.newDraft(taskAsDraft);
 
         Navigator.pop(context);
         return false;
@@ -292,7 +300,7 @@ bool enabled = true;
                 time: _time
               );
 
-              if(_taskName.text.isNotEmpty) DBProvider.db.newDraft(taskAsDraft);
+              if((taskAsDraft.task.isNotEmpty) && (taskAsDraft.task!=null)) DBProvider.db.newDraft(taskAsDraft);
 
               Navigator.pop(context);
               },
@@ -316,10 +324,7 @@ bool enabled = true;
                         goal: _addGoal.text,
                         time: _time
                     );
-                    if(widget.id!=null){
-                      task.id = widget.id;
-                      DBProvider.db.updateTask(task);
-                    }else DBProvider.db.newTask(task);
+                    if(task.task!=null && task.task.isNotEmpty) DBProvider.db.newTask(task);
 
 
                     _formKey.currentState.save();
@@ -538,6 +543,7 @@ bool enabled = true;
                                   if(value!=0){
                                     setState(() {
                                       _categorySelected = itemCategories[value];
+                                      print("******************** category : "+_categorySelected.toString());
                                     });}
                                 },
                               child: Row(

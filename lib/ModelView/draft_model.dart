@@ -12,6 +12,11 @@ class DraftLists extends StatefulWidget {
 }
 
 class _DraftListsState extends State<DraftLists> {
+
+  Future<List<Draft>> getList()async{
+    List<Draft> list = await DBProvider.db.getAllDraft();
+    return (list.isNotEmpty)?list: [];
+  }
   /// deleteButton
   /// ************************************************************************************************
   Widget deleteButton(item){
@@ -74,7 +79,6 @@ class _DraftListsState extends State<DraftLists> {
     );
   }
 
-  @override
   Widget build(BuildContext context) {
     return Container(
       color: Theme.of(context).backgroundColor,
@@ -92,7 +96,7 @@ class _DraftListsState extends State<DraftLists> {
             child: Container(
               color: Theme.of(context).backgroundColor,
               child: FutureBuilder(
-                  future: DBProvider.db.getAllDraft(),
+                  future: getList(),
                   builder: (context,AsyncSnapshot snapshot){
                     print(snapshot.hasData);
                     print(snapshot.data);
@@ -132,8 +136,6 @@ class _DraftListsState extends State<DraftLists> {
                                 child:Slidable(
                                   actionPane: SlidableScrollActionPane(),
                                   actionExtentRatio: 0.5,
-
-
                                   secondaryActions: [ /* right */
                                     deleteButton(items[index]),
 
@@ -187,26 +189,29 @@ class _DraftListsState extends State<DraftLists> {
                                           backgroundColor: Colors.transparent,
                                           child: IconButton(
                                             padding: EdgeInsets.all(0),
-                                            onPressed: (){
+                                            onPressed: ()async{
+                                              Draft dr = items[index];
+                                              await DBProvider.db.deleteDraft(items[index].id);
                                               Navigator.push(
                                                 context,
                                                 MaterialPageRoute<void>(
                                                   builder: (BuildContext context) => AddNewTasks(
-                                                    id: items[index].id,
-                                                    category: items[index].category,
-                                                    date: items[index].date,
-                                                    dateReminder: items[index].dateReminder,
-                                                    frequency: items[index].frequency,
-                                                    goal: items[index].goal,
-                                                    note: items[index].note,
-                                                    status: items[index].status,
-                                                    task: items[index].task,
-                                                    time: items[index].time,
-                                                    timeReminder: items[index].timeReminder,
+                                                    id: dr.id,
+                                                    category: dr.category,
+                                                    date: dr.date,
+                                                    dateReminder: dr.dateReminder,
+                                                    frequency: dr.frequency,
+                                                    goal: dr.goal,
+                                                    note: dr.note,
+                                                    status: dr.status,
+                                                    task: dr.task,
+                                                    time: dr.time,
+                                                    timeReminder: dr.timeReminder,
                                                   ),
                                                   fullscreenDialog: true,
                                                 ),
                                               );
+                                              setState(() {});
                                             },
                                             icon :Icon( Icons.edit),
                                             iconSize: 20,

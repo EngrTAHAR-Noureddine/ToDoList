@@ -353,26 +353,29 @@ Widget deleteButton(item){
                                                             backgroundColor: Colors.transparent,
                                                             child: IconButton(
                                                               padding: EdgeInsets.all(0),
-                                                              onPressed: (){
+                                                              onPressed: ()async{
+                                                                Item tk = items[index];
+                                                                await DBProvider.db.deleteTask(items[index].task.id);
                                                                 Navigator.push(
                                                                   context,
                                                                   MaterialPageRoute<void>(
                                                                     builder: (BuildContext context) => AddNewTasks(
-                                                                      id: items[index].task.id,
-                                                                      category: items[index].task.category,
-                                                                      date: items[index].task.date,
-                                                                      dateReminder: items[index].task.dateReminder,
-                                                                      frequency: items[index].task.frequency,
-                                                                      goal: items[index].task.goal,
-                                                                      note: items[index].task.note,
-                                                                      status: items[index].task.status,
-                                                                      task: items[index].task.task,
-                                                                      time: items[index].task.time,
-                                                                      timeReminder: items[index].task.timeReminder,
+                                                                      id: tk.task.id,
+                                                                      category: tk.task.category,
+                                                                      date: tk.task.date,
+                                                                      dateReminder: tk.task.dateReminder,
+                                                                      frequency: tk.task.frequency,
+                                                                      goal: tk.task.goal,
+                                                                      note: tk.task.note,
+                                                                      status: tk.task.status,
+                                                                      task: tk.task.task,
+                                                                      time: tk.task.time,
+                                                                      timeReminder: tk.task.timeReminder,
                                                                     ),
                                                                     fullscreenDialog: true,
                                                                   ),
                                                                 );
+                                                                setState(() {});
                                                               },
                                                               icon :Icon( Icons.edit),
                                                               iconSize: 20,

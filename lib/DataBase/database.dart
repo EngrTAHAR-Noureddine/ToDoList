@@ -59,6 +59,7 @@ class DBProvider {
           "frequency TEXT,"
           "date TEXT,"
           "time TEXT,"
+          "goal TEXT,"
           "dateReminder TEXT,"
           "timeReminder TEXT"
           ")");
