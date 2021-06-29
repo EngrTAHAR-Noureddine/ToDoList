@@ -16,6 +16,9 @@ class TasksModel extends StatefulWidget {
 
 
 class _TasksModelState extends State<TasksModel> {
+
+  /// inProgressButton
+  /// *******************************************************************
 Widget inProgressButton(item){
   return Container(
 
@@ -63,7 +66,8 @@ Widget inProgressButton(item){
     ),
   );
 }
-
+/// finishedButton
+/// *******************************************************************************
 Widget finishedButton(item){
  return Container(
 
@@ -111,6 +115,8 @@ Widget finishedButton(item){
     ),
   );
 }
+/// renewalButton
+/// ************************************************************************************
 
 Widget renewalButton(item){
   return Container(
@@ -160,6 +166,8 @@ Widget renewalButton(item){
   );
 }
 
+/// deleteButton
+/// ************************************************************************************************
 Widget deleteButton(item){
   return Container(
 
@@ -217,74 +225,13 @@ Widget deleteButton(item){
       },
     ),
 
- /*   MaterialButton(
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            bottomRight: Radius.circular(10),
-            topRight: Radius.circular(10),
-          )
-      ),
-      height: double.infinity,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(Icons.delete, ),
-          Text('Delete')
-        ],
-      ),
-      textColor:Color(0xDEFFFFFF),
-      color: Colors.transparent,
-      hoverColor: Colors.transparent,
-      highlightColor: Colors.transparent,
-      focusColor: Colors.transparent,
-      splashColor: Colors.white.withOpacity(0.3),
-      elevation: 0,
-      hoverElevation: 0,
-      highlightElevation: 0,
-      focusElevation: 0,
-
-      onPressed: (){
-        return showDialog(context: context, builder: (context){
-          return AlertDialog(
-            backgroundColor:Theme.of(context).floatingActionButtonTheme.hoverColor,
-
-            shape: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            title: Center(child: Text("Delete Task" , style: TextStyle(color: Color(0xFF979DB0) ),),),
-            actions: [
-              MaterialButton(
-
-                child: Text("OK",style: TextStyle(color:Color(0xFF979DB0)),),
-                onPressed: ()async{
-
-                  await DBProvider.db.deleteTask(item.task.id);
-                    setState(() {
-
-                    });
-                  Navigator.pop(context);
-                },
-              ),
-              MaterialButton(
-
-                splashColor: Colors.transparent,
-                child: Text("Cancel",style: TextStyle(color:Color(0xFF979DB0)),),
-                onPressed: () {
-                  Navigator.pop(context);
-
-                },
-              ),
-            ],
-            content: SingleChildScrollView(
-              child: Container(
-                child: Text("You are sure to delete task",),),
-            ),
-          ); });
-      },
-
-    ), */
   );
 }
+
+
+/// build
+/// ***********************************************************************************
+
 
   Widget pageViewCategory(String category){
 

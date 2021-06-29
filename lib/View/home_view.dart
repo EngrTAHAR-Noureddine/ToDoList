@@ -59,7 +59,11 @@ class _HomeState extends State<Home> {
 
                 ):Container(),
                 ListTile(
-
+                  contentPadding:  EdgeInsets.only(left : 20.0),
+                  shape: BeveledRectangleBorder(
+                      borderRadius: BorderRadius.circular(40),
+                    side:(SwitchViews().index==0)? BorderSide(width: 0,color: Colors.white,style: BorderStyle.solid):BorderSide.none
+                  ),
                   onTap: () {
                             setState(() {
                               SwitchViews().index=0;
@@ -71,7 +75,13 @@ class _HomeState extends State<Home> {
                   leading: Icon(Icons.task_alt_rounded),
                   title: Text('Tasks'),
                 ),
+                SizedBox(height: 10,),
                 ListTile(
+                  contentPadding:  EdgeInsets.only(left : 20.0),
+                  shape: BeveledRectangleBorder(
+                      borderRadius: BorderRadius.circular(40),
+                      side: (SwitchViews().index==1)? BorderSide(width: 0,color: Colors.white,style: BorderStyle.solid):BorderSide.none
+                  ),
                   onTap: () {
 
                         setState(() {
@@ -83,7 +93,13 @@ class _HomeState extends State<Home> {
                   leading: Icon(Icons.delete),
                   title: Text('Drafts'),
                 ),
+                SizedBox(height: 10,),
                 ListTile(
+                  contentPadding:  EdgeInsets.only(left : 20.0),
+                  shape: BeveledRectangleBorder(
+                      borderRadius: BorderRadius.circular(40),
+                      side: (SwitchViews().index==2)? BorderSide(width: 0,color: Colors.white,style: BorderStyle.solid):BorderSide.none
+                  ),
                   onTap: () {
                       setState(() {
                         SwitchViews().index=2;
@@ -94,13 +110,20 @@ class _HomeState extends State<Home> {
                   leading: Image.asset('assets/images/goal.png',color: Theme.of(context).splashColor,),
                   title: Text('Goals'),
                 ),
+                SizedBox(height: 10,),
                 ListTile(
+                  contentPadding:  EdgeInsets.only(left : 20.0),
+                  shape: BeveledRectangleBorder(
+                      borderRadius: BorderRadius.circular(40),
+                      side: (SwitchViews().index==3)? BorderSide(width: 0,color: Colors.white,style: BorderStyle.solid):BorderSide.none
+                  ),
                   onTap: () {},
                   leading: Icon(Icons.settings),
                   title: Text('Settings'),
                 ),
-                Spacer(),
-                MaterialButton(
+
+                (orientation == Orientation.portrait)? Spacer():Container(),
+                (orientation == Orientation.portrait)? MaterialButton(
                   onPressed: (){},
                   child: DefaultTextStyle(
                     style: TextStyle(
@@ -114,7 +137,7 @@ class _HomeState extends State<Home> {
                       child: Text('About The App'),
                     ),
                   ),
-                ),
+                ):Container(),
               ],
             ),
           ),
