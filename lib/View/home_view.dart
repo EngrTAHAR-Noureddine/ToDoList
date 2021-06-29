@@ -60,9 +60,10 @@ class _HomeState extends State<Home> {
                 ):Container(),
                 ListTile(
                   contentPadding:  EdgeInsets.only(left : 20.0),
-                  shape: BeveledRectangleBorder(
-                      borderRadius: BorderRadius.circular(40),
-                    side:(SwitchViews().index==0)? BorderSide(width: 0,color: Colors.white,style: BorderStyle.solid):BorderSide.none
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      side: (SwitchViews().index==0)? BorderSide(width: 0,color: Colors.white,style: BorderStyle.solid):BorderSide.none
+
                   ),
                   onTap: () {
                             setState(() {
@@ -78,9 +79,10 @@ class _HomeState extends State<Home> {
                 SizedBox(height: 10,),
                 ListTile(
                   contentPadding:  EdgeInsets.only(left : 20.0),
-                  shape: BeveledRectangleBorder(
-                      borderRadius: BorderRadius.circular(40),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
                       side: (SwitchViews().index==1)? BorderSide(width: 0,color: Colors.white,style: BorderStyle.solid):BorderSide.none
+
                   ),
                   onTap: () {
 
@@ -96,9 +98,10 @@ class _HomeState extends State<Home> {
                 SizedBox(height: 10,),
                 ListTile(
                   contentPadding:  EdgeInsets.only(left : 20.0),
-                  shape: BeveledRectangleBorder(
-                      borderRadius: BorderRadius.circular(40),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
                       side: (SwitchViews().index==2)? BorderSide(width: 0,color: Colors.white,style: BorderStyle.solid):BorderSide.none
+
                   ),
                   onTap: () {
                       setState(() {
@@ -113,9 +116,10 @@ class _HomeState extends State<Home> {
                 SizedBox(height: 10,),
                 ListTile(
                   contentPadding:  EdgeInsets.only(left : 20.0),
-                  shape: BeveledRectangleBorder(
-                      borderRadius: BorderRadius.circular(40),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
                       side: (SwitchViews().index==3)? BorderSide(width: 0,color: Colors.white,style: BorderStyle.solid):BorderSide.none
+
                   ),
                   onTap: () {},
                   leading: Icon(Icons.settings),

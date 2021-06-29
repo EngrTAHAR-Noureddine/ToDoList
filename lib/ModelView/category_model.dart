@@ -103,7 +103,8 @@ class _CategoryBuilderState extends State<CategoryBuilder> {
                                         padding: EdgeInsets.only(left: 10),
                                         elevation: 3,
                                         shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(20)
+                                            borderRadius: BorderRadius.circular(20),
+
                                         ),
                                         color: Theme.of(context).accentColor,
                                         child: Column(

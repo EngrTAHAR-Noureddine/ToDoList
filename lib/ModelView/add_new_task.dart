@@ -171,11 +171,11 @@ bool enabled = true;
       firstDate: DateTime(2000),
       lastDate: DateTime(3000),
     );
-    DateTime dt ;
+   // DateTime dt ;
     if (picked != null && picked != selectedReminder)
-      dt = DateTime(picked.year,picked.month,picked.day,0,0,0,0,0);
+      //dt = DateTime(picked.year,picked.month,picked.day,0,0,0,0,0);
       setState(() {
-        selectedReminder = dt;
+        selectedReminder = picked;
       });
   }
 
@@ -217,11 +217,11 @@ bool enabled = true;
       firstDate: DateTime(2000),
       lastDate: DateTime(3000),
     );
-    DateTime dt ;
+ //   DateTime dt ;
     if (picked != null && picked != selectedDate)
-       dt = DateTime(picked.year,picked.month,picked.day,0,0,0,0,0);
+      // dt = DateTime(picked.year,picked.month,picked.day,0,0,0,0,0);
       setState(() {
-        selectedDate = dt;
+        selectedDate = picked;
       });
   }
   List<String> _part =[];
@@ -318,7 +318,7 @@ bool enabled = true;
                        _checkdate[0] = true;
                        print("************* _checkdate[0] : "+_checkdate[0].toString());
                      });
-                    }else {
+                    }else{
                       setState(() {
                         _checkdate[0] = false;
                         print("************* _checkdate[0] : "+_checkdate[0].toString());
@@ -332,39 +332,50 @@ bool enabled = true;
                     }else {
 
                        if((selectedDate.year == selectedReminder.year)&&(selectedDate.month == selectedReminder.month)&&(selectedDate.day == selectedReminder.day)){
+
                          List<String> time1 = _time.split(":");
                          List<String> time2 = _timeR.split(":");
+
                          if(((int.parse(time1[0])*60+int.parse(time1[1]))-(int.parse(time2[0])*60+int.parse(time2[1])))<0){
+
                            setState(() {
                              _checkdate[1] = false;
                              _checkdate[2] = true;
-                             print("************* _checkdate[2] : "+_checkdate[2].toString());
+                             print("************* _checkdate[1] inside intparse : "+_checkdate[1].toString());
                            });
+
                          }else{
+
                            setState(() {
                              _checkdate[1] = false;
                              _checkdate[2] = false;
-                             print("************* _checkdate[2] : "+_checkdate[2].toString());
+                             print("************* _checkdate[1] else intparse: "+_checkdate[1].toString());
                            });
+
                          }
 
                        }else{
+
                          setState(() {
                            _checkdate[1] = false;
                            _checkdate[2] = false;
-                           print("************* _checkdate[2] : "+_checkdate[2].toString());
+                           print("************* _checkdate[1] inside else not same : "+_checkdate[1].toString());
                          });
+
+
                        }
 
 
                      }
-                     if(!_checkdate[0] && !_checkdate[1]&& !_checkdate[2]){
+                     if(!_checkdate[0] && !_checkdate[1] && !_checkdate[2]){
+
                       _checkdate[0] = false;
                       _checkdate[1] = false;
                       _checkdate[2] = false;
                       print("************* _checkdate[0] : "+_checkdate[0].toString());
-                      print("************* _checkdate[2] : "+_checkdate[2].toString());
+                      print("************* _checkdate[1] : "+_checkdate[1].toString());
                       if(_categorySelected =="Category") _categorySelected = "Temporary";
+
                       Task task = new Task(
                           task:_taskName.text,
                           timeReminder: _timeR,
@@ -377,6 +388,7 @@ bool enabled = true;
                           goal: _addGoal.text,
                           time: _time
                       );
+
                       if(task.task!=null && task.task.isNotEmpty) DBProvider.db.newTask(task);
 
 
@@ -394,6 +406,13 @@ bool enabled = true;
                   }
                 },
                 color: Colors.transparent,
+                splashColor: Colors.grey.withOpacity(0.5),
+                highlightElevation: 0,
+                  focusElevation: 0,
+                hoverElevation: 0,
+                hoverColor: Colors.transparent,
+                focusColor: Colors.transparent,
+                highlightColor: Colors.transparent,
                 elevation: 0,
 
                       child: Align(
@@ -928,10 +947,8 @@ bool enabled = true;
                   ),
                   /* Show Date & Time Pickers Widgets */
                   Container(
-                    //height: 100,
                       width: MediaQuery.of(context).size.width,
                       color: Theme.of(context).backgroundColor,
-                      //margin: EdgeInsets.all(2),
                       margin: EdgeInsets.only(top:5,bottom: 10),
                       padding: EdgeInsets.only(left: 10, right: 10,),
                       child:  Row(
