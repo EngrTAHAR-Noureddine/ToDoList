@@ -32,7 +32,7 @@ class _HomeState extends State<Home> {
       statusBarIconBrightness: Theme.of(context).brightness,
     ));
       return   AdvancedDrawer(
-      backdropColor: Theme.of(context).primaryColor,
+      backdropColor: Theme.of(context).floatingActionButtonTheme.foregroundColor,
       controller: _advancedDrawerController,
       animationCurve: Curves.easeInOut,
       animationDuration: const Duration(milliseconds: 300),
@@ -64,7 +64,7 @@ class _HomeState extends State<Home> {
                   contentPadding:  EdgeInsets.only(left : 20.0),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
-                      side: (SwitchViews().index==0)? BorderSide(width: 0,color: Colors.white,style: BorderStyle.solid):BorderSide.none
+                      side: (SwitchViews().index==0)? BorderSide(width: 0,color: Theme.of(context).splashColor,style: BorderStyle.solid):BorderSide.none
 
                   ),
                   onTap: () {
@@ -83,7 +83,7 @@ class _HomeState extends State<Home> {
                   contentPadding:  EdgeInsets.only(left : 20.0),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
-                      side: (SwitchViews().index==1)? BorderSide(width: 0,color: Colors.white,style: BorderStyle.solid):BorderSide.none
+                      side: (SwitchViews().index==1)? BorderSide(width: 0,color: Theme.of(context).splashColor,style: BorderStyle.solid):BorderSide.none
 
                   ),
                   onTap: () {
@@ -102,7 +102,7 @@ class _HomeState extends State<Home> {
                   contentPadding:  EdgeInsets.only(left : 20.0),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
-                      side: (SwitchViews().index==2)? BorderSide(width: 0,color: Colors.white,style: BorderStyle.solid):BorderSide.none
+                      side: (SwitchViews().index==2)? BorderSide(width: 0,color: Theme.of(context).splashColor,style: BorderStyle.solid):BorderSide.none
 
                   ),
                   onTap: () {
@@ -120,7 +120,7 @@ class _HomeState extends State<Home> {
                   contentPadding:  EdgeInsets.only(left : 20.0),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
-                      side: (SwitchViews().index==3)? BorderSide(width: 0,color: Colors.white,style: BorderStyle.solid):BorderSide.none
+                      side: (SwitchViews().index==3)? BorderSide(width: 0,color: Theme.of(context).splashColor,style: BorderStyle.solid):BorderSide.none
 
                   ),
                   onTap: () {},
@@ -134,7 +134,7 @@ class _HomeState extends State<Home> {
                   child: DefaultTextStyle(
                     style: TextStyle(
                       fontSize: 12,
-                      color: Colors.white54,
+                      color: Theme.of(context).splashColor,
                     ),
                     child: Container(
                       margin: const EdgeInsets.symmetric(
@@ -165,6 +165,7 @@ class _HomeState extends State<Home> {
                   duration: Duration(milliseconds: 250),
                   child: Icon(
                     value.visible ? Icons.clear : Icons.menu,
+                    color: Color(0xFF8F8FA8),
                     key: ValueKey<bool>(value.visible),
                   ),
                 );

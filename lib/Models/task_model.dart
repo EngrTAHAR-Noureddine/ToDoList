@@ -121,19 +121,19 @@ class Item {
   Widget getIcon(){
     switch(this.task.status){
       case "Important": /*C00000*/
-        return Icon(Icons.radio_button_off_rounded,color: Color(0xFFC00000),);
+        return Icon(Icons.radio_button_off_rounded,color: Color(0xFFC00000),size: 30,);
         break;
       case "Less important": /* ff4500 */
-        return Icon(Icons.radio_button_off_rounded,color: Color(0xFFFF4500));
+        return Icon(Icons.radio_button_off_rounded,color: Color(0xFFFF4500),size: 30,);
         break;
       case "Finished"://00B98C
-        return Icon(Icons.task_alt_rounded,color: Color(0xFF00B98C));
+        return Icon(Icons.task_alt_rounded,color: Color(0xFF00B98C),size: 30,);
         break;
       case "Voluntary": /* 6D6E70 */
-        return Icon(Icons.radio_button_off_rounded,color: Color(0xFF6D6E70));
+        return Icon(Icons.radio_button_off_rounded,color: Color(0xFF6D6E70),size: 30,);
         break;
       default : /* In progress  0269CA */
-        return Icon(Icons.radio_button_off_rounded,color: Color(0xFF0269CA));
+        return Icon(Icons.radio_button_off_rounded,color: Color(0xFF0269CA),size: 30,);
         break;
 
     }

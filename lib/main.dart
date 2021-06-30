@@ -55,7 +55,7 @@ class MyApp extends StatelessWidget {
                     floatingActionButtonTheme: FloatingActionButtonThemeData(
                       backgroundColor: Color(0xFF000000), //11
                       focusColor: Color(0xFF020417), //12
-          //E6FFFB
+                        foregroundColor:Color(0xFF2643C4),
                       hoverColor: Color(0xFFF4F6FD),
 
                     ),
@@ -97,6 +97,7 @@ class MyApp extends StatelessWidget {
                       backgroundColor: Color(0xFFADADAD), //11
                       focusColor: Color(0xDEFFFFFF), //12
                       hoverColor: Color(0xFF262626),
+                      foregroundColor: Color(0xFFF4F6FD)
 
                     ),
                     canvasColor: Color(0xFFF99FA6),
@@ -111,7 +112,7 @@ class MyApp extends StatelessWidget {
 
 
                   ),
-                  themeMode: ThemeMode.system,
+                  themeMode: ThemeMode.dark,
                   home: Home(),
                 );
               }
