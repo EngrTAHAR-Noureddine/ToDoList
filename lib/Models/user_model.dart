@@ -14,6 +14,7 @@ class User {
   int id;
   String darkMode;
   String passWord;
+  String hideGoal;
   String linkAgenda;
 
 
@@ -23,7 +24,7 @@ class User {
     this.darkMode,
     this.passWord,
     this.linkAgenda,
-
+    this.hideGoal,
   });
 
   factory User.fromMap(Map<String, dynamic> json) => new User(
@@ -31,6 +32,7 @@ class User {
     darkMode: json["darkMode"],
     passWord: json["passWord"],
     linkAgenda: json["linkAgenda"],
+    hideGoal:json["hideGoal"],
 
   );
 
@@ -39,6 +41,7 @@ class User {
     "darkMode": darkMode,
     "passWord": passWord,
     "linkAgenda": linkAgenda,
+    "hideGoal":hideGoal,
 
   };
 }

@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
 import 'package:provider/provider.dart';
+import 'package:todolist/DataBase/database.dart';
 import 'package:todolist/ModelView/add_new_goal.dart';
 import 'package:todolist/ModelView/add_new_task.dart';
+import 'package:todolist/Models/provider_class.dart';
 import 'dart:math' as math;
 
-import 'package:todolist/ModelView/body_model.dart';
-import 'package:todolist/Models/data_variable.dart';
 import 'package:todolist/Models/provider_home_class.dart';
+import 'package:todolist/Models/user_model.dart';
 import 'package:todolist/View/switch_view.dart';
 
 
@@ -26,6 +27,19 @@ class _HomeState extends State<Home> {
   }
   TextEditingController _searchItem = new TextEditingController();
  bool _bigger = false;
+
+ Future<bool> setUser()async{
+   User user = await DBProvider.db.getUser(1);
+   DBProvider.db.getUser(1).whenComplete(()async{
+     if(user==null){
+       user = new User(id: 1,hideGoal: "",passWord: "",linkAgenda: "none",darkMode: "Light");
+       await DBProvider.db.newUser(user);
+     }
+   });
+   await ProviderClass().setAppMode(false, user);
+
+ }
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -123,7 +137,9 @@ class _HomeState extends State<Home> {
                       side: (SwitchViews().index==3)? BorderSide(width: 0,color: Theme.of(context).splashColor,style: BorderStyle.solid):BorderSide.none
 
                   ),
-                  onTap: () {},
+                  onTap: () {setState(() {
+                    SwitchViews().index=3;
+                  });},
                   leading: Icon(Icons.settings),
                   title: Text('Settings'),
                 ),
@@ -175,7 +191,7 @@ class _HomeState extends State<Home> {
           elevation: 0,
             actions: [
 
-              IconButton(
+              (SwitchViews().index!=3)?    IconButton(
                 icon: Icon(
                   Icons.search,
                   color: Color(0xFF8F8FA8),
@@ -185,8 +201,8 @@ class _HomeState extends State<Home> {
                     _bigger = !_bigger;
                   });
                 },
-              ),
-              AnimatedContainer(
+              ):Container(),
+              (SwitchViews().index!=3)? AnimatedContainer(
                 width: !_bigger ? 0 : MediaQuery.of(context).size.width*0.55,
                 margin: EdgeInsets.only(right: !_bigger ?0:10),
                 color: Colors.transparent,
@@ -263,7 +279,7 @@ class _HomeState extends State<Home> {
                   ),
                 ),
                 duration: Duration(milliseconds: 200),
-              ),
+              ):Container(),
               Transform.rotate(
                 angle: 20 * math.pi / 180,
                 child: IconButton(
@@ -279,7 +295,7 @@ class _HomeState extends State<Home> {
           body:ViewSwitch(),
 
 
-         floatingActionButton:(![1,5].contains(SwitchViews().index))? FloatingActionButton(
+         floatingActionButton:(![1,3,5].contains(SwitchViews().index))? FloatingActionButton(
               elevation: 0,
 
               child: Icon(Icons.add ,color: Theme.of(context).splashColor,),

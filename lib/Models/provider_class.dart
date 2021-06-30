@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:todolist/DataBase/database.dart';
+import 'package:todolist/Models/user_model.dart';
 
 class ProviderClass extends ChangeNotifier{
   static final ProviderClass _singleton = ProviderClass._internal();
@@ -11,11 +13,18 @@ class ProviderClass extends ChangeNotifier{
 
 
   PageController controller = PageController(initialPage: 0);
+   ThemeMode themeMode = ThemeMode.system;
+
 
 
   List<String> listWidgets =["Today","Tomorrow"];
 
-
+    Future<void> setAppMode(value,User user)async{
+  user.darkMode =(value)?"Dark":"Light";
+  themeMode=(user.darkMode=="Dark")?ThemeMode.dark:ThemeMode.light;
+  await DBProvider.db.updateUser(user);
+  notifyListeners();
+}
 
   void setWidget(name){
     if(this.listWidgets.length>2){

@@ -67,6 +67,7 @@ class DBProvider {
           "id INTEGER PRIMARY KEY,"
           "darkMode TEXT,"
           "passWord TEXT,"
+          "hideGoal TEXT,"
           "linkAgenda TEXT"
           ")");
     });
@@ -231,10 +232,15 @@ class DBProvider {
     return res;
   }
   // get User with id
-  getUser(int id) async {
+  Future<User> getUser(int id) async {
     final db = await database;
+
     var res =await  db.query("User", where: "id = ?", whereArgs: [id]);
-    return res.isNotEmpty ? Task.fromMap(res.first) : Null ;
+    if(res.isEmpty || res==null){
+      newUser(User(id:1,darkMode: "Light",linkAgenda: "none",passWord: "",hideGoal: "no"));
+      res =await  db.query("User", where: "id = ?", whereArgs: [id]);
+    }
+    return User.fromMap(res.first);
   }
 
 //******************************** Draft ****************
