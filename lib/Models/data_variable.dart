@@ -10,6 +10,7 @@ class Variables{
   Variables._internal();
 bool isLarge;
   int _idOfList;
+  String searchItem;
   List<String> _categories =[];
   List<String> status = ["Important","Less important","In progress","Finished","Voluntary"];
   List<String> frequency = ["Once","Daily","weekly","monthly"];

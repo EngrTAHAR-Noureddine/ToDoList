@@ -114,7 +114,7 @@ class DBProvider {
   //get all tasks with search by task name
   Future<List<Task>> getAllSearch(String taskSearch) async {
     final db = await database;
-    var res = await db.query("Task", where: "task = ?", whereArgs: [taskSearch]);
+    var res = await db.rawQuery("SELECT * FROM Task WHERE task LIKE '%$taskSearch%'");
     List<Task> list =
     res.isNotEmpty ? res.map((c) => Task.fromMap(c)).toList() : [];
     return list;

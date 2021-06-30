@@ -21,7 +21,8 @@ class MyApp extends StatelessWidget {
         providers: [
                         ChangeNotifierProvider<ProviderClass>(
                               create: (context) => ProviderClass(), ),
-
+                        ChangeNotifierProvider<SwitchViews>(
+                          create: (context) => SwitchViews(), ),
         ],
         child: Builder(
         builder: (context)

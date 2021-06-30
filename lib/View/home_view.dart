@@ -7,6 +7,7 @@ import 'package:todolist/ModelView/add_new_task.dart';
 import 'dart:math' as math;
 
 import 'package:todolist/ModelView/body_model.dart';
+import 'package:todolist/Models/data_variable.dart';
 import 'package:todolist/Models/provider_home_class.dart';
 import 'package:todolist/View/switch_view.dart';
 
@@ -23,8 +24,8 @@ class _HomeState extends State<Home> {
   void _handleMenuButtonPressed() {
     _advancedDrawerController.showDrawer();
   }
-
-
+  TextEditingController _searchItem = new TextEditingController();
+ bool _bigger = false;
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -172,12 +173,95 @@ class _HomeState extends State<Home> {
           ),
           elevation: 0,
             actions: [
+
               IconButton(
                 icon: Icon(
                   Icons.search,
                   color: Color(0xFF8F8FA8),
                 ),
-                onPressed: (){},
+                onPressed: (){
+                  setState(() {
+                    _bigger = !_bigger;
+                  });
+                },
+              ),
+              AnimatedContainer(
+                width: !_bigger ? 0 : MediaQuery.of(context).size.width*0.55,
+                margin: EdgeInsets.only(right: !_bigger ?0:10),
+                color: Colors.transparent,
+                child: TextField(
+
+                  textAlign: TextAlign.left,
+                  style: TextStyle(fontSize: 14,color: Theme.of(context).floatingActionButtonTheme.backgroundColor ),
+                  maxLines: 1,
+                  maxLength: 100,
+                  showCursor: true,
+                    onTap: (){
+                    setState(() {
+                      SwitchViews().index=5;
+                    });
+                    },
+                  onChanged: (value)=>SwitchViews().onSearch(value),
+                  controller: _searchItem,
+                  autofocus: false,
+
+
+                  minLines: 1,
+                  keyboardType: TextInputType.text,
+
+                  decoration: InputDecoration(
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0xFF8F8FA8),
+                          style: BorderStyle.solid,
+                          width: 1
+                        )
+                      ),
+                    focusedBorder:UnderlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Colors.blue,
+                            style: BorderStyle.solid,
+                            width: 2
+                        )
+                    ),
+                    focusedErrorBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Theme.of(context).errorColor,
+                            style: BorderStyle.solid,
+                            width: 1
+                        )
+                    ),
+                    errorBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Theme.of(context).errorColor,
+                            style: BorderStyle.solid,
+                            width: 1
+                        )
+                    ),
+                    //isDense: true,
+                    contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical:0),
+                    alignLabelWithHint: false,
+                   labelText: null,
+
+                    counterStyle: TextStyle(
+                      height: double.minPositive,
+                    ),
+                    counterText: "",
+
+                    hintText: "Search...",
+                    hintStyle: TextStyle(color: Color(0xFFB8B8B8)),
+
+
+
+                  ),
+                  toolbarOptions: ToolbarOptions(
+                    cut: true,
+                    copy: true,
+                    selectAll: true,
+                    paste: true,
+                  ),
+                ),
+                duration: Duration(milliseconds: 200),
               ),
               Transform.rotate(
                 angle: 20 * math.pi / 180,
@@ -194,7 +278,7 @@ class _HomeState extends State<Home> {
           body:ViewSwitch(),
 
 
-         floatingActionButton:(SwitchViews().index!=1)? FloatingActionButton(
+         floatingActionButton:(![1,5].contains(SwitchViews().index))? FloatingActionButton(
               elevation: 0,
 
               child: Icon(Icons.add ,color: Theme.of(context).splashColor,),
