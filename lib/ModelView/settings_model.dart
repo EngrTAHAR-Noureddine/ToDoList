@@ -182,25 +182,32 @@ class _SettingsModelState extends State<SettingsModel> {
         builder: (context,snapshot){
           if(snapshot.hasData){
             user=snapshot.data;
-              print("************* has data ******************");
-              print("dark = "+user.darkMode);
-              print("password = "+user.passWord);
-              print("hide = "+user.hideGoal);
-              print("link = "+user.linkAgenda);
-              print("id = "+user.id.toString());
-              print("*********************************");
+            print("******************inside ***************");
+            print("_switches[0] = "+_switches[0].toString());
+            print("_switches[1] = "+_switches[1].toString());
+            print("_switches[2] = "+_switches[2].toString());
+            print("_switches[3] = "+_switches[3].toString());
+            print("*********************************");
 
           }else{print("error = "+ snapshot.hasError.toString() +" is : "+snapshot.error.toString());}
-          _switches[0]=(user.darkMode=="Dark")?true:false;
-          _switches[1]=(user.passWord!=null && user.passWord.isNotEmpty)?true:false;
-          _switches[2]=(user.hideGoal!=null && user.hideGoal == "yes")?true:false;
-          _switches[3]=(user.linkAgenda!="none")?true:false;
-          print("*********************************");
-          print("_switches[0] = "+_switches[0].toString());
-          print("_switches[1] = "+_switches[1].toString());
-          print("_switches[2] = "+_switches[2].toString());
-          print("_switches[3] = "+_switches[3].toString());
-          print("*********************************");
+              if(user!=null) {
+                _switches[0] =
+                (user.darkMode != null && user.darkMode == "Dark")
+                    ? true
+                    : false;
+                _switches[1] =
+                (user.passWord != null && user.passWord.isNotEmpty)
+                    ? true
+                    : false;
+                _switches[2] = (user.hideGoal != null && user.hideGoal == "yes")
+                    ? true
+                    : false;
+                _switches[3] =
+                (user.linkAgenda != null && user.linkAgenda != "none")
+                    ? true
+                    : false;
+              }
+
           return Container(
             padding: EdgeInsets.all(10),
             child: ListView(
@@ -241,7 +248,7 @@ class _SettingsModelState extends State<SettingsModel> {
                   },
                   secondary:  Icon(Icons.lock,color: Theme.of(context).floatingActionButtonTheme.focusColor),
                 ),
-                (user.passWord!=null&&user.passWord.isNotEmpty)? SwitchListTile(
+                (user !=null && user.passWord!=null&&user.passWord.isNotEmpty)? SwitchListTile(
                   activeColor: Colors.blue,
                   inactiveThumbColor: Colors.grey,
                   inactiveTrackColor: Colors.grey,
@@ -262,13 +269,13 @@ class _SettingsModelState extends State<SettingsModel> {
                 ):Container(),
                 ListTile(
 
-                  title: (user.linkAgenda!="none")? Text("Change Link of google Calendar",style: TextStyle(color: Theme.of(context).floatingActionButtonTheme.focusColor)):
+                  title: (user!=null && user.linkAgenda!="none")? Text("Change Link of google Calendar",style: TextStyle(color: Theme.of(context).floatingActionButtonTheme.focusColor)):
                   Text('Add Link of google Calendar',style: TextStyle(color: Theme.of(context).floatingActionButtonTheme.focusColor)),
                   leading:  Icon(Icons.calendar_today,color: Theme.of(context).floatingActionButtonTheme.focusColor),
                   trailing:  MaterialButton(
                         onPressed: (){},
                       padding: EdgeInsets.all(0),
-                      child:(user.linkAgenda!="none")?Icon(Icons.change_circle,color: Theme.of(context).floatingActionButtonTheme.focusColor): Icon(Icons.add_circle,color: Theme.of(context).floatingActionButtonTheme.focusColor)),
+                      child:(user !=null && user.linkAgenda!="none")?Icon(Icons.change_circle,color: Theme.of(context).floatingActionButtonTheme.focusColor): Icon(Icons.add_circle,color: Theme.of(context).floatingActionButtonTheme.focusColor)),
                 ),
               ],
             ),

@@ -26,6 +26,13 @@ class ProviderClass extends ChangeNotifier{
   notifyListeners();
 }
 
+  Future<void> setAppMod(User user)async{
+
+    themeMode=(user.darkMode=="Dark")?ThemeMode.dark:ThemeMode.light;
+
+    notifyListeners();
+  }
+
   void setWidget(name){
     if(this.listWidgets.length>2){
       this.listWidgets[0] = name;
