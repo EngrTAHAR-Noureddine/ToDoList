@@ -4,6 +4,7 @@ import 'package:todolist/DataBase/database.dart';
 import 'package:todolist/ModelView/add_new_goal.dart';
 import 'package:todolist/Models/custom_expansion_tile.dart' as custom;
 import 'package:todolist/Models/goal_model.dart';
+import 'package:todolist/Models/user_model.dart';
 
 
 class GoalModel extends StatefulWidget {
@@ -14,10 +15,13 @@ class GoalModel extends StatefulWidget {
 }
 
 class _GoalModelState extends State<GoalModel> {
+User user;
 
   Future<List<Goal>> getList()async{
+    user = await DBProvider.db.getUser(1);
+
     List<Goal> list = await DBProvider.db.getAllGoals();
-    setState(() {});
+    setState((){});
     return (list.isNotEmpty)?list: [];
   }
   /// deleteButton
@@ -81,7 +85,84 @@ class _GoalModelState extends State<GoalModel> {
 
     );
   }
+Future<void> showDialogToHideGoals(BuildContext context,) async {
+  final TextEditingController _textEditingController = TextEditingController();
+  final GlobalKey<FormState> _formKeyDialogCat = GlobalKey<FormState>();
+  String title = "Enter Password";
+  String hintText = "Enter password";
+  String validButton ="Enter";
 
+  return await showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) {
+        return   Center(
+          child: SingleChildScrollView(
+
+            child: AlertDialog(
+              backgroundColor:Theme.of(context).floatingActionButtonTheme.hoverColor,
+
+              shape: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              content: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () {
+                  FocusScope.of(context).requestFocus(new FocusNode());
+                },
+                child:   Form(
+                    key: _formKeyDialogCat,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        TextFormField(
+                          style: TextStyle(color: Theme.of(context).floatingActionButtonTheme.focusColor),
+                          controller: _textEditingController,
+                          validator: (value) {
+                            return (value.isNotEmpty) ? (value!=user.passWord )?"incorrect password":null: "Enter passowrd";
+                          },
+                          decoration:
+                          InputDecoration(hintText: hintText,hintStyle: TextStyle(color: Color(0xFFB8B8B8))),
+                        ),
+
+                      ],
+                    )),
+
+              ),
+              title: Text(title,style: TextStyle(color: Color(0xFF979DB0) ),),
+              actions: <Widget>[
+                MaterialButton(
+
+                  onPressed:()async{
+                    if (_formKeyDialogCat.currentState.validate()) {
+
+                      user.hideGoal ="no";
+                      await DBProvider.db.updateUser(user);
+                      setState((){});
+                      Navigator.of(context).pop();
+
+                    }
+                  },
+
+                  child: Text(validButton,style: TextStyle(color:Color(0xFF979DB0)),),
+                ),
+
+                MaterialButton(
+                  child: Text('Cancel',style:TextStyle(color: Color(0xFF979DB0) )),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+
+      });
+
+
+}
 
   @override
   Widget build(BuildContext context) {
@@ -92,8 +173,21 @@ class _GoalModelState extends State<GoalModel> {
           Container(
             margin: EdgeInsets.all(10),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text("Goals",style: TextStyle(color:Color(0xFF979DB0),fontSize: 20,),),
+
+                IconButton(
+                    onPressed:()async{
+                      if(user.hideGoal == "yes"){return await showDialogToHideGoals(context);
+                      }else{
+                        user.hideGoal="yes";
+                        await DBProvider.db.updateUser(user);
+                        setState(() {});
+                      }
+                              },
+                    color:Color(0xFF979DB0) ,
+                    icon:   (user!=null && user.hideGoal=="no")?Icon(Icons.visibility):Icon(Icons.visibility_off))
               ],
             ),
           ),

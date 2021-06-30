@@ -46,6 +46,7 @@ class _SettingsModelState extends State<SettingsModel> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           TextFormField(
+                            style: TextStyle(color: Theme.of(context).floatingActionButtonTheme.focusColor),
                             controller: _textEditingController,
                             validator: (value) {
                               return (value.isNotEmpty) ? (value!=user.passWord )?"incorrect password":null: "Enter passowrd";
@@ -123,6 +124,7 @@ class _SettingsModelState extends State<SettingsModel> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           TextFormField(
+                            style: TextStyle(color: Theme.of(context).floatingActionButtonTheme.focusColor),
                             controller: _textEditingController,
                             validator: (value) {
                               return value.isNotEmpty ? (value!=user.passWord && text =="remove")?"incorrect password":null: "Enter passowrd";
