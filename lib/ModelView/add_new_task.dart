@@ -260,6 +260,25 @@ bool enabled = true;
     initState();
     return WillPopScope (
       onWillPop: () async{
+
+        if(widget.task!=null && widget.task.isNotEmpty) {
+          Task task = new Task(
+              task:widget.task,
+              timeReminder: widget.timeReminder,
+              dateReminder:widget.dateReminder,
+              category: widget.category,
+              frequency: widget.frequency,
+              date: widget.date,
+              note: widget.note,
+              status: widget.status,
+              goal: widget.goal,
+              time: widget.time
+          );
+
+          if(task.task!=null && task.task.isNotEmpty) DBProvider.db.newTask(task);
+        }
+
+
         if(_categorySelected =="Category") _categorySelected = "Temporary";
         Draft taskAsDraft = new Draft(
             task:_taskName.text,
@@ -287,6 +306,23 @@ bool enabled = true;
           leading:  CloseButton(
             color: Color(0xFF8F8FA8),
             onPressed: (){
+              if(widget.task!=null && widget.task.isNotEmpty) {
+                Task task = new Task(
+                    task:widget.task,
+                    timeReminder: widget.timeReminder,
+                    dateReminder:widget.dateReminder,
+                    category: widget.category,
+                    frequency: widget.frequency,
+                    date: widget.date,
+                    note: widget.note,
+                    status: widget.status,
+                    goal: widget.goal,
+                    time: widget.time
+                );
+
+                if(task.task!=null && task.task.isNotEmpty) DBProvider.db.newTask(task);
+              }
+
               if(_categorySelected =="Category") _categorySelected = "Temporary";
               Draft taskAsDraft = new Draft(
                   task:_taskName.text,

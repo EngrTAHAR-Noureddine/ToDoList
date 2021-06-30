@@ -17,8 +17,8 @@ class SearchResult extends StatefulWidget {
 }
 
 class _SearchResultState extends State<SearchResult> {
-  Future<List<Item>> getList(searchItem)async{
-    List<Task> list = await DBProvider.db.getAllSearch(searchItem);
+  Future<List<Item>> getList(String searchItem)async{
+    List<Task> list =(searchItem!=null && searchItem.isNotEmpty)? await DBProvider.db.getAllSearch(searchItem):[];
     List<Item> items =  (list.isEmpty)?[]:List<Item>.generate(list.length, (int index) {
     return Item(list[index]);
     });
