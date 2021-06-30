@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
 import 'package:provider/provider.dart';
+import 'package:todolist/ModelView/add_new_goal.dart';
 import 'package:todolist/ModelView/add_new_task.dart';
 import 'dart:math' as math;
 
@@ -203,7 +204,7 @@ class _HomeState extends State<Home> {
                 Navigator.push(
                   context,
                   MaterialPageRoute<void>(
-                    builder: (BuildContext context) => AddNewTasks(),
+                    builder: (BuildContext context) => (SwitchViews().index==2)?AddGoal():AddNewTasks(),
                     fullscreenDialog: true,
                   ),
                 );

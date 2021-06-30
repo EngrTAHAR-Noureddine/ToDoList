@@ -282,10 +282,12 @@ Widget deleteButton(item){
                           ],
                         )
                             : ListView.builder(
+
                             scrollDirection: Axis.vertical,
                             itemCount: items.length,
                             padding: EdgeInsets.all(5),
-                            itemBuilder: (BuildContext context, int index){
+                            itemBuilder: (BuildContext context, int ind){
+                              int index = items.length-ind-1;
                               return Container(
                                 margin: EdgeInsets.all(5),
                                 child:Slidable(

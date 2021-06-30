@@ -396,6 +396,8 @@ bool enabled = true;
 
                       ScaffoldMessenger.of(context)
                           .showSnackBar(SnackBar(content: Text('Processing Data')));
+
+                      setState(() {});
                       Navigator.pop(context);
 
                     }
