@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:todolist/DataBase/database.dart';
@@ -22,6 +23,7 @@ class _SettingsModelState extends State<SettingsModel> {
     String validButton ="Enter";
 
     return await showDialog(
+        barrierDismissible: false,
         context: context,
         builder: (context) {
           return   Center(
@@ -98,6 +100,7 @@ class _SettingsModelState extends State<SettingsModel> {
     String hintText = (text=="add")?"Enter new password":"Enter password";
     String validButton =text;
     return await showDialog(
+        barrierDismissible: false,
         context: context,
         builder: (context) {
           return   Center(
@@ -165,6 +168,104 @@ class _SettingsModelState extends State<SettingsModel> {
 
 
   }
+
+  Future<void> showDialogToAddLink(BuildContext context,String text) async {
+    final TextEditingController _textEditingController = TextEditingController();
+    final GlobalKey<FormState> _formKeyDialogCat = GlobalKey<FormState>();
+    String title = "Add Link Google Calendar";
+    String hintText = "Enter new Link";
+    String validButton =text;
+    return await showDialog(
+      barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return   Center(
+            child: SingleChildScrollView(
+
+              child: AlertDialog(
+                backgroundColor:Theme.of(context).floatingActionButtonTheme.hoverColor,
+                contentTextStyle: TextStyle(color: Theme.of(context).floatingActionButtonTheme.focusColor),
+                shape: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                content: GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () {
+                    FocusScope.of(context).requestFocus(new FocusNode());
+                  },
+                  child:   Form(
+                      key: _formKeyDialogCat,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          TextFormField(
+                            style: TextStyle(color: Theme.of(context).floatingActionButtonTheme.focusColor),
+                            controller: _textEditingController,
+                            validator: (value) {
+                              return value.isNotEmpty ? null: "Enter Link";
+                            },
+                            decoration:
+                            InputDecoration(hintText: hintText,hintStyle: TextStyle(color: Color(0xFFB8B8B8))),
+                          ),
+
+                        ],
+                      )),
+
+                ),
+                title: Text(title,style: TextStyle(color: Color(0xFF979DB0) ),),
+                actions: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      (validButton!="add")?  MaterialButton(
+
+                        onPressed:()async{
+
+                            user.linkAgenda = "none";
+                            await DBProvider.db.updateUser(user);
+                            setState((){});
+                            Navigator.of(context).pop();
+
+
+                        },
+
+                        child: Text("remove",style: TextStyle(color:Color(0xFF979DB0)),),
+                      ):Container(),
+
+                      MaterialButton(
+
+                        onPressed:()async{
+                          if (_formKeyDialogCat.currentState.validate()) {
+                            user.linkAgenda = _textEditingController.text;
+                            await DBProvider.db.updateUser(user);
+                            setState((){});
+                            Navigator.of(context).pop();
+
+                          }
+                        },
+
+                        child: Text(validButton,style: TextStyle(color:Color(0xFF979DB0)),),
+                      ),
+
+                      MaterialButton(
+                        child: Text('Cancel',style:TextStyle(color: Color(0xFF979DB0) )),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+
+                        },
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          );
+
+        });
+
+
+  }
+
   User user ;
 
   Future<User> getUser()async{
@@ -272,10 +373,13 @@ class _SettingsModelState extends State<SettingsModel> {
                   title: (user!=null && user.linkAgenda!="none")? Text("Change Link of google Calendar",style: TextStyle(color: Theme.of(context).floatingActionButtonTheme.focusColor)):
                   Text('Add Link of google Calendar',style: TextStyle(color: Theme.of(context).floatingActionButtonTheme.focusColor)),
                   leading:  Icon(Icons.calendar_today,color: Theme.of(context).floatingActionButtonTheme.focusColor),
-                  trailing:  MaterialButton(
-                        onPressed: (){},
+                  trailing:  IconButton(
+                        onPressed: ()async{
+                          String text = (user !=null && user.linkAgenda!="none")?"change":"add";
+                          return await showDialogToAddLink(context,text);
+                          },
                       padding: EdgeInsets.all(0),
-                      child:(user !=null && user.linkAgenda!="none")?Icon(Icons.change_circle,color: Theme.of(context).floatingActionButtonTheme.focusColor): Icon(Icons.add_circle,color: Theme.of(context).floatingActionButtonTheme.focusColor)),
+                      icon:(user !=null && user.linkAgenda!="none")?Icon(Icons.change_circle,color: Theme.of(context).floatingActionButtonTheme.focusColor): Icon(Icons.add_circle,color: Theme.of(context).floatingActionButtonTheme.focusColor)),
                 ),
               ],
             ),
