@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:todolist/Models/provider_class.dart';
 import 'package:todolist/Models/provider_home_class.dart';
+import 'package:todolist/View/login.dart';
 
 
 import 'View/home_view.dart';
@@ -115,7 +116,7 @@ class MyApp extends StatelessWidget {
 
                                 ),
                                 themeMode:  value.themeMode,
-                                home: Home(),
+                                home: LogIn(),//Home(),
                               );});
               }
               )
