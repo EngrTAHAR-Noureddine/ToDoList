@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:todolist/Models/Data/TodayTask.dart';
 import 'package:todolist/Models/Data/draft_model.dart';
 import 'package:todolist/Models/Data/goal_model.dart';
 import 'package:todolist/Models/Data/task_model.dart';
@@ -44,6 +45,22 @@ class DBProvider {
           "timeReminder TEXT"
           ")");
 
+      await db.execute("CREATE TABLE TodayTask ("
+          "id INTEGER PRIMARY KEY,"
+          "task TEXT,"
+          "category TEXT,"
+          "note TEXT,"
+          "status TEXT,"
+          "frequency TEXT,"
+          "goal TEXT,"
+          "date TEXT,"
+          "hour INTEGER,"
+          "minute INTEGER,"
+          "idTask INTEGER,"
+          "inMinute INTEGER"
+          ")");
+
+
       await db.execute("CREATE TABLE Goal ("
           "id INTEGER PRIMARY KEY,"
           "goal TEXT,"
@@ -75,6 +92,28 @@ class DBProvider {
 
   }
 
+  ///**************************************************************************
+  newTodayTask(TodayTask newTask) async {
+    final db = await database;
+    var res = await db.insert("TodayTask", newTask.toMap());
+    return res;
+  }
+  Future<List<TodayTask>> getAllTodayTask(String date) async {
+    final db = await database;
+    var res = await db.rawQuery("SELECT * FROM TodayTask WHERE TodayTask.date LIKE '$date' ORDER BY inMinute asc");
+    List<TodayTask> list =
+    res.isNotEmpty ? res.map((c) => TodayTask.fromMap(c)).toList() : [];
+    return list;
+  }
+  deleteTodayTask(int id) async {
+    final db = await database;
+    db.delete("TodayTask", where: "id = ?", whereArgs: [id]);
+  }
+
+  ///**************************************************************************
+
+
+
 //insert new task
   newTask(Task newTask) async {
     final db = await database;
@@ -105,6 +144,23 @@ class DBProvider {
   Future<List<dynamic>> getCategories() async {
     final db = await database;
     var res = await db.rawQuery("SELECT COUNT(category), category FROM Task GROUP BY category");
+    List<dynamic> list =
+    res.isNotEmpty ? res.toList() : [];
+    return list;
+  }
+
+
+
+  Future<List<Task>> getTimeByDateSelected(String date) async {
+    final db = await database;
+    var res = await db.rawQuery("SELECT * FROM Task WHERE Task.date LIKE '$date' ORDER BY time asc");
+    List<dynamic> list =
+    res.isNotEmpty ? res.map((c) => Task.fromMap(c)).toList() : [];
+    return list;
+  }
+  Future<List<dynamic>> getTimeByDateReminder(String date) async {
+    final db = await database;
+    var res = await db.rawQuery("SELECT dateReminder, timeReminder,id,task FROM Task WHERE Task.dateReminder LIKE '$date' ORDER BY timeReminder asc");
     List<dynamic> list =
     res.isNotEmpty ? res.toList() : [];
     return list;
