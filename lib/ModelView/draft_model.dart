@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:todolist/DataBase/database.dart';
 import 'package:todolist/ModelView/add_new_task.dart';
-import 'package:todolist/Models/draft_model.dart';
+import 'package:todolist/Models/Data/draft_model.dart';
 import 'package:todolist/Models/custom_expansion_tile.dart' as custom;
 class DraftLists extends StatefulWidget {
   const DraftLists({Key key}) : super(key: key);

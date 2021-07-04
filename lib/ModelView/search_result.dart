@@ -4,8 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:todolist/DataBase/database.dart';
 import 'package:todolist/ModelView/add_new_task.dart';
 import 'package:todolist/Models/custom_expansion_tile.dart' as custom;
-import 'package:todolist/Models/provider_home_class.dart';
-import 'package:todolist/Models/task_model.dart';
+import 'package:todolist/Models/ProvidersClass/provider_home_class.dart';
+import 'package:todolist/Models/Data/task_model.dart';
 import 'package:todolist/View/home_view.dart';
 
 

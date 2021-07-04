@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todolist/DataBase/database.dart';
-import 'package:todolist/Models/goal_model.dart';
+import 'package:todolist/Models/Data/goal_model.dart';
 
 class AddGoal extends StatefulWidget {
 

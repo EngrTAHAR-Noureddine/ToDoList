@@ -5,11 +5,11 @@ import 'package:provider/provider.dart';
 import 'package:todolist/DataBase/database.dart';
 import 'package:todolist/ModelView/add_new_goal.dart';
 import 'package:todolist/ModelView/add_new_task.dart';
-import 'package:todolist/Models/provider_class.dart';
+import 'package:todolist/Models/ProvidersClass/provider_class.dart';
 import 'dart:math' as math;
 
-import 'package:todolist/Models/provider_home_class.dart';
-import 'package:todolist/Models/user_model.dart';
+import 'package:todolist/Models/ProvidersClass/provider_home_class.dart';
+import 'package:todolist/Models/Data/user_model.dart';
 import 'package:todolist/View/switch_view.dart';
 
 

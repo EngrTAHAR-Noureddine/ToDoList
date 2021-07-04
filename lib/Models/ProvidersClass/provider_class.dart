@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todolist/DataBase/database.dart';
-import 'package:todolist/Models/user_model.dart';
+import 'package:todolist/Models/Data/user_model.dart';
 
 class ProviderClass extends ChangeNotifier{
   static final ProviderClass _singleton = ProviderClass._internal();
@@ -13,18 +13,18 @@ class ProviderClass extends ChangeNotifier{
 
 
   PageController controller = PageController(initialPage: 0);
-   ThemeMode themeMode = ThemeMode.system;
+  ThemeMode themeMode = ThemeMode.system;
 
 
 
   List<String> listWidgets =["Today","Tomorrow"];
 
-    Future<void> setAppMode(value,User user)async{
-  user.darkMode =(value)?"Dark":"Light";
-  themeMode=(user.darkMode=="Dark")?ThemeMode.dark:ThemeMode.light;
-  await DBProvider.db.updateUser(user);
-  notifyListeners();
-}
+  Future<void> setAppMode(value,User user)async{
+    user.darkMode =(value)?"Dark":"Light";
+    themeMode=(user.darkMode=="Dark")?ThemeMode.dark:ThemeMode.light;
+    await DBProvider.db.updateUser(user);
+    notifyListeners();
+  }
 
   Future<void> setAppMod(User user)async{
 
@@ -42,11 +42,14 @@ class ProviderClass extends ChangeNotifier{
   }
 
   void removeWidget(){
-      this.listWidgets.removeAt(0);
-        this.controller.jumpToPage(0);
-      notifyListeners();
+    this.listWidgets.removeAt(0);
+    this.controller.jumpToPage(0);
+    notifyListeners();
   }
 
+  void setState(){
+    notifyListeners();
+  }
 
 
 }

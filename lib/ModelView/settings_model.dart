@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:todolist/DataBase/database.dart';
-import 'package:todolist/Models/provider_class.dart';
-import 'package:todolist/Models/user_model.dart';
+import 'package:todolist/Models/ProvidersClass/provider_class.dart';
+import 'package:todolist/Models/Data/user_model.dart';
 
 class SettingsModel extends StatefulWidget {
   const SettingsModel({Key key}) : super(key: key);

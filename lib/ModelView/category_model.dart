@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:todolist/DataBase/database.dart';
-import 'package:todolist/Models/data_variable.dart';
-import 'package:todolist/Models/provider_class.dart';
-import 'package:todolist/Models/task_model.dart';
+import 'package:todolist/Models/Data/data_variable.dart';
+import 'package:todolist/Models/ProvidersClass/provider_class.dart';
+import 'package:todolist/Models/Data/task_model.dart';
 class CategoryBuilder extends StatefulWidget {
 
   @override

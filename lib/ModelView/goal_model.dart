@@ -3,8 +3,8 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:todolist/DataBase/database.dart';
 import 'package:todolist/ModelView/add_new_goal.dart';
 import 'package:todolist/Models/custom_expansion_tile.dart' as custom;
-import 'package:todolist/Models/goal_model.dart';
-import 'package:todolist/Models/user_model.dart';
+import 'package:todolist/Models/Data/goal_model.dart';
+import 'package:todolist/Models/Data/user_model.dart';
 
 
 class GoalModel extends StatefulWidget {

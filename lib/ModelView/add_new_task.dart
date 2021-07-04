@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:todolist/DataBase/database.dart';
-import 'package:todolist/Models/data_variable.dart';
-import 'package:todolist/Models/draft_model.dart';
-import 'package:todolist/Models/task_model.dart';
+import 'package:todolist/Models/Data/data_variable.dart';
+import 'package:todolist/Models/Data/draft_model.dart';
+import 'package:todolist/Models/Data/task_model.dart';
 
 class AddNewTasks extends StatefulWidget {
  int id;

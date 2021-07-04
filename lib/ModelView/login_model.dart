@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:todolist/Models/data_variable.dart';
+import 'package:todolist/Models/Data/data_variable.dart';
 
 class LogInClass extends StatefulWidget {
   const LogInClass({Key key}) : super(key: key);

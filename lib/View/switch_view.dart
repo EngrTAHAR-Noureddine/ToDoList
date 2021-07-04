@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:todolist/Models/provider_home_class.dart';
+import 'package:todolist/Models/ProvidersClass/provider_home_class.dart';
 
 
 class ViewSwitch extends StatefulWidget {

@@ -4,10 +4,10 @@ import 'dart:io';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:todolist/Models/draft_model.dart';
-import 'package:todolist/Models/goal_model.dart';
-import 'package:todolist/Models/task_model.dart';
-import 'package:todolist/Models/user_model.dart';
+import 'package:todolist/Models/Data/draft_model.dart';
+import 'package:todolist/Models/Data/goal_model.dart';
+import 'package:todolist/Models/Data/task_model.dart';
+import 'package:todolist/Models/Data/user_model.dart';
 
 class DBProvider {
   DBProvider._();
