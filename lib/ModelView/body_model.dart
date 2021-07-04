@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:todolist/Models/Data/data_variable.dart';
-import 'package:todolist/View/category_view.dart';
+import 'package:todolist/View/categories.dart';
 import 'package:todolist/View/list_of_tasks.dart';
 
 class ToDoListBody extends StatefulWidget {
@@ -22,14 +22,14 @@ class _ToDoListBodyState extends State<ToDoListBody> {
             return (Variables().isLarge)?
             Column(
               children: [
-                CategoryView(),
+                Categories(),
                 Expanded(child: ListOfTasks()),
               ],
             )
                 :
             Row(
               children: [
-                CategoryView(),
+                Categories(),
                 Expanded(child: ListOfTasks()),
               ],
             )
