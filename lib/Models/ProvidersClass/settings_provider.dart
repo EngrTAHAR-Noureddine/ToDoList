@@ -13,7 +13,7 @@ class SettingsProvider extends ChangeNotifier{
 
   Future<User> getUser()async{
     User user = await DBProvider.db.getUser(1);
-
+    this.user = user;
     return user;
   }
   Future<void> showDialogToHideGoals(BuildContext context,) async {

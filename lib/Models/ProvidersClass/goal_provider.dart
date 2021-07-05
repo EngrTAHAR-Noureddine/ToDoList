@@ -69,11 +69,11 @@ class GoalProvider extends ChangeNotifier {
     );
   }
 
-  User user;
+
 
   Stream<List<Goal>> getList()async*{
 
-    user= await SettingsProvider().getUser();
+  User user= await SettingsProvider().getUser();
     List<Goal> list = await DBProvider.db.getAllGoals();
     yield list;
   }

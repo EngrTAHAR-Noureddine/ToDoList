@@ -33,22 +33,20 @@ class _GoalViewState extends State<GoalView> {
 
                       IconButton(
                           onPressed:()async{
-                            if(GoalProvider().user.hideGoal == "yes" && GoalProvider().user.passWord!=null && GoalProvider().user.passWord.isNotEmpty){
+                            if(SettingsProvider().user.hideGoal == "yes" && SettingsProvider().user.passWord!=null && SettingsProvider().user.passWord.isNotEmpty){
                                return await SettingsProvider().showDialogToHideGoals(context);
                             }else {
-                              GoalProvider().user.hideGoal=(GoalProvider().user.hideGoal=="no")?"yes" :"no";
-                              await DBProvider.db.updateUser(GoalProvider().user);
+                              SettingsProvider().user.hideGoal=(SettingsProvider().user.hideGoal=="no")?"yes" :"no";
+                              await DBProvider.db.updateUser(SettingsProvider().user);
                               setState(() {});
                             }
                           },
                           color:Color(0xFF979DB0) ,
-                          icon:Consumer<GoalProvider>(
-                                builder: (context, value, child) {
-                                  return (GoalProvider().user != null &&
-                                      GoalProvider().user.hideGoal == "no")
+                          icon: (SettingsProvider().user != null &&
+                                      SettingsProvider().user.hideGoal == "no")
                                       ? Icon(Icons.visibility)
-                                      : Icon(Icons.visibility_off);
-                                })
+                                      : Icon(Icons.visibility_off)
+
                                     )
                     ],
                   ),
@@ -87,7 +85,7 @@ class _GoalViewState extends State<GoalView> {
                                   ),
                                 ],
                               )
-                                  :(GoalProvider().user.hideGoal=="no")? ListView.builder(
+                                  :(SettingsProvider().user.hideGoal=="no")? ListView.builder(
 
                                   scrollDirection: Axis.vertical,
                                   itemCount: items.length,
