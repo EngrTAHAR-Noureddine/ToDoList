@@ -110,6 +110,7 @@ void callbackDispatcher() async{
             time: inputData["time"]
         );
         await DBProvider.db.newQueue(newQueue);
+        NotificationProvider().isUnread = true;
         await Workmanager().initialize(callbackDispatcher);
         await Workmanager().registerOneOffTask(
             "today"+DateTime.now().toString(), "test",

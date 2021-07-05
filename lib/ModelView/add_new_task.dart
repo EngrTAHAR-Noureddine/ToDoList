@@ -323,73 +323,24 @@ class _AddNewTasksState extends State<AddNewTasks> {
 
                 if (task.task != null && task.task.isNotEmpty) {
                   await DBProvider.db.newTask(task);
-                  List<String> lstdate = task.date.split("/");
-                  List<String> lstdatR = task.dateReminder.split("/");
-                  if ((DateTime
-                      .now()
-                      .day == int.parse(lstdate[0])) && (DateTime
-                      .now()
-                      .month == int.parse(lstdate[1])) && (DateTime
-                      .now()
-                      .year == int.parse(lstdate[2]))) {
-                    List<String> timesplit = task.time.split(":");
-                    await DBProvider.db.newTodayTask(
-                        TodayTask(
-                            idTask: task.id,
-                            task: task.task,
-                            category: task.category,
-                            frequency: task.frequency,
-                            goal: task.goal,
-                            status: task.status,
-                            note: task.note,
-                            date: task.date,
-                            hour: int.parse(timesplit[0]),
-                            minute: int.parse(timesplit[1]),
-                            inMinute: (int.parse(timesplit[0])*60+int.parse(timesplit[1]))
-                        )
-                    );
-                    //Workmanager().cancelAll();
-                    //await LocalNotification.flutterNotificationPlugin.cancelAll();
-                  /*  WidgetsFlutterBinding.ensureInitialized();
+
+                  WidgetsFlutterBinding.ensureInitialized();
                     await Workmanager().initialize(callbackDispatcher);
                     await Workmanager().registerOneOffTask(
                         DateTime.now().toString(), "task",
-                        inputData: {"data": "init","title":" ","body":" ","time":" "},
+                        inputData: {
+                          "data": "init",
+                          "title":" ",
+                          "body":" ",
+                          "time":" ",
+                          "idTask":0,
+                          "date":" ",
+                          "status":" ",
+                          "frequency":" ",
+                          "idQueue":0},
                         initialDelay: Duration(seconds: 1)
-                    );*/
-                  }else if(((DateTime
-                      .now()
-                      .day == int.parse(lstdatR[0])) && (DateTime
-                      .now()
-                      .month == int.parse(lstdatR[1])) && (DateTime
-                      .now()
-                      .year == int.parse(lstdatR[2])))){
-                    List<String> timesplit = task.timeReminder.split(":");
-                    await DBProvider.db.newTodayTask(
-                        TodayTask(
-                            idTask: task.id,
-                            task: task.task,
-                            category: task.category,
-                            frequency: task.frequency,
-                            goal: task.goal,
-                            status: task.status,
-                            note: task.note,
-                            date: task.date,
-                            hour: int.parse(timesplit[0]),
-                            minute: int.parse(timesplit[1]),
-                            inMinute: (int.parse(timesplit[0])*60+int.parse(timesplit[1]))
-                        )
                     );
-                    //    Workmanager().cancelAll();
-                    //  await LocalNotification.flutterNotificationPlugin.cancelAll();
-                  /*  WidgetsFlutterBinding.ensureInitialized();
-                    await Workmanager().initialize(callbackDispatcher);
-                    await Workmanager().registerOneOffTask(
-                        DateTime.now().toString(), "task",
-                        inputData: {"data": "init","title":" ","body":" ","time":" "},
-                        initialDelay: Duration(seconds: 1)
-                    );*/
-                  }
+
                 }
               }
 
@@ -498,8 +449,7 @@ class _AddNewTasksState extends State<AddNewTasks> {
 
                       if (task.task != null && task.task.isNotEmpty) {
                         await DBProvider.db.newTask(task);
-                          //    Workmanager().cancelAll();
-                          //  await LocalNotification.flutterNotificationPlugin.cancelAll();
+
                           WidgetsFlutterBinding.ensureInitialized();
                           await Workmanager().initialize(callbackDispatcher);
                           await Workmanager().registerOneOffTask(
@@ -524,7 +474,7 @@ class _AddNewTasksState extends State<AddNewTasks> {
                       _formKey.currentState.save();
 
                       ScaffoldMessenger.of(context)
-                          .showSnackBar(SnackBar(content: Text('Processing Data')));
+                          .showSnackBar(SnackBar(content: Text('New Task added')));
 
                       setState(() {});
                       Navigator.pop(context);
