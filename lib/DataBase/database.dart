@@ -154,14 +154,14 @@ class DBProvider {
   Future<List<Task>> getTimeByDateSelected(String date) async {
     final db = await database;
     var res = await db.rawQuery("SELECT * FROM Task WHERE Task.date LIKE '$date' ORDER BY time asc");
-    List<dynamic> list =
+    List<Task> list =
     res.isNotEmpty ? res.map((c) => Task.fromMap(c)).toList() : [];
     return list;
   }
-  Future<List<dynamic>> getTimeByDateReminder(String date) async {
+  Future<List<Task>> getTimeByDateReminder(String date) async {
     final db = await database;
-    var res = await db.rawQuery("SELECT dateReminder, timeReminder,id,task FROM Task WHERE Task.dateReminder LIKE '$date' ORDER BY timeReminder asc");
-    List<dynamic> list =
+    var res = await db.rawQuery("SELECT *FROM Task WHERE Task.dateReminder LIKE '$date' ORDER BY timeReminder asc");
+    List<Task> list =
     res.isNotEmpty ? res.toList() : [];
     return list;
   }
