@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todolist/DataBase/database.dart';
 import 'package:todolist/Models/Data/user_model.dart';
+import 'package:todolist/Models/ProvidersClass/goal_provider.dart';
 
 class SettingsProvider extends ChangeNotifier{
   static final SettingsProvider _singleton = SettingsProvider._internal();
@@ -68,6 +69,7 @@ class SettingsProvider extends ChangeNotifier{
 
                         user.hideGoal ="no";
                         await DBProvider.db.updateUser(user);
+                       // GoalProvider().setState();
                         notifyListeners();
                         Navigator.of(context).pop();
 
@@ -267,4 +269,6 @@ class SettingsProvider extends ChangeNotifier{
 
 
   }
+
+  setState(){notifyListeners();}
 }

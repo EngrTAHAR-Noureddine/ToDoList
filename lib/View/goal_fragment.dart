@@ -33,23 +33,31 @@ class _GoalViewState extends State<GoalView> {
 
                       IconButton(
                           onPressed:()async{
-                            if(GoalProvider().user.hideGoal == "yes"){return await SettingsProvider().showDialogToHideGoals(context);
-                            }else{
-                              GoalProvider().user.hideGoal="yes";
+                            if(GoalProvider().user.hideGoal == "yes" && GoalProvider().user.passWord!=null && GoalProvider().user.passWord.isNotEmpty){
+                               return await SettingsProvider().showDialogToHideGoals(context);
+                            }else {
+                              GoalProvider().user.hideGoal=(GoalProvider().user.hideGoal=="no")?"yes" :"no";
                               await DBProvider.db.updateUser(GoalProvider().user);
                               setState(() {});
                             }
                           },
                           color:Color(0xFF979DB0) ,
-                          icon:   (GoalProvider().user!=null && GoalProvider().user.hideGoal=="no")?Icon(Icons.visibility):Icon(Icons.visibility_off))
+                          icon:Consumer<GoalProvider>(
+                                builder: (context, value, child) {
+                                  return (GoalProvider().user != null &&
+                                      GoalProvider().user.hideGoal == "no")
+                                      ? Icon(Icons.visibility)
+                                      : Icon(Icons.visibility_off);
+                                })
+                                    )
                     ],
                   ),
                 ),
                 Expanded(
                   child: Container(
                     color: Theme.of(context).backgroundColor,
-                    child: FutureBuilder(
-                        future: GoalProvider().getList(),
+                    child: StreamBuilder(
+                        stream: GoalProvider().getList(),
                         builder: (context,AsyncSnapshot snapshot){
                           print(snapshot.hasData);
                           print(snapshot.data);
@@ -79,7 +87,7 @@ class _GoalViewState extends State<GoalView> {
                                   ),
                                 ],
                               )
-                                  : ListView.builder(
+                                  :(GoalProvider().user.hideGoal=="no")? ListView.builder(
 
                                   scrollDirection: Axis.vertical,
                                   itemCount: items.length,
@@ -174,7 +182,14 @@ class _GoalViewState extends State<GoalView> {
 
                                       ),
                                     );
-                                  }),
+                                  }):Container(
+
+                                child: Text("Sorry! is Privacy",  style: TextStyle(fontWeight: FontWeight.normal , color: Color(0xFF979DB0)),),
+                                alignment: Alignment.center,
+
+
+
+                              ),
                             );
 
                           }else  return Column(

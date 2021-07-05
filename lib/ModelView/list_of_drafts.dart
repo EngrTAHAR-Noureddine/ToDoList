@@ -10,9 +10,9 @@ import 'package:todolist/Models/custom_expansion_tile.dart' as custom;
 
 
 class ListOfDrafts extends StatelessWidget{
-  Future<List<Draft>> getList()async{
+  Stream<List<Draft>> getList()async*{
     List<Draft> list = await DBProvider.db.getAllDraft();
-    return (list.isNotEmpty)?list: [];
+    yield list;
   }
   @override
   Widget build(BuildContext context) {
@@ -33,8 +33,8 @@ class ListOfDrafts extends StatelessWidget{
                 Expanded(
                   child: Container(
                     color: Theme.of(context).backgroundColor,
-                    child: FutureBuilder(
-                        future: getList(),
+                    child: StreamBuilder(
+                        stream: getList(),
                         builder: (context,AsyncSnapshot snapshot){
                           if(snapshot.hasData) {
 

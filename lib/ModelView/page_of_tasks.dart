@@ -33,8 +33,8 @@ class PageOfTasks extends StatelessWidget {
                 Expanded(
                   child: Container(
                     color: Theme.of(context).backgroundColor,
-                    child: FutureBuilder(
-                        future: TaskFunctions().getList(category),
+                    child: StreamBuilder(
+                        stream: TaskFunctions().getList(category),
                         builder: (context,AsyncSnapshot snapshot){
 
                           if(snapshot.hasData) {

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:todolist/Models/ProvidersClass/task_button.dart';
 import 'package:todolist/Models/category_class.dart';
 import 'package:todolist/Models/Data/data_variable.dart';
 import 'package:todolist/Models/Data/task_model.dart';
@@ -22,8 +24,8 @@ class _CategoriesState extends State<Categories> {
   @override
   Widget build(BuildContext context) {
     initState();
-    return FutureBuilder(
-        future: CategoryFunction().getCategories(),
+    return StreamBuilder(
+        stream: CategoryFunction().getCategories(),
         builder: (context, AsyncSnapshot snapshot) {
           List<Category> list = (snapshot.hasData)?snapshot.data:[];
           if(list.isNotEmpty){

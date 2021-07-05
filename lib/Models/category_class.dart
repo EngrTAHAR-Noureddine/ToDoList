@@ -12,7 +12,7 @@ class CategoryFunction {
   }
 
   CategoryFunction._internal();
-  Future<List<Category>> getCategories()async{
+  Stream<List<Category>> getCategories()async*{
 
     List<Map> list = await DBProvider.db.getCategories();
 
@@ -20,7 +20,7 @@ class CategoryFunction {
     List<String> categoriesList = [];
     listCat.forEach((element) { categoriesList.add(element.category); });
     Variables().setCat(categoriesList);
-    return (listCat.isNotEmpty)?listCat:[];
+    yield listCat;
   }
 
   Widget  categoryWidget(context,Category category){

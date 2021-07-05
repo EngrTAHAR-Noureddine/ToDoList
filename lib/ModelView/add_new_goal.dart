@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:todolist/DataBase/database.dart';
 import 'package:todolist/Models/Data/goal_model.dart';
+import 'package:todolist/Models/ProvidersClass/goal_provider.dart';
+import 'package:todolist/Models/ProvidersClass/settings_provider.dart';
 
 class AddGoal extends StatefulWidget {
 
@@ -100,6 +102,8 @@ class _AddGoalState extends State<AddGoal> {
 
                     ScaffoldMessenger.of(context)
                         .showSnackBar(SnackBar(content: Text('new Goal added')));
+                    SettingsProvider().setState();
+                  //  GoalProvider().setState();
                     Navigator.pop(context);
 
 

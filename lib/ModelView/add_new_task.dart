@@ -6,6 +6,9 @@ import 'package:todolist/Models/Data/TodayTask.dart';
 import 'package:todolist/Models/Data/data_variable.dart';
 import 'package:todolist/Models/Data/draft_model.dart';
 import 'package:todolist/Models/Data/task_model.dart';
+import 'package:todolist/Models/ProvidersClass/task_button.dart';
+import 'package:todolist/main.dart';
+import 'package:workmanager/workmanager.dart';
 
 
 class AddNewTasks extends StatefulWidget {
@@ -32,8 +35,6 @@ class AddNewTasks extends StatefulWidget {
 }
 
 class _AddNewTasksState extends State<AddNewTasks> {
-
-
 
 
   Future<void> showDialogToAddCategory(BuildContext context) async {
@@ -109,9 +110,6 @@ class _AddNewTasksState extends State<AddNewTasks> {
 
 
   }
-
-
-
 
   List<String> itemCategories =["Add New Category","Temporary"];
 
@@ -227,6 +225,7 @@ class _AddNewTasksState extends State<AddNewTasks> {
       });
   }
   List<String> _part =[];
+
   @override
   void initState() {
 
@@ -418,7 +417,7 @@ class _AddNewTasksState extends State<AddNewTasks> {
             Container(
 
               child: MaterialButton(
-                onPressed: (){
+                onPressed: ()async{
                   if (_formKey.currentState.validate()) {
                     DateTime yesterday= DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day-1);
                     if(selectedDate.isBefore(yesterday)){
@@ -497,7 +496,19 @@ class _AddNewTasksState extends State<AddNewTasks> {
                           time: _time
                       );
 
-                      if(task.task!=null && task.task.isNotEmpty) DBProvider.db.newTask(task);
+                      if (task.task != null && task.task.isNotEmpty) {
+                        await DBProvider.db.newTask(task);
+                          //    Workmanager().cancelAll();
+                          //  await LocalNotification.flutterNotificationPlugin.cancelAll();
+                          WidgetsFlutterBinding.ensureInitialized();
+                          await Workmanager().initialize(callbackDispatcher);
+                          await Workmanager().registerOneOffTask(
+                              DateTime.now().toString(), "task",
+                              inputData: {"data": "init","title":" ","body":" ","time":" "},
+                              initialDelay: Duration(seconds: 1)
+                          );
+
+                      }
 
 
                       _formKey.currentState.save();
@@ -512,9 +523,13 @@ class _AddNewTasksState extends State<AddNewTasks> {
 
 
 
-
+                    TaskButton().setState();
                   }
+
                 },
+
+
+
                 color: Colors.transparent,
                 splashColor: Colors.grey.withOpacity(0.5),
                 highlightElevation: 0,

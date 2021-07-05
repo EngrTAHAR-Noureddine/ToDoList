@@ -28,7 +28,7 @@ class _HomeState extends State<Home> {
   TextEditingController _searchItem = new TextEditingController();
  bool _bigger = false;
 
- Future<bool> setUser()async{
+  Stream<bool> setUser()async*{
    User user = await DBProvider.db.getUser(1);
 
    await ProviderClass().setAppMod(user);
@@ -40,8 +40,8 @@ class _HomeState extends State<Home> {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarIconBrightness: Theme.of(context).brightness,
     ));
-      return FutureBuilder(
-          future: setUser(),
+      return StreamBuilder(
+          stream: setUser(),
           builder: (context,snapshot){
             return AdvancedDrawer(
               backdropColor:Color(0xFF2643C4),
@@ -199,6 +199,7 @@ class _HomeState extends State<Home> {
                 );
               }),
               child: Scaffold(
+                backgroundColor: Theme.of(context).backgroundColor,
 
                 appBar: AppBar(
                   brightness: Theme.of(context).primaryColorBrightness,

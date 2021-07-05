@@ -71,11 +71,11 @@ class GoalProvider extends ChangeNotifier {
 
   User user;
 
-  Future<List<Goal>> getList()async{
+  Stream<List<Goal>> getList()async*{
 
     user= await SettingsProvider().getUser();
     List<Goal> list = await DBProvider.db.getAllGoals();
-    return (list.isNotEmpty)?list: [];
+    yield list;
   }
 
   setState(){notifyListeners();}
