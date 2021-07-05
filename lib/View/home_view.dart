@@ -5,11 +5,14 @@ import 'package:provider/provider.dart';
 import 'package:todolist/DataBase/database.dart';
 import 'package:todolist/ModelView/add_new_goal.dart';
 import 'package:todolist/ModelView/add_new_task.dart';
+import 'package:todolist/Models/Data/queue_model.dart';
+import 'package:todolist/Models/ProvidersClass/notification_provider.dart';
 import 'package:todolist/Models/ProvidersClass/provider_class.dart';
 import 'dart:math' as math;
 
 import 'package:todolist/Models/ProvidersClass/provider_home_class.dart';
 import 'package:todolist/Models/Data/user_model.dart';
+import 'package:todolist/View/notification_fragment.dart';
 import 'package:todolist/View/switch_view.dart';
 
 
@@ -32,6 +35,9 @@ class _HomeState extends State<Home> {
    User user = await DBProvider.db.getUser(1);
 
    await ProviderClass().setAppMod(user);
+   List<Queue> listQueue = await DBProvider.db.getAllQueue();
+
+  if(listQueue!=null && listQueue.isNotEmpty){ NotificationProvider().setList(listQueue);  print(listQueue);}
 
  }
 
@@ -40,9 +46,12 @@ class _HomeState extends State<Home> {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarIconBrightness: Theme.of(context).brightness,
     ));
-      return StreamBuilder(
+      return Consumer<NotificationProvider>(
+          builder: (context, value, child){
+      return  StreamBuilder(
           stream: setUser(),
           builder: (context,snapshot){
+
             return AdvancedDrawer(
               backdropColor:Color(0xFF2643C4),
               controller: _advancedDrawerController,
@@ -313,14 +322,37 @@ class _HomeState extends State<Home> {
                       ),
                       duration: Duration(milliseconds: 200),
                     ):Container(),
-                    Transform.rotate(
-                      angle: 20 * math.pi / 180,
-                      child: IconButton(
-                        icon: Icon(
-                          Icons.notifications_none_outlined,
-                          color: Color(0xFF8F8FA8),
-                        ),
-                        onPressed: (){},
+                    CircleAvatar(
+                      backgroundColor:Colors.transparent,
+                      child: Stack(
+
+                        children: [
+                          Transform.rotate(
+                            angle: 20 * math.pi / 180,
+                            child: IconButton(
+                                  splashColor: Colors.transparent,
+                              icon: Icon(
+                                Icons.notifications_none_outlined,
+                                color: Color(0xFF8F8FA8),
+                              ),
+                              onPressed: (){
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute<void>(
+                                    builder: (BuildContext context) => NotificationView(),
+                                    fullscreenDialog: true,
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                          (NotificationProvider().getNumber()!=null && NotificationProvider().getNumber()>0)?Positioned(  // draw a red marble
+                              top: 15,
+                              left: 10,
+                              child:Icon(Icons.brightness_1, size: 10.0,
+                                  color: Colors.redAccent),
+                          ):Container(),
+                        ],
                       ),
                     ),
                   ],
@@ -350,7 +382,7 @@ class _HomeState extends State<Home> {
 
               ),
             );
-          });
+          });});
 
 
   }

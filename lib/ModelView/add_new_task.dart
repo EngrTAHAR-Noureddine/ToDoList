@@ -504,7 +504,17 @@ class _AddNewTasksState extends State<AddNewTasks> {
                           await Workmanager().initialize(callbackDispatcher);
                           await Workmanager().registerOneOffTask(
                               DateTime.now().toString(), "task",
-                              inputData: {"data": "init","title":" ","body":" ","time":" "},
+                              inputData: {
+                                "data": "init",
+                                "title":" ",
+                                "body":" ",
+                                "time":" ",
+                                "idTask":0,
+                                "date":" ",
+                                "status":" ",
+                                "frequency":" ",
+                                "idQueue":0
+                              },
                               initialDelay: Duration(seconds: 1)
                           );
 

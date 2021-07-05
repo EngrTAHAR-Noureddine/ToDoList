@@ -80,8 +80,6 @@ class _GoalViewState extends State<GoalView> {
                                     child: Text("is Empty",  style: TextStyle(fontWeight: FontWeight.normal , color: Color(0xFF979DB0)),),
                                     alignment: Alignment.center,
 
-
-
                                   ),
                                 ],
                               )

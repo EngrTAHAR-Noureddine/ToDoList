@@ -1,8 +1,11 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class LocalNotification {
   static FlutterLocalNotificationsPlugin flutterNotificationPlugin;
   static AndroidNotificationDetails androidSettings;
+
+
 
   static Initializer() {
     /*
@@ -28,8 +31,14 @@ class LocalNotification {
         onSelectNotification: onNotificationSelect);
   }
 
-  static Future<void> onNotificationSelect(String payload) async {
-    print(payload);
+  static Future<dynamic> onNotificationSelect(String payload) async {
+
+
+        return NewScreen(
+          payload: payload,
+        );
+
+
   }
 
   static ShowOneTimeNotification(DateTime scheduledDate,String title, String body, String time) async {
@@ -37,5 +46,27 @@ class LocalNotification {
     await flutterNotificationPlugin.schedule(1, "Task : "+title,
         time+":"+body, scheduledDate, notificationDetails,
         androidAllowWhileIdle: true);
+  }
+}
+
+class NewScreen extends StatelessWidget {
+  String payload;
+
+  NewScreen({
+    @required this.payload,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.blue,
+      appBar: AppBar(
+        title: Text(payload),
+
+      ),
+      body: Container(
+        color: Colors.red,
+      ),
+    );
   }
 }

@@ -5,12 +5,14 @@ import 'package:todolist/DataBase/database.dart';
 import 'package:todolist/Models/Data/TodayTask.dart';
 import 'package:todolist/Models/Data/task_model.dart';
 import 'package:todolist/Models/ProvidersClass/goal_provider.dart';
+import 'package:todolist/Models/ProvidersClass/notification_provider.dart';
 import 'package:todolist/Models/ProvidersClass/settings_provider.dart';
 import 'package:todolist/Models/ProvidersClass/task_button.dart';
 import 'package:todolist/Models/notification_service.dart';
 import 'package:todolist/Models/ProvidersClass/provider_class.dart';
 import 'package:todolist/Models/ProvidersClass/provider_home_class.dart';
 import 'package:workmanager/workmanager.dart';
+import 'Models/Data/queue_model.dart';
 import 'View/home_view.dart';
 
 void callbackDispatcher() async{
@@ -64,14 +66,34 @@ void callbackDispatcher() async{
         await Workmanager().initialize(callbackDispatcher);
         await Workmanager().registerOneOffTask(
             "tomorrow"+now.toString(), "test2",
-            inputData: {"data": "init","title":" ","body":" ","time":" "},
+            inputData: {
+              "data": "init",
+              "title":" ",
+              "body":" ",
+              "time":" ",
+              "idTask":0,
+              "date":" ",
+              "status":" ",
+              "frequency":" ",
+              "idQueue":0
+        },
             initialDelay: Duration(minutes: ((24*60)-(now.hour*60+now.minute)))
         );
         WidgetsFlutterBinding.ensureInitialized();
         await Workmanager().initialize(callbackDispatcher);
         await Workmanager().registerOneOffTask(
             "today"+now.toString(), "test2",
-            inputData: {"data": "notNow","title":" ","body":" ","time":" "},
+            inputData: {
+              "data": "notNow",
+              "title":" ",
+              "body":" ",
+              "time":" ",
+              "idTask":0,
+              "date":" ",
+              "status":" ",
+              "frequency":" ",
+              "idQueue":0
+        },
             initialDelay: Duration(seconds: 1)
         );
         break;
@@ -79,10 +101,29 @@ void callbackDispatcher() async{
         LocalNotification.Initializer();
         LocalNotification.ShowOneTimeNotification(DateTime.now(),inputData["title"],inputData["body"],inputData["time"]);
         WidgetsFlutterBinding.ensureInitialized();
+        Queue newQueue = new Queue(
+            idTask:inputData["idTask"] ,
+            date: inputData["date"],
+            status: inputData["status"],
+            frequency: inputData["frequency"],
+            task: inputData["title"],
+            time: inputData["time"]
+        );
+        await DBProvider.db.newQueue(newQueue);
         await Workmanager().initialize(callbackDispatcher);
         await Workmanager().registerOneOffTask(
             "today"+DateTime.now().toString(), "test",
-            inputData: {"data": "notNow","title":" ","body":" ","time":" "},
+            inputData: {
+                        "data": "notNow",
+                        "title":" ",
+                        "body":" ",
+                        "time":" ",
+                        "idTask":0,
+                        "date":" ",
+                        "status":" ",
+                        "frequency":" ",
+                        "idQueue":0
+                      },
             initialDelay: Duration(minutes: 1)
         );
         return Future.value(true);
@@ -119,7 +160,17 @@ void callbackDispatcher() async{
               await Workmanager().initialize(callbackDispatcher);
               await Workmanager().registerOneOffTask(
                   picker.id.toString(), "test2",
-                  inputData: {"data": "itTime","title":picker.task,"body":(picker.note!=null)?picker.note:"click to show details...","time":picker.date},
+                  inputData: {
+                    "data": "itTime",
+                    "title":picker.task,
+                    "body":(picker.note!=null)?picker.note:"click to show details...",
+                    "time":picker.date,
+                    "idTask":picker.idTask,
+                    "date":date,
+                    "status":picker.status,
+                    "frequency":picker.frequency,
+                    "idQueue":0
+                  },
                   initialDelay: Duration(seconds: 1)
               );
             } else {
@@ -128,7 +179,17 @@ void callbackDispatcher() async{
               await Workmanager().initialize(callbackDispatcher);
               await Workmanager().registerOneOffTask(
                   picker.id.toString(), "test",
-                  inputData: {"data": "itTime","title":picker.task,"body":(picker.note!=null)?picker.note:"click to show details...","time":picker.date},
+                  inputData: {
+                    "data": "itTime",
+                    "title":picker.task,
+                    "body":(picker.note!=null)?picker.note:"click to show details...",
+                    "time":picker.date,
+                    "idTask":picker.idTask,
+                    "date":date,
+                    "status":picker.status,
+                    "frequency":picker.frequency,
+                    "idQueue":0
+                  },
                   initialDelay: Duration(minutes: delay)
               );
             }
@@ -149,7 +210,17 @@ void main() async{
   await Workmanager().initialize(callbackDispatcher);
   await Workmanager().registerOneOffTask(
       "1", "task",
-      inputData: {"data": "init","title":" ","body":" ","time":" "},
+      inputData: {
+        "data": "init",
+        "title":" ",
+        "body":" ",
+        "time":" ",
+        "idTask":0,
+        "date":" ",
+        "status":" ",
+        "frequency":" ",
+        "idQueue":0
+  },
       initialDelay: Duration(seconds: 1)
   );
   runApp(MyApp());
@@ -171,6 +242,8 @@ class MyApp extends StatelessWidget {
                           create: (context) => SettingsProvider(), ),
                         ChangeNotifierProvider<GoalProvider>(
                           create: (context) => GoalProvider(), ),
+                          ChangeNotifierProvider<NotificationProvider>(
+                            create: (context) => NotificationProvider(), ),
         ],
         child: Builder(
         builder: (context)
