@@ -19,6 +19,7 @@ class TodayTask {
   String frequency;
   String goal;
   String date;
+  String isReminder;
   int hour;
   int minute;
   int idTask;
@@ -42,6 +43,7 @@ class TodayTask {
     this.idTask,
     this.goal,
     this.note,
+    this.isReminder,
 
   });
 
@@ -61,6 +63,7 @@ class TodayTask {
     category: json["category"],
     idTask: json["idTask"],
     note: json["note"],
+    isReminder : json["isReminder"],
 
 
   );
@@ -81,5 +84,6 @@ class TodayTask {
     "category": category,
     "idTask": idTask,
     "note": note,
+    "isReminder":isReminder,
   };
 }

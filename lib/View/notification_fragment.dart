@@ -11,10 +11,10 @@ class NotificationView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<NotificationProvider>(
         builder: (context, value, child){
-
+          print(NotificationProvider().listQueues);
           return WillPopScope (
               onWillPop: ()async{
-                NotificationProvider().isUnread=false;
+                NotificationProvider().isUnread="false";
                 Navigator.pop(context);
                 return false;
               },
@@ -26,7 +26,7 @@ class NotificationView extends StatelessWidget {
 
                       leading: IconButton(
                         onPressed: (){
-                          NotificationProvider().isUnread=false;
+                          NotificationProvider().isUnread="false";
                           Navigator.pop(context);
                         },
                         icon:  Icon(
@@ -70,7 +70,7 @@ class NotificationView extends StatelessWidget {
                                         ),
                                         color: Color(0xFF00B98C),
                                         textColor: Colors.white,
-                                        onPressed: ()=>NotificationProvider().clickFinished(context,task.idTask),
+                                        onPressed: ()=>NotificationProvider().clickFinished(context,task.idTask,task.id),
                                         child: Text("Finished"),
 
                                       ),
@@ -93,55 +93,21 @@ class NotificationView extends StatelessWidget {
                               ],
                             ),
                           );
-                          /* ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
 
-                            child: ListTile(
-                              tileColor: Colors.yellow,
-                                contentPadding: EdgeInsets.all(0),
-                                title: Container(
-                                  padding: EdgeInsets.all(10),
-                            height :50,child:Text(task.task), color:Colors.blue),
-                                subtitle: Container(
-                            color: Colors.grey,
-                            padding: EdgeInsets.only(left: 10,right: 10),
-                            child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                            MaterialButton(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  side: BorderSide.none
-
-                              ),
-                              color: Colors.greenAccent,
-                              textColor: Colors.white,
-                                onPressed: (){
-                                print("click indice :"+index.toString());
-                                },
-                              child: Text("OK"),
-
-                                ),
-                            MaterialButton(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  side: BorderSide.none
-
-                              ),
-                              color: Colors.redAccent,
-                              textColor: Colors.white,
-                              onPressed: (){
-                                print("click indice :"+index.toString());
-                              },
-                              child: Text("OK"),
-
-                            ),
-                                  ],
-                                )),
-                              ),
-                          ); */
                         }),
-                      ):Container(),
+                      ):Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+
+                            child: Text("is Empty",  style: TextStyle(fontWeight: FontWeight.normal , color: Color(0xFF979DB0)),),
+                            alignment: Alignment.center,
+
+
+
+                          ),
+                        ],
+                      ),
                     ),
                   ),
           );

@@ -346,7 +346,7 @@ class _HomeState extends State<Home> {
                               },
                             ),
                           ),
-                          (NotificationProvider().isUnread!=null && NotificationProvider().isUnread)?Positioned(  // draw a red marble
+                          (NotificationProvider().isUnread!=null && NotificationProvider().isUnread=="true")?Positioned(  // draw a red marble
                               top: 15,
                               left: 10,
                               child:Icon(Icons.brightness_1, size: 10.0,

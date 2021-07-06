@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:todolist/DataBase/database.dart';
-import 'package:todolist/Models/Data/TodayTask.dart';
 import 'package:todolist/Models/Data/data_variable.dart';
 import 'package:todolist/Models/Data/draft_model.dart';
 import 'package:todolist/Models/Data/task_model.dart';
@@ -122,13 +121,13 @@ class _AddNewTasksState extends State<AddNewTasks> {
 
   bool enabled = true;
   String _categorySelected;
-  String _statusSelected ;
+
   String _frequencySelected;
 
   DateTime selectedDate = DateTime.now();
   TimeOfDay selectedTime = TimeOfDay(hour: 00, minute: 00);
   String  _time= DateTime.now().hour.toString()+":"+DateTime.now().minute.toString();
-
+  String _statusSelected;
   DateTime selectedReminder = DateTime.now();
   TimeOfDay selectedTimeReminder = TimeOfDay(hour: 00, minute: 00);
   String  _timeR= DateTime.now().hour.toString()+":"+DateTime.now().minute.toString();
@@ -248,7 +247,7 @@ class _AddNewTasksState extends State<AddNewTasks> {
 
     if((widget.note!=null)&&(widget.note.isNotEmpty)) _addNoteText.text = widget.note;
 
-    _statusSelected =((widget.status!=null)&&(widget.status.isNotEmpty))? widget.status:(_statusSelected!=null && _statusSelected.isNotEmpty)?_statusSelected:"Voluntary";
+     _statusSelected =((widget.status!=null)&&(widget.status.isNotEmpty))? widget.status:Variables().status[3];
 
     if((widget.goal!=null)&&(widget.goal.isNotEmpty))_addGoal.text = widget.goal;
     if((widget.time!=null)&&(widget.time.isNotEmpty)) _time =widget.time ;
@@ -337,7 +336,7 @@ class _AddNewTasksState extends State<AddNewTasks> {
                           "date":" ",
                           "status":" ",
                           "frequency":" ",
-                          "idQueue":0},
+                          "isReminder":"no"},
                         initialDelay: Duration(seconds: 1)
                     );
 
@@ -463,7 +462,7 @@ class _AddNewTasksState extends State<AddNewTasks> {
                                 "date":" ",
                                 "status":" ",
                                 "frequency":" ",
-                                "idQueue":0
+                                "isReminder":"no"
                               },
                               initialDelay: Duration(seconds: 1)
                           );
@@ -717,96 +716,6 @@ class _AddNewTasksState extends State<AddNewTasks> {
                       ),
                     ),
 
-
-                  ),
-                  /* Status Text*/
-                  Container(
-                    child: Text("Status :",style:TextStyle(color:Color(0xFF979DB0),fontWeight:FontWeight.bold ,fontSize:16,fontFamily: "Roboto"),),
-                    alignment: Alignment.centerLeft,
-                  ),
-                  /* Status PopMenu Button */
-                  Container(
-                    //height: 100,
-                    width: MediaQuery.of(context).size.width,
-
-                    margin: EdgeInsets.only(top:5,bottom: 10,left:10,right: 10),
-                    padding: EdgeInsets.all(10),
-
-                    decoration: ShapeDecoration(
-
-                      color: Theme.of(context).accentColor,
-                      shape: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-
-                        borderSide: BorderSide(
-                          color: Theme.of(context).floatingActionButtonTheme.backgroundColor,
-                          width: 1,
-                          style: BorderStyle.solid,
-                        ),
-                      ),
-                    ),
-                    child:   PopupMenuButton(
-                      color: Theme.of(context).cardColor,
-
-                      // padding: EdgeInsets.zero,
-                      shape:RoundedRectangleBorder(
-                          side: BorderSide(width: 1,style: BorderStyle.solid,color: Theme.of(context).floatingActionButtonTheme.backgroundColor,),
-                          borderRadius: BorderRadius.circular(5)),
-                      elevation: 4,
-
-                      itemBuilder: (context) {
-                        List<String> itemStatus = Variables().status;
-                        itemStatus.removeWhere((element) => element == "Finished");
-                        return itemStatus
-                            .map((item) => PopupMenuItem(
-
-                            height: 40,
-                            padding:EdgeInsets.all(5),
-                            // enabled: false,
-                            value: itemStatus.indexOf(item),
-                            child: StatefulBuilder(
-
-                                builder: (BuildContext context, StateSetter setState) {
-                                  return Container(
-                                      width: MediaQuery.of(context).size.width,
-                                      height: 40,
-                                      margin: EdgeInsets.all(0),
-                                      padding: EdgeInsets.only(left:10,top: 5,bottom: 5,right: 5),
-                                      alignment: Alignment.centerLeft,
-                                      decoration: ShapeDecoration(
-                                        color: Theme.of(context).accentColor,
-
-                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-                                      ),
-                                      child: Text(
-                                        item.toString(),
-                                        style: TextStyle(color: Theme.of(context).floatingActionButtonTheme.focusColor,
-                                            fontSize: 12,
-                                            fontFamily: "Roboto"),
-                                      )
-
-                                  );
-                                }
-                            )
-                        )
-                        ).toList();
-                      },
-                      onSelected: (value) async{
-
-                        setState(() {
-                          _statusSelected = Variables().status[value];
-                        });
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text( _statusSelected , style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal , color: Theme.of(context).floatingActionButtonTheme.backgroundColor,)),
-                          Icon(Icons.keyboard_arrow_down_rounded , color:  Theme.of(context).floatingActionButtonTheme.backgroundColor,),
-
-                        ],
-                      ),
-                    ),
 
                   ),
                   /* Frequency Text */

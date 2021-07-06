@@ -12,7 +12,8 @@ bool isLarge;
   int _idOfList;
   String searchItem;
   List<String> _categories =[];
-  List<String> status = ["Important","Less important","In progress","Finished","Voluntary"];
+                            //0          //1            //2           //3            //4
+  List<String> status = ["0In progress","1Important","2Less important","3Voluntary","4Finished"];
   List<String> frequency = ["Once","Daily","weekly","monthly"];
   ///have : today, tomorrow, Temporary(is status)
   Map<String,int> _tasks;

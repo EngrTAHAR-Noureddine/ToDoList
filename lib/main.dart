@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:todolist/DataBase/database.dart';
-import 'package:todolist/Models/Data/TodayTask.dart';
-import 'package:todolist/Models/Data/task_model.dart';
+import 'package:todolist/Models/Data/work_manager.dart';
 import 'package:todolist/Models/ProvidersClass/goal_provider.dart';
 import 'package:todolist/Models/ProvidersClass/notification_provider.dart';
 import 'package:todolist/Models/ProvidersClass/settings_provider.dart';
 import 'package:todolist/Models/ProvidersClass/task_button.dart';
-import 'package:todolist/Models/notification_service.dart';
 import 'package:todolist/Models/ProvidersClass/provider_class.dart';
 import 'package:todolist/Models/ProvidersClass/provider_home_class.dart';
 import 'package:workmanager/workmanager.dart';
-import 'Models/Data/queue_model.dart';
+
 import 'View/home_view.dart';
 
 void callbackDispatcher() async{
@@ -21,181 +18,16 @@ void callbackDispatcher() async{
     print(inputData["data"]);
     switch(inputData["data"]){
       case "init":
-        DateTime now = DateTime.now();
-        String date = now.day.toString()+"/"+now.month.toString()+"/"+now.year.toString();
-        List<Task> taskToday = await DBProvider.db.getTimeByDateSelected(date);
-        List<Task> taskreminder = await DBProvider.db.getTimeByDateSelected(date);
-        TodayTask task;
-        if(taskToday!=null && taskToday.isNotEmpty){
-          for(int i=0; i<taskToday.length;i++){
-            task = new TodayTask(
-              idTask: taskToday[i].id,
-              task: taskToday[i].task,
-              category: taskToday[i].category,
-              frequency: taskToday[i].frequency,
-              goal: taskToday[i].goal,
-              status: taskToday[i].status,
-              note: taskToday[i].note,
-              date: taskToday[i].date,
-              hour: int.parse(taskToday[i].time.split(":")[0]),
-              minute: int.parse(taskToday[i].time.split(":")[1]),
-              inMinute: (int.parse(taskToday[i].time.split(":")[0])*60+int.parse(taskToday[i].time.split(":")[1]))
-            );
-            await DBProvider.db.newTodayTask(task);
-          }
-        }
-        if(taskreminder!=null && taskreminder.isNotEmpty){
-          for(int i=0; i<taskreminder.length;i++){
-            task = new TodayTask(
-                idTask: taskreminder[i].id,
-                task: taskreminder[i].task,
-                category: taskreminder[i].category,
-                frequency: taskreminder[i].frequency,
-                goal: taskreminder[i].goal,
-                status: taskreminder[i].status,
-                note: taskreminder[i].note,
-                date: taskreminder[i].dateReminder,
-                hour: int.parse(taskreminder[i].timeReminder.split(":")[0]),
-                minute: int.parse(taskreminder[i].timeReminder.split(":")[1]),
-                inMinute: (int.parse(taskreminder[i].timeReminder.split(":")[0])*60+int.parse(taskreminder[i].timeReminder.split(":")[1]))
-            );
-            await DBProvider.db.newTodayTask(task);
-          }
-        }
-        WidgetsFlutterBinding.ensureInitialized();
-        await Workmanager().initialize(callbackDispatcher);
-        await Workmanager().registerOneOffTask(
-            "tomorrow"+now.toString(), "test2",
-            inputData: {
-              "data": "init",
-              "title":" ",
-              "body":" ",
-              "time":" ",
-              "idTask":0,
-              "date":" ",
-              "status":" ",
-              "frequency":" ",
-              "idQueue":0
-        },
-            initialDelay: Duration(minutes: ((24*60)-(now.hour*60+now.minute)))
-        );
-        WidgetsFlutterBinding.ensureInitialized();
-        await Workmanager().initialize(callbackDispatcher);
-        await Workmanager().registerOneOffTask(
-            "today"+now.toString(), "test2",
-            inputData: {
-              "data": "notNow",
-              "title":" ",
-              "body":" ",
-              "time":" ",
-              "idTask":0,
-              "date":" ",
-              "status":" ",
-              "frequency":" ",
-              "idQueue":0
-        },
-            initialDelay: Duration(seconds: 1)
-        );
+        await WorkManagerProvider().initialWork();
         break;
+
       case "itTime" :
-        LocalNotification.Initializer();
-        LocalNotification.ShowOneTimeNotification(DateTime.now(),inputData["title"],inputData["body"],inputData["time"]);
-        WidgetsFlutterBinding.ensureInitialized();
-        Queue newQueue = new Queue(
-            idTask:inputData["idTask"] ,
-            date: inputData["date"],
-            status: inputData["status"],
-            frequency: inputData["frequency"],
-            task: inputData["title"],
-            time: inputData["time"]
-        );
-        await DBProvider.db.newQueue(newQueue);
-        NotificationProvider().isUnread = true;
-        await Workmanager().initialize(callbackDispatcher);
-        await Workmanager().registerOneOffTask(
-            "today"+DateTime.now().toString(), "test",
-            inputData: {
-                        "data": "notNow",
-                        "title":" ",
-                        "body":" ",
-                        "time":" ",
-                        "idTask":0,
-                        "date":" ",
-                        "status":" ",
-                        "frequency":" ",
-                        "idQueue":0
-                      },
-            initialDelay: Duration(minutes: 1)
-        );
+        await WorkManagerProvider().itTimeToWork(inputData);
         return Future.value(true);
         break;
 
-
       default : //"notNow"
-        DateTime now = DateTime.now();
-        int inMinuteNow = now.hour*60+now.minute;
-        TodayTask picker;
-        int delay ;
-        String date = now.day.toString()+"/"+now.month.toString()+"/"+now.year.toString();
-        List<TodayTask> tdt = await DBProvider.db.getAllTodayTask(date);
-        print("hello");
-        print(tdt);
-        if(tdt!=null && tdt.isNotEmpty) {
-          print(tdt);
-          for(int i=0; i<tdt.length;i++) {
-            if (inMinuteNow <= tdt[i].inMinute){
-              picker = tdt[i];
-              break;
-            }else{
-              await DBProvider.db.deleteTodayTask(tdt[i].id);
-
-            }
-
-          }
-
-          if(picker != null) {
-            print(picker.hour.toString()+":"+picker.minute.toString());
-
-            if (picker.inMinute == inMinuteNow) {
-              WidgetsFlutterBinding.ensureInitialized();
-              await Workmanager().initialize(callbackDispatcher);
-              await Workmanager().registerOneOffTask(
-                  picker.id.toString(), "test2",
-                  inputData: {
-                    "data": "itTime",
-                    "title":picker.task,
-                    "body":(picker.note!=null)?picker.note:"click to show details...",
-                    "time":picker.date,
-                    "idTask":picker.idTask,
-                    "date":date,
-                    "status":picker.status,
-                    "frequency":picker.frequency,
-                    "idQueue":0
-                  },
-                  initialDelay: Duration(seconds: 1)
-              );
-            } else {
-              delay = picker.inMinute - inMinuteNow;
-              WidgetsFlutterBinding.ensureInitialized();
-              await Workmanager().initialize(callbackDispatcher);
-              await Workmanager().registerOneOffTask(
-                  picker.id.toString(), "test",
-                  inputData: {
-                    "data": "itTime",
-                    "title":picker.task,
-                    "body":(picker.note!=null)?picker.note:"click to show details...",
-                    "time":picker.date,
-                    "idTask":picker.idTask,
-                    "date":date,
-                    "status":picker.status,
-                    "frequency":picker.frequency,
-                    "idQueue":0
-                  },
-                  initialDelay: Duration(minutes: delay)
-              );
-            }
-          }
-        }
+        await WorkManagerProvider().notNowToWork();
         break;
 
     }
@@ -220,7 +52,7 @@ void main() async{
         "date":" ",
         "status":" ",
         "frequency":" ",
-        "idQueue":0
+        "isReminder":"no"
   },
       initialDelay: Duration(seconds: 1)
   );
