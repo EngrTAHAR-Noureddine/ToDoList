@@ -349,7 +349,9 @@ class DBProvider {
       newUser(User(id:1,darkMode: "Light",linkAgenda: "none",passWord: "",hideGoal: "no",notificationUnread: "false"));
       res =await  db.query("User", where: "id = ?", whereArgs: [id]);
     }
-    return User.fromMap(res.first);
+    User user;
+    if(res!=null) user = User.fromMap(res.first);
+    return user;
   }
 
 //******************************** Draft ****************

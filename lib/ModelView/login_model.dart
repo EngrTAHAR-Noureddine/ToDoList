@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todolist/Models/Data/data_variable.dart';
+import 'package:todolist/Models/ProvidersClass/settings_provider.dart';
+import 'package:todolist/View/home_view.dart';
 
 class LogInClass extends StatefulWidget {
   const LogInClass({Key key}) : super(key: key);
@@ -9,8 +11,7 @@ class LogInClass extends StatefulWidget {
 }
 
 class _LogInClassState extends State<LogInClass> {
-  final GlobalKey<FormState> _formKeyLogIn = GlobalKey<FormState>();
-  final TextEditingController _passwordText = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return  OrientationBuilder(builder: (context, orientation) {
@@ -52,13 +53,20 @@ class _LogInClassState extends State<LogInClass> {
                       Container(
                         color: Colors.blue,
                         height:(Variables().isLarge)?MediaQuery.of(context).size.height*0.15:MediaQuery.of(context).size.height*0.3,
-                      child: Form(
-                          key: _formKeyLogIn,
-                          child: TextFormField(
-                            controller: _passwordText,
-
-                          ),
-                      ),
+                      child: MaterialButton(
+                        color: (SettingsProvider().user.passWord!=null && SettingsProvider().user.passWord.isNotEmpty)?Colors.green:Colors.red,
+                        child: Text("click"),
+                        onPressed: (){
+                          Navigator.pop(context);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute<void>(
+                              builder: (BuildContext context) => Home(),
+                              fullscreenDialog: true,
+                            ),
+                          );
+                        },
+                      )
 
                       ),
                       Container(

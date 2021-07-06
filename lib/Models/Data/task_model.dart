@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:todolist/DataBase/database.dart';
+import 'package:todolist/Models/Data/data_variable.dart';
+import 'package:todolist/Models/Data/queue_model.dart';
 import 'package:todolist/Models/ProvidersClass/notification_provider.dart';
 
 Task taskFromJson(String str) {
@@ -121,19 +123,19 @@ class Item {
 
   Widget getIcon(){
     switch(this.task.status){
-      case "Important": /*C00000*/
+      case "1Important": /*C00000*/
         return Icon(Icons.radio_button_off_rounded,color: Color(0xFFC00000),size: 30,);
         break;
-      case "Less important": /* ff4500 */
+      case "2Less important": /* ff4500 */
         return Icon(Icons.radio_button_off_rounded,color: Color(0xFFFF4500),size: 30,);
         break;
-      case "Finished"://00B98C
+      case "4Finished"://00B98C
         return Icon(Icons.task_alt_rounded,color: Color(0xFF00B98C),size: 30,);
         break;
-      case "Voluntary": /* 6D6E70 */
+      case "3Voluntary": /* 6D6E70 */
         return Icon(Icons.radio_button_off_rounded,color: Color(0xFF6D6E70),size: 30,);
         break;
-      default : /* In progress  0269CA */
+      default : /* 0In progress  0269CA */
         return Icon(Icons.radio_button_off_rounded,color: Color(0xFF0269CA),size: 30,);
         break;
 
@@ -153,11 +155,12 @@ class TaskFunctions{
 
 
   Stream<List<Item>> getList(String name)async*{
+
     DateTime dateNow = DateTime.now();
     List<Task> list =[];
     DateTime tomorrow = DateTime(dateNow.year, dateNow.month, dateNow.day + 1);
     String date ;
-    await NotificationProvider().changeColorTask();
+
     switch(name){
       case "Today":
                     date = dateNow.day.toString()+"/"+dateNow.month.toString()+"/"+dateNow.year.toString();

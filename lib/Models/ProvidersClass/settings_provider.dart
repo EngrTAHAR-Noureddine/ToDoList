@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todolist/DataBase/database.dart';
 import 'package:todolist/Models/Data/user_model.dart';
-import 'package:todolist/Models/ProvidersClass/goal_provider.dart';
+
 
 class SettingsProvider extends ChangeNotifier{
   static final SettingsProvider _singleton = SettingsProvider._internal();

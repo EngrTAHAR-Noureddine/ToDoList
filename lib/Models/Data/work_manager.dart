@@ -179,10 +179,11 @@ class WorkManagerProvider{
         }
         else{
           print("else of picker ==== ");
-          await DBProvider.db.deleteTodayTask(tdt[i].id);
+
 
           Task task = await DBProvider.db.getTask(tdt[i].idTask);
           if(task!=null){
+            print("this colored in workmanager =========== ");
             if((task.status==Variables().status[3])||(task.status==Variables().status[4])){
               List<String> dateSelected = task.date.split("/");
               List<String> dateReminder = task.dateReminder.split("/");
@@ -217,6 +218,7 @@ class WorkManagerProvider{
 
             }
           }
+          await DBProvider.db.deleteTodayTask(tdt[i].id);
         }
       }
 
@@ -284,10 +286,17 @@ class WorkManagerProvider{
         isReminder: inputData["isReminder"]
     );
     await DBProvider.db.newQueue(newQueue);
-    NotificationProvider().isUnread = "true";
+    Task task = await DBProvider.db.getTask(inputData["idTask"]);
+    if(task!=null && (task.status!=Variables().status[3])){
+      task.status = (inputData["isReminder"]=="yes")?Variables().status[2]:Variables().status[1];
+      await DBProvider.db.updateTask(task);
+    }
     User user = await SettingsProvider().getUser();
-    await DBProvider.db.updateUser(user);
+
+  if(user!=null) {
     user.notificationUnread = "true";
+    await DBProvider.db.updateUser(user);
+  }
     await Workmanager().initialize(callbackDispatcher);
     await Workmanager().registerOneOffTask(
         "today"+DateTime.now().toString(), "test",
@@ -305,7 +314,5 @@ class WorkManagerProvider{
         initialDelay: Duration(minutes: 1)
     );
   }
+  }
 
-
-
-}

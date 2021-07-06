@@ -3,6 +3,8 @@ import 'package:todolist/DataBase/database.dart';
 import 'package:todolist/Models/Data/data_variable.dart';
 import 'package:todolist/Models/Data/queue_model.dart';
 import 'package:todolist/Models/Data/task_model.dart';
+import 'package:todolist/Models/Data/user_model.dart';
+import 'package:todolist/Models/ProvidersClass/settings_provider.dart';
 
 class NotificationProvider extends ChangeNotifier{
   static final NotificationProvider _singleton = NotificationProvider._internal();
@@ -13,73 +15,80 @@ class NotificationProvider extends ChangeNotifier{
 
   List<Queue> listQueues;
   String isUnread;
-  int number;
-  setList(List<Queue> list){
-    this.listQueues = list;
-    this.number=list.length;
 
-    notifyListeners();
+  Stream<bool> getUnread()async*{
+    User user = await SettingsProvider().getUser();
+    if(user!=null){
+      this.isUnread = user.notificationUnread;
+      print("inside if of get unread "+this.isUnread.toString());
+    }
+    yield (this.isUnread=="true");
   }
-  int getNumber(){
-    return this.number;
+
+  updateNotificationRead()async{
+    User user = await SettingsProvider().getUser();
+    if(user!=null){
+      user.notificationUnread = "false";
+      await DBProvider.db.updateUser(user);
+      notifyListeners();
+    }
   }
-  List<Queue> getList(){
+
+
+  Future<List<Queue>> getList()async{
+    this.listQueues = await DBProvider.db.getAllQueue();
+    if(this.listQueues!=null){
+
+     await updateNotificationRead();
+
+    }
     return this.listQueues;
   }
-  //TODO
-/// refresh in icon of notification not work
-  /// refresh the last item of notification didn't delete
-  /// we need log in
-  /// splash screen
-  /// logo
-  /// ascendent the tasks
-  Future<void> changeColorTask()async{
-    if(this.listQueues!=null&&this.listQueues.isNotEmpty){
-    for(int i=0; i<this.listQueues.length;i++){
-      Queue queue = listQueues[i];
-      Task task = await DBProvider.db.getTask(queue.idTask);
-      if(task!=null){
-        task.status =(queue.isReminder =="yes")? Variables().status[2]:Variables().status[1];
-        await DBProvider.db.updateTask(task);
-      }
-    }
-    }
-  }
+
+
 
 
 
   Future<void> cancelNotification()async{
+    this.listQueues =[];
+    this.listQueues = await getList();
+
     if(this.listQueues!=null&&this.listQueues.isNotEmpty) {
       for (int i = 0; i < this.listQueues.length; i++) {
         Queue queue = listQueues[i];
         Task task = await DBProvider.db.getTask(queue.idTask);
         if (task != null) {
-          task.status =
-          (queue.isReminder == "yes") ? Variables().status[2] : Variables()
-              .status[1];
+          task.status =(queue.isReminder == "yes") ? Variables().status[2] : Variables().status[1];
           await DBProvider.db.updateTask(task);
           await DBProvider.db.deleteQueue(queue.id);
         }
       }
+      await updateNotificationRead();
     }
+    notifyListeners();
   }
 
 
-  Future<void> clickInProgress(context ,int id)async{
+  Future<void> clickInProgress(context ,int id,int idQ)async{
     Task task = await DBProvider.db.getTask(id);
     if(task != null) {
       task.status = Variables().status[0];
       await DBProvider.db.updateTask(task);
     }
+    await DBProvider.db.deleteQueue(idQ);
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text('The task is in progress')));
     notifyListeners();
   }
+
   Future<void> clickFinished(context ,int idTask ,int id)async{
-    await DBProvider.db.deleteQueue(id);
+
     Task task = await DBProvider.db.getTask(idTask);
     if(task != null) {
-      task.status =(task.frequency=="Once")?Variables().status[4]:Variables().status[3];
+      print("i'm in click finished => "+task.task);
+      print("i'm in click finished => "+task.frequency);
+      task.status =(task.frequency==Variables().frequency[0])?Variables().status[4]:Variables().status[3];
+      print("i'm in click finished => "+task.status);
       List<String> dateSelected = task.date.split("/");
       DateTime date ;
       List<String> dateReminder = task.dateReminder.split("/");
@@ -104,9 +113,11 @@ class NotificationProvider extends ChangeNotifier{
                         break;
       }
       await DBProvider.db.updateTask(task);
+      await DBProvider.db.deleteQueue(id);
     }
+    notifyListeners();
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text('The task is finished')));
-    notifyListeners();
+
   }
 }

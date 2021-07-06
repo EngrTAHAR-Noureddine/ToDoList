@@ -233,7 +233,7 @@ class _AddNewTasksState extends State<AddNewTasks> {
 
     _categorySelected =((widget.category!=null)&&(widget.category.isNotEmpty))? widget.category:(_categorySelected!=null && _categorySelected.isNotEmpty)?_categorySelected:"Category";
 
-    _frequencySelected =((widget.frequency!=null)&&(widget.frequency.isNotEmpty))? widget.frequency:(_frequencySelected!=null && _frequencySelected.isNotEmpty)?_frequencySelected:"Once";
+    _frequencySelected =((widget.frequency!=null)&&(widget.frequency.isNotEmpty))? widget.frequency:(_frequencySelected!=null && _frequencySelected.isNotEmpty)?_frequencySelected:Variables().frequency[0];
 
     if((widget.dateReminder!=null)&&(widget.dateReminder.isNotEmpty)){
       _part= widget.dateReminder.split("/");
@@ -285,7 +285,7 @@ class _AddNewTasksState extends State<AddNewTasks> {
             timeReminder: _timeR,
             dateReminder:selectedReminder.day.toString()+"/"+selectedReminder.month.toString()+"/"+selectedReminder.year.toString(),
             category: _categorySelected,
-            frequency: _addFrequencyText.text,
+            frequency: _frequencySelected,
             date: selectedDate.day.toString()+"/"+selectedDate.month.toString()+"/"+selectedDate.year.toString(),
             note: _addNoteText.text,
             status: _statusSelected,
@@ -350,7 +350,7 @@ class _AddNewTasksState extends State<AddNewTasks> {
                   timeReminder: _timeR,
                   dateReminder:selectedReminder.day.toString()+"/"+selectedReminder.month.toString()+"/"+selectedReminder.year.toString(),
                   category: _categorySelected,
-                  frequency: _addFrequencyText.text,
+                  frequency: _frequencySelected,
                   date: selectedDate.day.toString()+"/"+selectedDate.month.toString()+"/"+selectedDate.year.toString(),
                   note: _addNoteText.text,
                   status: _statusSelected,
@@ -438,7 +438,7 @@ class _AddNewTasksState extends State<AddNewTasks> {
                           timeReminder: _timeR,
                           dateReminder:selectedReminder.day.toString()+"/"+selectedReminder.month.toString()+"/"+selectedReminder.year.toString(),
                           category: _categorySelected,
-                          frequency: _addFrequencyText.text,
+                          frequency: _frequencySelected,
                           date: selectedDate.day.toString()+"/"+selectedDate.month.toString()+"/"+selectedDate.year.toString(),
                           note: _addNoteText.text,
                           status: _statusSelected,

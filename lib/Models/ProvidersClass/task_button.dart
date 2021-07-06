@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:todolist/DataBase/database.dart';
+import 'package:todolist/Models/Data/data_variable.dart';
 
 class TaskButton extends ChangeNotifier{
   static final TaskButton _singleton = TaskButton._internal();
@@ -49,7 +50,7 @@ class TaskButton extends ChangeNotifier{
         focusElevation: 0,
 
         onPressed: ()async{
-          item.task.status = "In progress";
+          item.task.status = Variables().status[0];
           await DBProvider.db.updateTask(item.task);
           // setState(() {}); update
           notifyListeners();
@@ -97,7 +98,7 @@ class TaskButton extends ChangeNotifier{
         focusElevation: 0,
 
         onPressed: ()async{
-          item.task.status = "Finished";
+          item.task.status = Variables().status[4];
           await DBProvider.db.updateTask(item.task);
           // setState(() {}); update
           notifyListeners();
@@ -145,7 +146,7 @@ class TaskButton extends ChangeNotifier{
         focusElevation: 0,
 
         onPressed: ()async{
-          item.task.status = "Voluntary";
+          item.task.status = Variables().status[3];
           await DBProvider.db.updateTask(item.task);
           //setState(() {}); update
           notifyListeners();

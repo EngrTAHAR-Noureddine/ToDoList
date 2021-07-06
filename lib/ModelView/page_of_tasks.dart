@@ -3,6 +3,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 import 'package:todolist/DataBase/database.dart';
 import 'package:todolist/ModelView/add_new_task.dart';
+import 'package:todolist/Models/Data/data_variable.dart';
 import 'package:todolist/Models/ProvidersClass/provider_class.dart';
 import 'package:todolist/Models/Data/task_model.dart';
 import 'package:todolist/Models/custom_expansion_tile.dart' as custom;
@@ -44,6 +45,7 @@ class PageOfTasks extends StatelessWidget {
                             return RefreshIndicator(
                               onRefresh: ()async{
                                 ProviderClass().setState();
+
                               },
                               backgroundColor: Theme.of(context).backgroundColor,
                               color: Theme.of(context).primaryColor,
@@ -74,8 +76,8 @@ class PageOfTasks extends StatelessWidget {
                                         actionExtentRatio: 0.5,
 
                                         actions: [ /*left */
-                                          (items[index].task.status == "In progress")?
-                                          TaskButton().finishedButton(context,items[index]):(items[index].task.status == "Finished")?TaskButton().renewalButton(context,items[index]):TaskButton().inProgressButton(context,items[index]),
+                                          (items[index].task.status == Variables().status[0])?
+                                          TaskButton().finishedButton(context,items[index]):(items[index].task.status == Variables().status[4])?TaskButton().renewalButton(context,items[index]):TaskButton().inProgressButton(context,items[index]),
 
 
 
