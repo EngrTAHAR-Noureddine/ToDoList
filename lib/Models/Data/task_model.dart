@@ -3,9 +3,6 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:todolist/DataBase/database.dart';
-import 'package:todolist/Models/Data/data_variable.dart';
-import 'package:todolist/Models/Data/queue_model.dart';
-import 'package:todolist/Models/ProvidersClass/notification_provider.dart';
 
 Task taskFromJson(String str) {
   final jsonData = json.decode(str);

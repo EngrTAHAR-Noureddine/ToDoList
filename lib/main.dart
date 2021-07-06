@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:todolist/Models/Data/theme_data.dart';
-import 'package:todolist/Models/Data/user_model.dart';
 import 'package:todolist/Models/Data/work_manager.dart';
 import 'package:todolist/Models/ProvidersClass/goal_provider.dart';
-import 'package:todolist/Models/ProvidersClass/notification_provider.dart';
 import 'package:todolist/Models/ProvidersClass/settings_provider.dart';
 import 'package:todolist/Models/ProvidersClass/task_button.dart';
 import 'package:todolist/Models/ProvidersClass/provider_class.dart';
@@ -13,7 +10,6 @@ import 'package:todolist/Models/ProvidersClass/provider_home_class.dart';
 import 'package:todolist/View/login.dart';
 import 'package:workmanager/workmanager.dart';
 
-import 'View/home_view.dart';
 
 void callbackDispatcher() async{
   Workmanager().executeTask((taskName, inputData) async {
@@ -79,8 +75,6 @@ class MyApp extends StatelessWidget {
                           create: (context) => SettingsProvider(), ),
                         ChangeNotifierProvider<GoalProvider>(
                           create: (context) => GoalProvider(), ),
-                          ChangeNotifierProvider<NotificationProvider>(
-                            create: (context) => NotificationProvider(), ),
         ],
         child: Builder(
         builder: (context)

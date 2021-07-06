@@ -7,7 +7,6 @@ import 'package:sqflite/sqflite.dart';
 import 'package:todolist/Models/Data/TodayTask.dart';
 import 'package:todolist/Models/Data/draft_model.dart';
 import 'package:todolist/Models/Data/goal_model.dart';
-import 'package:todolist/Models/Data/queue_model.dart';
 import 'package:todolist/Models/Data/task_model.dart';
 import 'package:todolist/Models/Data/user_model.dart';
 
@@ -44,16 +43,6 @@ class DBProvider {
           "goal TEXT,"
           "dateReminder TEXT,"
           "timeReminder TEXT"
-          ")");
-      await db.execute("CREATE TABLE Queue ("
-          "id INTEGER PRIMARY KEY,"
-          "idTask INTEGER,"
-          "task TEXT,"
-          "frequency TEXT,"
-          "status TEXT,"
-          "date TEXT,"
-          "isReminder TEXT,"
-          "time TEXT"
           ")");
       await db.execute("CREATE TABLE TodayTask ("
           "id INTEGER PRIMARY KEY,"
@@ -104,24 +93,6 @@ class DBProvider {
 
   }
 
-  ///********************************
-  newQueue(Queue newQueue) async {
-    final db = await database;
-    var res = await db.insert("Queue", newQueue.toMap());
-    return res;
-  }
-  Future<List<Queue>> getAllQueue() async {
-    final db = await database;
-    var res = await db.query("Queue");
-    List<Queue> list =
-    res.isNotEmpty ? res.map((c) => Queue.fromMap(c)).toList() : [];
-    return list;
-  }
-  deleteQueue(int id) async {
-    final db = await database;
-    db.delete("Queue", where: "id = ?", whereArgs: [id]);
-  }
-  ///********************************
 
   ///**************************************************************************
   newTodayTask(TodayTask newTask) async {

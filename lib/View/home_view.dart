@@ -1,16 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
-import 'package:provider/provider.dart';
 import 'package:todolist/ModelView/add_new_goal.dart';
 import 'package:todolist/ModelView/add_new_task.dart';
-import 'package:todolist/Models/ProvidersClass/notification_provider.dart';
-import 'package:todolist/Models/ProvidersClass/provider_class.dart';
-import 'dart:math' as math;
 import 'package:todolist/Models/ProvidersClass/provider_home_class.dart';
-import 'package:todolist/Models/Data/user_model.dart';
-import 'package:todolist/Models/ProvidersClass/settings_provider.dart';
-import 'package:todolist/View/notification_fragment.dart';
 import 'package:todolist/View/switch_view.dart';
 
 
@@ -37,13 +30,7 @@ class _HomeState extends State<Home> {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarIconBrightness: Theme.of(context).brightness,
     ));
-      return StreamBuilder(
-        stream: NotificationProvider().getUnread(),
-          builder: (context, snapshot)
-    {
-      bool _isunread =false;
-      if(snapshot.hasData) _isunread = snapshot.data;
-      print("_is un read => "+_isunread.toString());
+
       return AdvancedDrawer(
         backdropColor: Color(0xFF2643C4),
         controller: _advancedDrawerController,
@@ -338,42 +325,7 @@ class _HomeState extends State<Home> {
                 ),
                 duration: Duration(milliseconds: 200),
               ) : Container(),
-              CircleAvatar(
-                backgroundColor: Colors.transparent,
-                child: Stack(
 
-                  children: [
-                    Transform.rotate(
-                      angle: 20 * math.pi / 180,
-                      child: IconButton(
-                        splashColor: Colors.transparent,
-                        icon: Icon(
-                          Icons.notifications_none_outlined,
-                          color: Color(0xFF8F8FA8),
-                        ),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute<void>(
-                              builder: (BuildContext context) =>
-                                  NotificationView(),
-                              fullscreenDialog: true,
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                    (_isunread)
-                        ? Positioned( // draw a red marble
-                      top: 15,
-                      left: 10,
-                      child: Icon(Icons.brightness_1, size: 10.0,
-                          color: Colors.redAccent),
-                    )
-                        : Container(),
-                  ],
-                ),
-              ),
             ],
           ),
           body: ViewSwitch(),
@@ -407,7 +359,7 @@ class _HomeState extends State<Home> {
 
         ),
       );
-    });
+
 
 
 

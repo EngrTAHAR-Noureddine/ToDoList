@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:todolist/DataBase/database.dart';
 import 'package:todolist/Models/Data/TodayTask.dart';
 import 'package:todolist/Models/Data/data_variable.dart';
-import 'package:todolist/Models/Data/queue_model.dart';
 import 'package:todolist/Models/Data/task_model.dart';
 import 'package:todolist/Models/Data/user_model.dart';
-import 'package:todolist/Models/ProvidersClass/notification_provider.dart';
 import 'package:todolist/Models/ProvidersClass/settings_provider.dart';
 import 'package:todolist/Models/notification_service.dart';
 import 'package:workmanager/workmanager.dart';
@@ -276,16 +274,7 @@ class WorkManagerProvider{
     LocalNotification.Initializer();
     LocalNotification.ShowOneTimeNotification(DateTime.now(),inputData["title"],inputData["body"],inputData["time"]);
     WidgetsFlutterBinding.ensureInitialized();
-    Queue newQueue = new Queue(
-        idTask:inputData["idTask"] ,
-        date: inputData["date"],
-        status: inputData["status"],
-        frequency: inputData["frequency"],
-        task: inputData["title"],
-        time: inputData["time"],
-        isReminder: inputData["isReminder"]
-    );
-    await DBProvider.db.newQueue(newQueue);
+
     Task task = await DBProvider.db.getTask(inputData["idTask"]);
     if(task!=null && (task.status!=Variables().status[3])){
       task.status = (inputData["isReminder"]=="yes")?Variables().status[2]:Variables().status[1];
@@ -296,7 +285,9 @@ class WorkManagerProvider{
   if(user!=null) {
     user.notificationUnread = "true";
     await DBProvider.db.updateUser(user);
+
   }
+
     await Workmanager().initialize(callbackDispatcher);
     await Workmanager().registerOneOffTask(
         "today"+DateTime.now().toString(), "test",

@@ -2,9 +2,19 @@ import 'package:flutter/material.dart';
 
 import 'package:todolist/Models/ProvidersClass/provider_home_class.dart';
 
+class ViewSwitch extends StatelessWidget {
 
+
+  @override
+  Widget build(BuildContext context) {
+    return SwitchViews().returnWidget();
+  }
+}
+
+
+/*
 class ViewSwitch extends StatefulWidget {
-  const ViewSwitch({Key key}) : super(key: key);
+
 
   @override
   _ViewSwitchState createState() => _ViewSwitchState();
@@ -17,4 +27,4 @@ class _ViewSwitchState extends State<ViewSwitch> {
     return  SwitchViews().returnWidget();
 
   }
-}
+}*/
