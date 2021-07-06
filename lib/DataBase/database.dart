@@ -52,6 +52,7 @@ class DBProvider {
           "frequency TEXT,"
           "status TEXT,"
           "date TEXT,"
+          "isReminder TEXT,"
           "time TEXT"
           ")");
       await db.execute("CREATE TABLE TodayTask ("
@@ -63,6 +64,7 @@ class DBProvider {
           "frequency TEXT,"
           "goal TEXT,"
           "date TEXT,"
+          "isReminder TEXT,"
           "hour INTEGER,"
           "minute INTEGER,"
           "idTask INTEGER,"
@@ -91,6 +93,7 @@ class DBProvider {
           ")");
       await db.execute("CREATE TABLE User  ("
           "id INTEGER PRIMARY KEY,"
+          "notificationUnread TEXT,"
           "darkMode TEXT,"
           "passWord TEXT,"
           "hideGoal TEXT,"
@@ -133,11 +136,31 @@ class DBProvider {
     res.isNotEmpty ? res.map((c) => TodayTask.fromMap(c)).toList() : [];
     return list;
   }
+  Future<List<TodayTask>> getAllToTask() async {
+    final db = await database;
+    var res = await db.rawQuery("SELECT * FROM TodayTask");
+    List<TodayTask> list =
+    res.isNotEmpty ? res.map((c) => TodayTask.fromMap(c)).toList() : [];
+    return list;
+  }
   deleteTodayTask(int id) async {
     final db = await database;
     db.delete("TodayTask", where: "id = ?", whereArgs: [id]);
   }
+  deleteAllTodayTask() async {
+    final db = await database;
+    //db.rawDelete("Delete * from History");
+    try{
 
+      await db.transaction((txn) async {
+        var batch = txn.batch();
+        batch.delete("TodayTask");
+        await batch.commit();
+      });
+    } catch(error){
+      throw Exception('DbBase.cleanDatabase: ' + error.toString());
+    }
+  }
   ///**************************************************************************
 
 
@@ -149,10 +172,12 @@ class DBProvider {
     return res;
   }
   // get task with id
-  getTask(int id) async {
+  Future<Task> getTask(int id) async {
     final db = await database;
     var res =await  db.query("Task", where: "id = ?", whereArgs: [id]);
-    return res.isNotEmpty ? Task.fromMap(res.first) : Null ;
+    Task task;
+    if(res.isNotEmpty) task = Task.fromMap(res.first);
+    return task;
   }
 //get all tasks  with category
   Future<List<Task>> getCategory(String category) async {
@@ -169,10 +194,10 @@ class DBProvider {
     res.isNotEmpty ? res.map((c) => Task.fromMap(c)).toList() : [];
     return list;
   }
-  Future<List<dynamic>> getCategories() async {
+  Future<List<Map<dynamic, dynamic>>> getCategories() async {
     final db = await database;
     var res = await db.rawQuery("SELECT COUNT(category), category FROM Task GROUP BY category");
-    List<dynamic> list =
+    List<Map<dynamic, dynamic>> list =
     res.isNotEmpty ? res.toList() : [];
     return list;
   }
@@ -221,7 +246,7 @@ class DBProvider {
 //get all tasks
   Future<List<Task>> getAllTask() async {
     final db = await database;
-    var res = await db.query("Task");
+    var res = await db.query("Task",orderBy: "status asc");
     List<Task> list =
     res.isNotEmpty ? res.map((c) => Task.fromMap(c)).toList() : [];
     return list;
@@ -321,7 +346,7 @@ class DBProvider {
 
     var res =await  db.query("User", where: "id = ?", whereArgs: [id]);
     if(res.isEmpty || res==null){
-      newUser(User(id:1,darkMode: "Light",linkAgenda: "none",passWord: "",hideGoal: "no"));
+      newUser(User(id:1,darkMode: "Light",linkAgenda: "none",passWord: "",hideGoal: "no",notificationUnread: "false"));
       res =await  db.query("User", where: "id = ?", whereArgs: [id]);
     }
     return User.fromMap(res.first);

@@ -16,6 +16,7 @@ class User {
   String passWord;
   String hideGoal;
   String linkAgenda;
+  String notificationUnread;
 
 
 
@@ -25,6 +26,7 @@ class User {
     this.passWord,
     this.linkAgenda,
     this.hideGoal,
+    this.notificationUnread,
   });
 
   factory User.fromMap(Map<String, dynamic> json) => new User(
@@ -33,6 +35,7 @@ class User {
     passWord: json["passWord"],
     linkAgenda: json["linkAgenda"],
     hideGoal:json["hideGoal"],
+    notificationUnread : json["notificationUnread"],
 
   );
 
@@ -42,6 +45,6 @@ class User {
     "passWord": passWord,
     "linkAgenda": linkAgenda,
     "hideGoal":hideGoal,
-
+    "notificationUnread":notificationUnread,
   };
 }

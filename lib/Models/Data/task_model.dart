@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:todolist/DataBase/database.dart';
+import 'package:todolist/Models/ProvidersClass/notification_provider.dart';
 
 Task taskFromJson(String str) {
   final jsonData = json.decode(str);
@@ -156,6 +157,7 @@ class TaskFunctions{
     List<Task> list =[];
     DateTime tomorrow = DateTime(dateNow.year, dateNow.month, dateNow.day + 1);
     String date ;
+    await NotificationProvider().changeColorTask();
     switch(name){
       case "Today":
                     date = dateNow.day.toString()+"/"+dateNow.month.toString()+"/"+dateNow.year.toString();

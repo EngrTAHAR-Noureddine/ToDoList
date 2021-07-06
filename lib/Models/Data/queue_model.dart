@@ -18,6 +18,7 @@ class Queue {
   String status;
   String date;
   String time;
+  String isReminder;
 
 
   Queue({
@@ -28,6 +29,7 @@ class Queue {
     this.status,
     this.time,
     this.date,
+    this.isReminder,
   });
 
   factory Queue.fromMap(Map<String, dynamic> json) => new Queue(
@@ -38,7 +40,7 @@ class Queue {
     status: json["status"],
     time: json["time"],
     date: json["date"],
-
+      isReminder : json["isReminder"]
   );
 
   Map<String, dynamic> toMap() => {
@@ -49,5 +51,6 @@ class Queue {
     "status": status,
     "time": time,
     "date": date,
+    "isReminder":isReminder,
   };
 }
