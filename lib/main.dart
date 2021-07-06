@@ -3,8 +3,9 @@ import 'package:provider/provider.dart';
 import 'package:todolist/Models/Data/theme_data.dart';
 import 'package:todolist/Models/Data/work_manager.dart';
 import 'package:todolist/Models/ProvidersClass/goal_provider.dart';
+import 'package:todolist/Models/ProvidersClass/new_task_provider.dart';
 import 'package:todolist/Models/ProvidersClass/settings_provider.dart';
-import 'package:todolist/Models/ProvidersClass/task_button.dart';
+import 'package:todolist/Models/ProvidersClass/task_list_provider.dart';
 import 'package:todolist/Models/ProvidersClass/provider_class.dart';
 import 'package:todolist/Models/ProvidersClass/provider_home_class.dart';
 import 'package:todolist/View/login.dart';
@@ -64,17 +65,19 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-        providers: [
+        providers: [ //NewTaskProvider
                         ChangeNotifierProvider<ProviderClass>(
                           create: (context) => ProviderClass(), ),
                         ChangeNotifierProvider<SwitchViews>(
                           create: (context) => SwitchViews(), ),
-                        ChangeNotifierProvider<TaskButton>(
-                          create: (context) => TaskButton(), ),
+                        ChangeNotifierProvider<ToDoListBodyProvider>(
+                          create: (context) => ToDoListBodyProvider(), ),
                         ChangeNotifierProvider<SettingsProvider>(
                           create: (context) => SettingsProvider(), ),
                         ChangeNotifierProvider<GoalProvider>(
                           create: (context) => GoalProvider(), ),
+                        ChangeNotifierProvider<NewTaskProvider>(
+                          create: (context) => NewTaskProvider(), ),
         ],
         child: Builder(
         builder: (context)

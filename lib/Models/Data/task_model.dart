@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:todolist/DataBase/database.dart';
+import 'package:todolist/Models/Data/draft_model.dart';
 
 Task taskFromJson(String str) {
   final jsonData = json.decode(str);
@@ -69,6 +70,22 @@ class Task {
     "timeReminder":timeReminder,
     "goal":goal,
   };
+
+  Draft convert(Task task){
+    return new Draft(
+      time: task.time,
+      dateReminder: task.dateReminder,
+      timeReminder: task.timeReminder,
+      category: task.category,
+      goal: task.goal,
+      note: task.note,
+      date: task.date,
+      status: task.status,
+      frequency: task.frequency,
+      task: task.task,
+    );
+  }
+
 }
 
 

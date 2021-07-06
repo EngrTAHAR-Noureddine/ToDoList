@@ -12,19 +12,3 @@ class ViewSwitch extends StatelessWidget {
 }
 
 
-/*
-class ViewSwitch extends StatefulWidget {
-
-
-  @override
-  _ViewSwitchState createState() => _ViewSwitchState();
-}
-
-class _ViewSwitchState extends State<ViewSwitch> {
-
-  @override
-  Widget build(BuildContext context) {
-    return  SwitchViews().returnWidget();
-
-  }
-}*/

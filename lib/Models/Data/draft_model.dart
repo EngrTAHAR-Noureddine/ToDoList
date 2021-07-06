@@ -2,6 +2,8 @@
 
 import 'dart:convert';
 
+import 'package:todolist/Models/Data/task_model.dart';
+
 Draft draftFromJson(String str) {
   final jsonData = json.decode(str);
   return Draft.fromMap(jsonData);
@@ -67,6 +69,23 @@ class Draft {
     "timeReminder":timeReminder,
     "goal":goal,
   };
+
+  Task convertDraft(Draft draft){
+    return new Task(
+      id:draft.id,
+      time: draft.time,
+      task: draft.task,
+      frequency: draft.frequency,
+      status: draft.status,
+      date: draft.date,
+      note: draft.note,
+      goal: draft.goal,
+      category: draft.category,
+      timeReminder: draft.timeReminder,
+       dateReminder: draft.dateReminder
+    );
+  }
+
 }
 
 

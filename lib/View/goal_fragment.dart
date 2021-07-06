@@ -8,14 +8,9 @@ import 'package:todolist/Models/Data/goal_model.dart';
 import 'package:todolist/Models/ProvidersClass/goal_provider.dart';
 import 'package:todolist/Models/ProvidersClass/settings_provider.dart';
 
-class GoalView extends StatefulWidget {
-  const GoalView({Key key}) : super(key: key);
+class GoalView extends StatelessWidget {
 
-  @override
-  _GoalViewState createState() => _GoalViewState();
-}
 
-class _GoalViewState extends State<GoalView> {
   @override
   Widget build(BuildContext context) {
     return Consumer<SettingsProvider>(
@@ -34,20 +29,20 @@ class _GoalViewState extends State<GoalView> {
                       IconButton(
                           onPressed:()async{
                             if(SettingsProvider().user.hideGoal == "yes" && SettingsProvider().user.passWord!=null && SettingsProvider().user.passWord.isNotEmpty){
-                               return await SettingsProvider().showDialogToHideGoals(context);
+                              return await SettingsProvider().showDialogToHideGoals(context);
                             }else {
                               SettingsProvider().user.hideGoal=(SettingsProvider().user.hideGoal=="no")?"yes" :"no";
                               await DBProvider.db.updateUser(SettingsProvider().user);
-                              setState(() {});
+                              SettingsProvider().setState();
                             }
                           },
                           color:Color(0xFF979DB0) ,
                           icon: (SettingsProvider().user != null &&
-                                      SettingsProvider().user.hideGoal == "no")
-                                      ? Icon(Icons.visibility)
-                                      : Icon(Icons.visibility_off)
+                              SettingsProvider().user.hideGoal == "no")
+                              ? Icon(Icons.visibility)
+                              : Icon(Icons.visibility_off)
 
-                                    )
+                      )
                     ],
                   ),
                 ),
@@ -68,7 +63,7 @@ class _GoalViewState extends State<GoalView> {
 
                             return RefreshIndicator(
                               onRefresh: ()async{
-                                setState(() {});
+                                SettingsProvider().setState();
                               },
                               backgroundColor: Theme.of(context).backgroundColor,
                               color: Theme.of(context).primaryColor,
@@ -163,7 +158,7 @@ class _GoalViewState extends State<GoalView> {
                                                         fullscreenDialog: true,
                                                       ),
                                                     );
-                                                    setState(() {});
+                                                    SettingsProvider().setState();
                                                   },
                                                   icon :Icon( Icons.edit),
                                                   iconSize: 20,
@@ -203,3 +198,5 @@ class _GoalViewState extends State<GoalView> {
         });
   }
 }
+
+

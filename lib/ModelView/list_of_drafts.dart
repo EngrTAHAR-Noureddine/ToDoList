@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 import 'package:todolist/DataBase/database.dart';
-import 'package:todolist/Models/ProvidersClass/task_button.dart';
+import 'package:todolist/Models/Data/task_model.dart';
+import 'package:todolist/Models/ProvidersClass/task_list_provider.dart';
 import 'package:todolist/ModelView/add_new_task.dart';
 import 'package:todolist/Models/Data/draft_model.dart';
 import 'package:todolist/Models/custom_expansion_tile.dart' as custom;
@@ -16,7 +17,7 @@ class ListOfDrafts extends StatelessWidget{
   }
   @override
   Widget build(BuildContext context) {
-    return Consumer<TaskButton>(
+    return Consumer<ToDoListBodyProvider>(
         builder: (context, value, child) {
           return Container(
             color: Theme.of(context).backgroundColor,
@@ -42,7 +43,7 @@ class ListOfDrafts extends StatelessWidget{
 
                             return RefreshIndicator(
                               onRefresh: ()async{
-                                TaskButton().setState();
+                                ToDoListBodyProvider().setState();
                               },
                               backgroundColor: Theme.of(context).backgroundColor,
                               color: Theme.of(context).primaryColor,
@@ -71,7 +72,7 @@ class ListOfDrafts extends StatelessWidget{
                                         actionPane: SlidableScrollActionPane(),
                                         actionExtentRatio: 0.5,
                                         secondaryActions: [ /* right */
-                                          TaskButton().deleteDraft(context,items[index]),
+                                          ToDoListBodyProvider().deleteDraft(context,items[index]),
 
                                         ],
                                         child: custom.ExpansionTile(
@@ -125,27 +126,19 @@ class ListOfDrafts extends StatelessWidget{
                                                   padding: EdgeInsets.all(0),
                                                   onPressed: ()async{
                                                     Draft dr = items[index];
+                                                    Task task = Draft().convertDraft(dr);
                                                     await DBProvider.db.deleteDraft(items[index].id);
                                                     Navigator.push(
                                                       context,
                                                       MaterialPageRoute<void>(
                                                         builder: (BuildContext context) => AddNewTasks(
-                                                          id: dr.id,
-                                                          category: dr.category,
-                                                          date: dr.date,
-                                                          dateReminder: dr.dateReminder,
-                                                          frequency: dr.frequency,
-                                                          goal: dr.goal,
-                                                          note: dr.note,
-                                                          status: dr.status,
-                                                          task: dr.task,
-                                                          time: dr.time,
-                                                          timeReminder: dr.timeReminder,
+                                                          editeTask: task,
+
                                                         ),
                                                         fullscreenDialog: true,
                                                       ),
                                                     );
-                                                    TaskButton().setState();
+                                                    ToDoListBodyProvider().setState();
                                                   },
                                                   icon :Icon( Icons.edit),
                                                   iconSize: 20,

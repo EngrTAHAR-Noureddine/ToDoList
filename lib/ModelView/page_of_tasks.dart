@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:provider/provider.dart';
 import 'package:todolist/DataBase/database.dart';
 import 'package:todolist/ModelView/add_new_task.dart';
 import 'package:todolist/Models/Data/data_variable.dart';
 import 'package:todolist/Models/ProvidersClass/provider_class.dart';
 import 'package:todolist/Models/Data/task_model.dart';
 import 'package:todolist/Models/custom_expansion_tile.dart' as custom;
-import '../Models/ProvidersClass/task_button.dart';
+import '../Models/ProvidersClass/task_list_provider.dart';
 
 class PageOfTasks extends StatelessWidget {
 
@@ -17,9 +16,7 @@ class PageOfTasks extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<TaskButton>(
-        builder: (context, value, child) {
-          return Container(
+    return  Container(
             color: Theme.of(context).backgroundColor,
             child: Column(
               children: [
@@ -77,14 +74,14 @@ class PageOfTasks extends StatelessWidget {
 
                                         actions: [ /*left */
                                           (items[index].task.status == Variables().status[0])?
-                                          TaskButton().finishedButton(context,items[index]):(items[index].task.status == Variables().status[4])?TaskButton().renewalButton(context,items[index]):TaskButton().inProgressButton(context,items[index]),
+                                          ToDoListBodyProvider().finishedButton(context,items[index]):(items[index].task.status == Variables().status[4])?ToDoListBodyProvider().renewalButton(context,items[index]):ToDoListBodyProvider().inProgressButton(context,items[index]),
 
 
 
                                         ],
 
                                         secondaryActions: [ /* right */
-                                          TaskButton().deleteButton(context,items[index]),
+                                          ToDoListBodyProvider().deleteButton(context,items[index]),
 
                                         ],
                                         child: custom.ExpansionTile(
@@ -145,17 +142,8 @@ class PageOfTasks extends StatelessWidget {
                                                       context,
                                                       MaterialPageRoute<void>(
                                                         builder: (BuildContext context) => AddNewTasks(
-                                                          id: tk.task.id,
-                                                          category: tk.task.category,
-                                                          date: tk.task.date,
-                                                          dateReminder: tk.task.dateReminder,
-                                                          frequency: tk.task.frequency,
-                                                          goal: tk.task.goal,
-                                                          note: tk.task.note,
-                                                          status: tk.task.status,
-                                                          task: tk.task.task,
-                                                          time: tk.task.time,
-                                                          timeReminder: tk.task.timeReminder,
+                                                          editeTask:tk.task,
+
                                                         ),
                                                         fullscreenDialog: true,
                                                       ),
@@ -190,7 +178,7 @@ class PageOfTasks extends StatelessWidget {
               ],
             ),
           );
-        });
+
   }
 
 
