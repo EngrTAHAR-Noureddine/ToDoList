@@ -26,10 +26,10 @@ class NewTaskProvider extends ChangeNotifier{
   String _frequencySelected;
   DateTime selectedDate = DateTime.now();
   TimeOfDay selectedTime = TimeOfDay(hour: 00, minute: 00);
-  String  _time= DateTime.now().hour.toString()+":"+DateTime.now().minute.toString();
+  String  _time;
   DateTime selectedReminder = DateTime.now();
   TimeOfDay selectedTimeReminder = TimeOfDay(hour: 00, minute: 00);
-  String  _timeR= DateTime.now().hour.toString()+":"+DateTime.now().minute.toString();
+  String  _timeR;
   List<String> _part =[];
 
   setTask(task){
@@ -50,7 +50,11 @@ class NewTaskProvider extends ChangeNotifier{
                                                 time: ""
                                               );
     if((this.task.task!=null)&&(this.task.task.isNotEmpty))_taskName.text = this.task.task;
-    if((this.task.timeReminder!=null)&&(this.task.timeReminder.isNotEmpty)) _timeR = this.task.timeReminder;
+    if((this.task.timeReminder!=null)&&(this.task.timeReminder.isNotEmpty))
+      {
+        _timeR = this.task.timeReminder;
+
+      }else if(_timeR==null) _timeR = DateTime.now().hour.toString()+":"+DateTime.now().minute.toString();
 
     _categorySelected =((this.task.category!=null)&&(this.task.category.isNotEmpty))? this.task.category:(_categorySelected!=null && _categorySelected.isNotEmpty)?_categorySelected:"Category";
 
@@ -71,7 +75,10 @@ class NewTaskProvider extends ChangeNotifier{
     if((this.task.status!=null)&&(this.task.status.isNotEmpty)) this.task.status= Variables().status[3];
 
     if((this.task.goal!=null)&&(this.task.goal.isNotEmpty))_addGoal.text = this.task.goal;
-    if((this.task.time!=null)&&(this.task.time.isNotEmpty)) _time =this.task.time ;
+    if((this.task.time!=null)&&(this.task.time.isNotEmpty)) {
+      _time = this.task.time;
+
+    }else if(_time==null) _time = DateTime.now().hour.toString()+":"+DateTime.now().minute.toString();
   }
 
   Future<void> declineAdding(context)async{
@@ -105,9 +112,10 @@ class NewTaskProvider extends ChangeNotifier{
     this.task.category = _categorySelected;
     this.task.note = _addNoteText.text;
     this.task.date = selectedDate.day.toString()+"/"+selectedDate.month.toString()+"/"+selectedDate.year.toString();
-    this.task.time = selectedTime.hour.toString() + ':' + selectedTime.minute.toString();
+    this.task.time = _time;
+    this.task.timeReminder = _timeR;
     this.task.dateReminder = selectedReminder.day.toString()+"/"+selectedReminder.month.toString()+"/"+selectedReminder.year.toString();
-    this.task.timeReminder = selectedTimeReminder.hour.toString() + ':' + selectedTimeReminder.minute.toString();
+
 
 
     Draft taskAsDraft = Task().convert(this.task);
@@ -193,9 +201,9 @@ class NewTaskProvider extends ChangeNotifier{
         this.task.category = _categorySelected;
         this.task.note = _addNoteText.text;
         this.task.date = selectedDate.day.toString()+"/"+selectedDate.month.toString()+"/"+selectedDate.year.toString();
-        this.task.time = selectedTime.hour.toString() + ':' + selectedTime.minute.toString();
+        this.task.time = _time;
+        this.task.timeReminder = _timeR;
         this.task.dateReminder = selectedReminder.day.toString()+"/"+selectedReminder.month.toString()+"/"+selectedReminder.year.toString();
-        this.task.timeReminder = selectedTimeReminder.hour.toString() + ':' + selectedTimeReminder.minute.toString();
 
         if (task.task != null && task.task.isNotEmpty) {
           await DBProvider.db.newTask(this.task);
@@ -334,7 +342,7 @@ class NewTaskProvider extends ChangeNotifier{
       selectedDate = picked;
 
     }
-    this.task.date = selectedDate.day.toString()+"/"+selectedDate.month.toString()+"/"+selectedDate.year.toString();
+  //  this.task.date = selectedDate.day.toString()+"/"+selectedDate.month.toString()+"/"+selectedDate.year.toString();
       notifyListeners();
   }
 
@@ -357,7 +365,7 @@ class NewTaskProvider extends ChangeNotifier{
       _time = selectedTime.hour.toString() + ':' + selectedTime.minute.toString();
 
     }
-    this.task.time = selectedTime.hour.toString() + ':' + selectedTime.minute.toString();
+    //this.task.time = selectedTime.hour.toString() + ':' + selectedTime.minute.toString();
       notifyListeners();
   }
 
@@ -378,7 +386,7 @@ class NewTaskProvider extends ChangeNotifier{
     if (picked != null && picked != selectedReminder) {
       selectedReminder = picked;
         }
-    this.task.dateReminder = selectedReminder.day.toString()+"/"+selectedReminder.month.toString()+"/"+selectedReminder.year.toString();
+  //  this.task.dateReminder = selectedReminder.day.toString()+"/"+selectedReminder.month.toString()+"/"+selectedReminder.year.toString();
     notifyListeners();
   }
   Future<Null> _selectTimeReminder(BuildContext context) async {
@@ -398,7 +406,7 @@ class NewTaskProvider extends ChangeNotifier{
       _timeR = selectedTimeReminder.hour.toString() + ':' + selectedTimeReminder.minute.toString();
 
     }
-    this.task.timeReminder = selectedTimeReminder.hour.toString() + ':' + selectedTimeReminder.minute.toString();
+   // this.task.timeReminder = selectedTimeReminder.hour.toString() + ':' + selectedTimeReminder.minute.toString();
       notifyListeners();
   }
 

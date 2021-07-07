@@ -188,8 +188,10 @@ class TaskFunctions{
     }
 
     List<Item> items =  (list.isEmpty)?[]:List<Item>.generate(list.length, (int index) {
+      print("item time : "+list[index].time);
     return Item(list[index]);
     });
+
     yield items;
   }
 

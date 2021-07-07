@@ -335,6 +335,14 @@ class ToDoListBodyProvider extends ChangeNotifier{
     );
   }
 
+  changeColor(Task task, String reminder)async{
+    if(task!=null && (task.status==Variables().status[3])){
+      task.status = (reminder=="yes")?Variables().status[2]:Variables().status[1];
+      await DBProvider.db.updateTask(task);
+    }
+    notifyListeners();
+  }
+
   setState(){
     notifyListeners();
   }

@@ -8,7 +8,7 @@ class AddNewTask extends StatelessWidget {
   Task editTask;
  
   AddNewTask({ this.editTask });
-
+//TODO hadi marahi dir walo ll variables
   begin(){
     NewTaskProvider().setTask(this.editTask);
   }

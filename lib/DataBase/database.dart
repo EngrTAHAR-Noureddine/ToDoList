@@ -82,7 +82,6 @@ class DBProvider {
           ")");
       await db.execute("CREATE TABLE User  ("
           "id INTEGER PRIMARY KEY,"
-          "notificationUnread TEXT,"
           "darkMode TEXT,"
           "passWord TEXT,"
           "hideGoal TEXT,"
@@ -317,7 +316,7 @@ class DBProvider {
 
     var res =await  db.query("User", where: "id = ?", whereArgs: [id]);
     if(res.isEmpty || res==null){
-      newUser(User(id:1,darkMode: "Light",linkAgenda: "none",passWord: "",hideGoal: "no",notificationUnread: "false"));
+      newUser(User(id:1,darkMode: "Light",linkAgenda: "none",passWord: "",hideGoal: "no"));
       res =await  db.query("User", where: "id = ?", whereArgs: [id]);
     }
     User user;

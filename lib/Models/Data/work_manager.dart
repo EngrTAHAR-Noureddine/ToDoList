@@ -5,6 +5,7 @@ import 'package:todolist/Models/Data/data_variable.dart';
 import 'package:todolist/Models/Data/task_model.dart';
 import 'package:todolist/Models/Data/user_model.dart';
 import 'package:todolist/Models/ProvidersClass/settings_provider.dart';
+import 'package:todolist/Models/ProvidersClass/task_list_provider.dart';
 import 'package:todolist/Models/notification_service.dart';
 import 'package:workmanager/workmanager.dart';
 
@@ -92,7 +93,7 @@ class WorkManagerProvider{
             isReminder: "no",
             hour: int.parse(taskToday[i].time.split(":")[0]),
             minute: int.parse(taskToday[i].time.split(":")[1]),
-            inMinute: (int.parse(taskToday[i].time.split(":")[0])*60+int.parse(taskToday[i].time.split(":")[1]))
+            inMinute: ((int.parse(taskToday[i].time.split(":")[0])*60)+int.parse(taskToday[i].time.split(":")[1]))
         );
         await DBProvider.db.newTodayTask(todayTask);
       }
@@ -111,7 +112,7 @@ class WorkManagerProvider{
             isReminder: "yes",
             hour: int.parse(taskreminder[i].timeReminder.split(":")[0]),
             minute: int.parse(taskreminder[i].timeReminder.split(":")[1]),
-            inMinute: (int.parse(taskreminder[i].timeReminder.split(":")[0])*60+int.parse(taskreminder[i].timeReminder.split(":")[1]))
+            inMinute: ((int.parse(taskreminder[i].timeReminder.split(":")[0])*60)+int.parse(taskreminder[i].timeReminder.split(":")[1]))
         );
         await DBProvider.db.newTodayTask(todayTask);
       }
@@ -120,7 +121,7 @@ class WorkManagerProvider{
     WidgetsFlutterBinding.ensureInitialized();
     await Workmanager().initialize(callbackDispatcher);
     await Workmanager().registerOneOffTask(
-        "tomorrow"+now.toString(), "test2",
+        "tomorrow"+now.toString(), "test3",
         inputData: {
           "data": "init",
           "title":" ",
@@ -169,6 +170,9 @@ class WorkManagerProvider{
       print("tdt affiche ====== ");
       print(tdt);
       for(int i=0; i<tdt.length;i++) {
+        print(tdt[i].hour.toString()+":"+tdt[i].minute.toString());
+        print("picker no in loop : "+tdt[i].inMinute.toString());
+
         if (inMinuteNow <= tdt[i].inMinute){
           print("picker ====== ");
           picker = tdt[i];
@@ -177,7 +181,7 @@ class WorkManagerProvider{
         }
         else{
           print("else of picker ==== ");
-
+          print("hi ! ");
 
           Task task = await DBProvider.db.getTask(tdt[i].idTask);
           if(task!=null){
@@ -210,6 +214,7 @@ class WorkManagerProvider{
                   await DBProvider.db.updateTask(task);
                   break;
                 default :
+                  print("delete");
                   await DBProvider.db.deleteTask(task.id);
                           break;
               }
@@ -271,23 +276,26 @@ class WorkManagerProvider{
 
   Future<void> itTimeToWork(inputData)async{
     print("its time to work ");
+    print("inputdata = ");
+    print(inputData["idTask"]);
+    print(inputData["idTask"] is int);
+
     LocalNotification.Initializer();
     LocalNotification.ShowOneTimeNotification(DateTime.now(),inputData["title"],inputData["body"],inputData["time"]);
-    WidgetsFlutterBinding.ensureInitialized();
+   // WidgetsFlutterBinding.ensureInitialized();
 
     Task task = await DBProvider.db.getTask(inputData["idTask"]);
-    if(task!=null && (task.status!=Variables().status[3])){
+
+    if(task!=null && (task.status==Variables().status[3])){
+      print("task in it work is : "+task.task);
+      print(task.status +"and reminder "+inputData["isReminder"]);
       task.status = (inputData["isReminder"]=="yes")?Variables().status[2]:Variables().status[1];
       await DBProvider.db.updateTask(task);
     }
-    User user = await SettingsProvider().getUser();
+    //await ToDoListBodyProvider().changeColor(task, inputData["isReminder"]);
 
-  if(user!=null) {
-    user.notificationUnread = "true";
-    await DBProvider.db.updateUser(user);
 
-  }
-
+    WidgetsFlutterBinding.ensureInitialized();
     await Workmanager().initialize(callbackDispatcher);
     await Workmanager().registerOneOffTask(
         "today"+DateTime.now().toString(), "test",

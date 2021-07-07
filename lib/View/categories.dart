@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:todolist/Models/ProvidersClass/provider_class.dart';
 import 'package:todolist/Models/ProvidersClass/task_list_provider.dart';
 import 'package:todolist/Models/Data/data_variable.dart';
 import 'package:todolist/Models/Data/task_model.dart';
@@ -8,7 +10,9 @@ class Categories extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
+    return Consumer<ProviderClass>(
+        builder: (context, value, child) {
+      return StreamBuilder(
         stream: ToDoListBodyProvider().getCategories(),
         builder: (context, AsyncSnapshot snapshot) {
           List<Category> list = (snapshot.hasData) ? snapshot.data : [];
@@ -91,6 +95,6 @@ class Categories extends StatelessWidget {
           );
         }
 
-    );
+    ); });
   }
 }
