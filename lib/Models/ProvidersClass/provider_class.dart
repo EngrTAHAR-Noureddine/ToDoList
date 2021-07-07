@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todolist/DataBase/database.dart';
+import 'package:todolist/Models/Data/data_variable.dart';
+import 'package:todolist/Models/Data/task_model.dart';
 import 'package:todolist/Models/Data/user_model.dart';
 
 class ProviderClass extends ChangeNotifier{
@@ -15,7 +17,16 @@ class ProviderClass extends ChangeNotifier{
   PageController controller = PageController(initialPage: 0);
   ThemeMode themeMode = ThemeMode.system;
 
+  changeColor(Task task, String reminder)async{
+    if(task!=null && (task.status==Variables().status[3])){
+      task.status = (reminder=="yes")?Variables().status[2]:Variables().status[1];
 
+      print("update task ************************************* ");
+      await DBProvider.db.updateTask(task);
+
+    }
+    notifyListeners();
+  }
 
   List<String> listWidgets =["Today","Tomorrow"];
 

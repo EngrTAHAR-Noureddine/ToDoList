@@ -4,6 +4,7 @@ import 'package:todolist/Models/Data/TodayTask.dart';
 import 'package:todolist/Models/Data/data_variable.dart';
 import 'package:todolist/Models/Data/task_model.dart';
 import 'package:todolist/Models/Data/user_model.dart';
+import 'package:todolist/Models/ProvidersClass/provider_class.dart';
 import 'package:todolist/Models/ProvidersClass/settings_provider.dart';
 import 'package:todolist/Models/ProvidersClass/task_list_provider.dart';
 import 'package:todolist/Models/notification_service.dart';
@@ -291,8 +292,9 @@ class WorkManagerProvider{
       print(task.status +"and reminder "+inputData["isReminder"]);
       task.status = (inputData["isReminder"]=="yes")?Variables().status[2]:Variables().status[1];
       await DBProvider.db.updateTask(task);
+      ProviderClass().setState();
     }
-    //await ToDoListBodyProvider().changeColor(task, inputData["isReminder"]);
+   // await ProviderClass().changeColor(task, inputData["isReminder"]);
 
 
     WidgetsFlutterBinding.ensureInitialized();

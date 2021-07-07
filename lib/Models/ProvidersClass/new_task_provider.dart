@@ -18,25 +18,39 @@ class NewTaskProvider extends ChangeNotifier{
   final formKey = GlobalKey<FormState>();
 
   Task task;
-  TextEditingController _taskName = new TextEditingController();
-  TextEditingController _addGoal =new TextEditingController();
-  TextEditingController _addNoteText =new TextEditingController();
+  TextEditingController taskName = new TextEditingController();
+  TextEditingController addGoal =new TextEditingController();
+  TextEditingController addNoteText =new TextEditingController();
 
-  String _categorySelected;
-  String _frequencySelected;
-  DateTime selectedDate = DateTime.now();
-  TimeOfDay selectedTime = TimeOfDay(hour: 00, minute: 00);
-  String  _time;
-  DateTime selectedReminder = DateTime.now();
-  TimeOfDay selectedTimeReminder = TimeOfDay(hour: 00, minute: 00);
-  String  _timeR;
+  String categorySelected;
+  String frequencySelected;
+  DateTime selectedDate;
+  TimeOfDay selectedTime;
+  String  time;
+  DateTime selectedReminder;
+  TimeOfDay selectedTimeReminder ;
+  String  timeR;
   List<String> _part =[];
+
+
+
 
   setTask(task){
     this.task = task;
-    _taskName.clear();
-    _addGoal.clear();
-    _addNoteText.clear();
+    taskName.clear();
+    addGoal.clear();
+    addNoteText.clear();
+    print("this time now : "+DateTime.now().toString());
+
+    selectedDate = DateTime.now();
+    selectedReminder = DateTime.now();
+
+    selectedTime = TimeOfDay(hour: DateTime.now().hour, minute: DateTime.now().minute);
+    selectedTimeReminder = TimeOfDay(hour: DateTime.now().hour, minute: DateTime.now().minute);
+
+    print("selected := "+selectedTime.toString());
+    print("reminder selected := "+selectedTimeReminder.toString());
+
     if(this.task==null) this.task = new Task(
                                                 task: "",
                                                 frequency: "",
@@ -49,16 +63,16 @@ class NewTaskProvider extends ChangeNotifier{
                                                 dateReminder: "",
                                                 time: ""
                                               );
-    if((this.task.task!=null)&&(this.task.task.isNotEmpty))_taskName.text = this.task.task;
+    if((this.task.task!=null)&&(this.task.task.isNotEmpty))taskName.text = this.task.task;
     if((this.task.timeReminder!=null)&&(this.task.timeReminder.isNotEmpty))
       {
-        _timeR = this.task.timeReminder;
+        timeR = this.task.timeReminder;
 
-      }else if(_timeR==null) _timeR = DateTime.now().hour.toString()+":"+DateTime.now().minute.toString();
+      }else timeR = selectedTimeReminder.hour.toString()+":"+selectedTimeReminder.minute.toString();
 
-    _categorySelected =((this.task.category!=null)&&(this.task.category.isNotEmpty))? this.task.category:(_categorySelected!=null && _categorySelected.isNotEmpty)?_categorySelected:"Category";
+    categorySelected =((this.task.category!=null)&&(this.task.category.isNotEmpty))? this.task.category:(categorySelected!=null && categorySelected.isNotEmpty)?categorySelected:"Category";
 
-    _frequencySelected =((this.task.frequency!=null)&&(this.task.frequency.isNotEmpty))? this.task.frequency:(_frequencySelected!=null && _frequencySelected.isNotEmpty)?_frequencySelected:Variables().frequency[0];
+    frequencySelected =((this.task.frequency!=null)&&(this.task.frequency.isNotEmpty))? this.task.frequency:(frequencySelected!=null && frequencySelected.isNotEmpty)?frequencySelected:Variables().frequency[0];
 
     if((this.task.dateReminder!=null)&&(this.task.dateReminder.isNotEmpty)){
       _part= this.task.dateReminder.split("/");
@@ -70,15 +84,17 @@ class NewTaskProvider extends ChangeNotifier{
       selectedDate = DateTime(int.parse(_part[2]),int.parse(_part[1]),int.parse(_part[0]));
     }
 
-    if((this.task.note!=null)&&(this.task.note.isNotEmpty)) _addNoteText.text = this.task.note;
+    if((this.task.note!=null)&&(this.task.note.isNotEmpty)) addNoteText.text = this.task.note;
 
     if((this.task.status!=null)&&(this.task.status.isNotEmpty)) this.task.status= Variables().status[3];
 
-    if((this.task.goal!=null)&&(this.task.goal.isNotEmpty))_addGoal.text = this.task.goal;
+    if((this.task.goal!=null)&&(this.task.goal.isNotEmpty))addGoal.text = this.task.goal;
     if((this.task.time!=null)&&(this.task.time.isNotEmpty)) {
-      _time = this.task.time;
+      time = this.task.time;
 
-    }else if(_time==null) _time = DateTime.now().hour.toString()+":"+DateTime.now().minute.toString();
+    }else  time = selectedTime.hour.toString()+":"+selectedTime.minute.toString();
+
+    //notifyListeners();
   }
 
   Future<void> declineAdding(context)async{
@@ -103,17 +119,17 @@ class NewTaskProvider extends ChangeNotifier{
 
 
 
-    if(_categorySelected =="Category") _categorySelected = "Temporary";
+    if(categorySelected =="Category") categorySelected = "Temporary";
 
-    this.task.task = _taskName.text;
+    this.task.task = taskName.text;
     this.task.status = Variables().status[3];
-    this.task.frequency = _frequencySelected;
-    this.task.goal = _addGoal.text;
-    this.task.category = _categorySelected;
-    this.task.note = _addNoteText.text;
+    this.task.frequency = frequencySelected;
+    this.task.goal = addGoal.text;
+    this.task.category = categorySelected;
+    this.task.note = addNoteText.text;
     this.task.date = selectedDate.day.toString()+"/"+selectedDate.month.toString()+"/"+selectedDate.year.toString();
-    this.task.time = _time;
-    this.task.timeReminder = _timeR;
+    this.task.time = time;
+    this.task.timeReminder = timeR;
     this.task.dateReminder = selectedReminder.day.toString()+"/"+selectedReminder.month.toString()+"/"+selectedReminder.year.toString();
 
 
@@ -151,8 +167,8 @@ class NewTaskProvider extends ChangeNotifier{
 
         if((selectedDate.year == selectedReminder.year)&&(selectedDate.month == selectedReminder.month)&&(selectedDate.day == selectedReminder.day)){
 
-          List<String> time1 = _time.split(":");
-          List<String> time2 = _timeR.split(":");
+          List<String> time1 = time.split(":");
+          List<String> time2 = timeR.split(":");
 
           if((int.parse(time1[0])*60+int.parse(time1[1]))<(int.parse(time2[0])*60+int.parse(time2[1]))){
 
@@ -192,17 +208,17 @@ class NewTaskProvider extends ChangeNotifier{
         checkDate[2] = false;
         print("************* _checkdate[0] : "+checkDate[0].toString());
         print("************* _checkdate[1] : "+checkDate[1].toString());
-        if(_categorySelected =="Category") _categorySelected = "Temporary";
+        if(categorySelected =="Category") categorySelected = "Temporary";
 
-        this.task.task = _taskName.text;
+        this.task.task = taskName.text;
         this.task.status = Variables().status[3];
-        this.task.frequency = _frequencySelected;
-        this.task.goal = _addGoal.text;
-        this.task.category = _categorySelected;
-        this.task.note = _addNoteText.text;
+        this.task.frequency = frequencySelected;
+        this.task.goal = addGoal.text;
+        this.task.category = categorySelected;
+        this.task.note = addNoteText.text;
         this.task.date = selectedDate.day.toString()+"/"+selectedDate.month.toString()+"/"+selectedDate.year.toString();
-        this.task.time = _time;
-        this.task.timeReminder = _timeR;
+        this.task.time = time;
+        this.task.timeReminder = timeR;
         this.task.dateReminder = selectedReminder.day.toString()+"/"+selectedReminder.month.toString()+"/"+selectedReminder.year.toString();
 
         if (task.task != null && task.task.isNotEmpty) {
@@ -297,7 +313,7 @@ class NewTaskProvider extends ChangeNotifier{
                       if (_formKeyDialogCat.currentState.validate()) {
                         
                           itemCategories.add(_textEditingController.text);
-                          _categorySelected = _textEditingController.text;
+                          categorySelected = _textEditingController.text;
                         
                         Navigator.of(context).pop();
                           notifyListeners();
@@ -362,7 +378,7 @@ class NewTaskProvider extends ChangeNotifier{
     if (picked != null) {
       selectedTime = picked;
 
-      _time = selectedTime.hour.toString() + ':' + selectedTime.minute.toString();
+      time = selectedTime.hour.toString() + ':' + selectedTime.minute.toString();
 
     }
     //this.task.time = selectedTime.hour.toString() + ':' + selectedTime.minute.toString();
@@ -403,7 +419,7 @@ class NewTaskProvider extends ChangeNotifier{
     );
     if (picked != null) {
       selectedTimeReminder = picked;
-      _timeR = selectedTimeReminder.hour.toString() + ':' + selectedTimeReminder.minute.toString();
+      timeR = selectedTimeReminder.hour.toString() + ':' + selectedTimeReminder.minute.toString();
 
     }
    // this.task.timeReminder = selectedTimeReminder.hour.toString() + ':' + selectedTimeReminder.minute.toString();
@@ -438,7 +454,7 @@ class NewTaskProvider extends ChangeNotifier{
         maxLength: 100,
         showCursor: true,
 
-        controller: this._taskName,
+        controller: this.taskName,
         autofocus: false,
 
 
@@ -587,7 +603,7 @@ class NewTaskProvider extends ChangeNotifier{
           if(value==0){return await showDialogToAddCategory(context);}
           if(value!=0){
           
-              _categorySelected = itemCategories[value];
+              categorySelected = itemCategories[value];
            notifyListeners();
           }
         },
@@ -595,7 +611,7 @@ class NewTaskProvider extends ChangeNotifier{
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text( _categorySelected , style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal , color: Theme.of(context).floatingActionButtonTheme.backgroundColor,)),
+            Text( categorySelected , style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal , color: Theme.of(context).floatingActionButtonTheme.backgroundColor,)),
             Icon(Icons.keyboard_arrow_down_rounded , color:  Theme.of(context).floatingActionButtonTheme.backgroundColor,),
 
           ],
@@ -675,14 +691,14 @@ class NewTaskProvider extends ChangeNotifier{
         },
         onSelected: (value) {
           
-            _frequencySelected = Variables().frequency[value];
+            frequencySelected = Variables().frequency[value];
          notifyListeners();
         },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text( _frequencySelected , style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal , color: Theme.of(context).floatingActionButtonTheme.backgroundColor,)),
+            Text( frequencySelected , style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal , color: Theme.of(context).floatingActionButtonTheme.backgroundColor,)),
             Icon(Icons.keyboard_arrow_down_rounded , color:  Theme.of(context).floatingActionButtonTheme.backgroundColor,),
 
           ],
@@ -704,7 +720,7 @@ class NewTaskProvider extends ChangeNotifier{
         maxLength: 100,
         showCursor: true,
 
-        controller: _addGoal,
+        controller: addGoal,
         autofocus: false,
 
 
@@ -780,7 +796,7 @@ class NewTaskProvider extends ChangeNotifier{
                 ),
                 color: Theme.of(context).accentColor,
                 child:
-                Text(selectedDate.day.toString()+"/"+selectedDate.month.toString()+"/"+selectedDate.year.toString() ,style: TextStyle(color: Theme.of(context).floatingActionButtonTheme.backgroundColor ,fontSize:14,fontFamily: "Roboto"),),
+                Text(this.selectedDate.day.toString()+"/"+this.selectedDate.month.toString()+"/"+this.selectedDate.year.toString() ,style: TextStyle(color: Theme.of(context).floatingActionButtonTheme.backgroundColor ,fontSize:14,fontFamily: "Roboto"),),
 
               ),),
             SizedBox(
@@ -800,7 +816,7 @@ class NewTaskProvider extends ChangeNotifier{
                 ),
                 color: Theme.of(context).accentColor,
                 child:
-                Text(_time.toString() ,style: TextStyle(color: Theme.of(context).floatingActionButtonTheme.backgroundColor ,fontSize:14,fontFamily: "Roboto"),),
+                Text(this.time.toString() ,style: TextStyle(color: Theme.of(context).floatingActionButtonTheme.backgroundColor ,fontSize:14,fontFamily: "Roboto"),),
 
               ),),
           ],
@@ -832,7 +848,7 @@ class NewTaskProvider extends ChangeNotifier{
                 ),
                 color: Theme.of(context).accentColor,
                 child:
-                Text(selectedReminder.day.toString()+"/"+selectedReminder.month.toString()+"/"+selectedReminder.year.toString()  ,style: TextStyle(color: Theme.of(context).floatingActionButtonTheme.backgroundColor ,fontSize:14,fontFamily: "Roboto"),),
+                Text(this.selectedReminder.day.toString()+"/"+this.selectedReminder.month.toString()+"/"+this.selectedReminder.year.toString()  ,style: TextStyle(color: Theme.of(context).floatingActionButtonTheme.backgroundColor ,fontSize:14,fontFamily: "Roboto"),),
 
               ),),
             SizedBox(
@@ -852,7 +868,7 @@ class NewTaskProvider extends ChangeNotifier{
                 ),
                 color: Theme.of(context).accentColor,
                 child:
-                Text( _timeR.toString() ,style: TextStyle(color: Theme.of(context).floatingActionButtonTheme.backgroundColor ,fontSize:14,fontFamily: "Roboto"),),
+                Text( this.timeR.toString() ,style: TextStyle(color: Theme.of(context).floatingActionButtonTheme.backgroundColor ,fontSize:14,fontFamily: "Roboto"),),
 
               ),),
           ],
@@ -874,7 +890,7 @@ class NewTaskProvider extends ChangeNotifier{
         maxLength: 100,
         showCursor: true,
 
-        controller: _addNoteText,
+        controller: this.addNoteText,
         autofocus: false,
         minLines: 5,
         keyboardType: TextInputType.text,
@@ -921,6 +937,522 @@ class NewTaskProvider extends ChangeNotifier{
     );
   }
 
-
+  setState(){
+    notifyListeners();
+  }
 
 }
+/*
+class WidgetAddNewTask{
+  titleText(String title){
+    return Container(
+      alignment: Alignment.centerLeft,
+      child:Text(title,style:TextStyle(color:Color(0xFF979DB0),fontWeight:FontWeight.bold ,fontSize:16,fontFamily: "Roboto"),),
+    );
+  }
+  
+  inputTaskName(context){
+    return  Container(
+      width: MediaQuery.of(context).size.width,
+      color: Theme.of(context).backgroundColor,
+      margin: EdgeInsets.only(top:5,bottom: 10),
+      padding: EdgeInsets.only(left: 10, right: 10,),
+      child:TextFormField(
+
+        // focusNode: currentFocus,
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return 'Please enter some text';
+          }
+          return null;
+        },
+        textAlign: TextAlign.left,
+        style: TextStyle(fontSize: 14,color: Theme.of(context).floatingActionButtonTheme.backgroundColor ),
+        maxLines: 1,
+        maxLength: 100,
+        showCursor: true,
+
+        controller: NewTaskProvider().taskName,
+        autofocus: false,
+
+
+        minLines: 1,
+        keyboardType: TextInputType.text,
+
+        decoration: InputDecoration(
+          isDense: true,
+          contentPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+          alignLabelWithHint: false,
+          prefixIcon: Icon(Icons.task,color: Theme.of(context).floatingActionButtonTheme.backgroundColor),
+          labelText: null,
+
+          counterStyle: TextStyle(
+            height: double.minPositive,
+          ),
+          counterText: "",
+          focusedBorder:OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+
+            borderSide: BorderSide(
+              color: Theme.of(context).floatingActionButtonTheme.backgroundColor,
+              width: 1,
+              style: BorderStyle.solid,
+            ),
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+
+            borderSide: BorderSide(
+              color: Theme.of(context).errorColor,
+              width: 1,
+              style: BorderStyle.solid,
+            ),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+
+            borderSide: BorderSide(
+              color: Theme.of(context).errorColor,
+              width: 1,
+              style: BorderStyle.solid,
+            ),
+          ),
+          hintText: "Task name",
+          hintStyle: TextStyle(color: Color(0xFFB8B8B8)),
+
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+
+            borderSide: BorderSide(
+              color: Theme.of(context).floatingActionButtonTheme.backgroundColor,
+              width: 1,
+              style: BorderStyle.solid,
+            ),
+          ),
+
+        ),
+        toolbarOptions: ToolbarOptions(
+          cut: true,
+          copy: true,
+          selectAll: true,
+          paste: true,
+        ),
+      ),
+    );
+  }
+  
+  categoryChoice(context){
+    return Container(
+      //  height: 100,
+      width: MediaQuery.of(context).size.width,
+
+      margin: EdgeInsets.only(top:5,bottom: 10,left:10,right: 10),
+      padding: EdgeInsets.all(10),
+
+      decoration: ShapeDecoration(
+        //color: Theme.of(context).backgroundColor,
+        color: Theme.of(context).accentColor,//Color(0xFFF4F4F4),
+
+        shape: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10.0),
+
+          borderSide: BorderSide(
+            color: Theme.of(context).floatingActionButtonTheme.backgroundColor,
+            width: 1,
+            style: BorderStyle.solid,
+          ),
+        ),
+      ),
+      child:   PopupMenuButton(
+        color: Theme.of(context).cardColor,
+
+        // padding: EdgeInsets.zero,
+        shape:RoundedRectangleBorder(
+            side: BorderSide(width: 1,style: BorderStyle.solid,color: Theme.of(context).floatingActionButtonTheme.backgroundColor,),
+            borderRadius: BorderRadius.circular(5)),
+        elevation: 4,
+
+        itemBuilder: (context) {
+          if ((Variables().getCat().isNotEmpty)) {
+            Variables().getCat().forEach((element) {
+              if(!NewTaskProvider().itemCategories.contains(element)){
+                NewTaskProvider().itemCategories.add(element);
+              }
+            });
+
+          }
+
+          return NewTaskProvider().itemCategories
+              .map((item) => PopupMenuItem(
+
+              height: 40,
+              padding:EdgeInsets.all(5),
+              // enabled: false,
+              value: NewTaskProvider().itemCategories.indexOf(item),
+              child: StatefulBuilder(
+
+                  builder: (BuildContext context, StateSetter setState) {
+                    return Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: 40,
+                        margin: EdgeInsets.all(0),
+                        padding: EdgeInsets.only(left:10,top: 5,bottom: 5,right: 5),
+                        alignment: Alignment.centerLeft,
+                        decoration: ShapeDecoration(
+                          color: Theme.of(context).accentColor,
+
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                        ),
+                        child: Text(
+                          item.toString(),
+                          style: TextStyle(color: Theme.of(context).floatingActionButtonTheme.focusColor,
+                              fontSize: 12,
+                              fontFamily: "Roboto"),
+                        )
+
+                    );
+                  }
+              )
+          )
+          ).toList();
+        },
+        onSelected: (value) async{
+          if(value==0){return await NewTaskProvider().showDialogToAddCategory(context);}
+          if(value!=0){
+
+            NewTaskProvider().categorySelected = NewTaskProvider().itemCategories[value];
+            NewTaskProvider().setState();
+          }
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text( NewTaskProvider().categorySelected , style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal , color: Theme.of(context).floatingActionButtonTheme.backgroundColor,)),
+            Icon(Icons.keyboard_arrow_down_rounded , color:  Theme.of(context).floatingActionButtonTheme.backgroundColor,),
+
+          ],
+        ),
+      ),
+
+
+    );
+  }
+  
+  frequencyPopMenu(context){
+    return Container(
+      width: MediaQuery.of(context).size.width,
+
+      margin: EdgeInsets.only(top:5,bottom: 10,left:10,right: 10),
+      padding: EdgeInsets.all(10),
+
+      decoration: ShapeDecoration(
+        //color: Theme.of(context).backgroundColor,
+        color: Theme.of(context).accentColor,//Color(0xFFF4F4F4),
+
+        shape: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10.0),
+
+          borderSide: BorderSide(
+            color: Theme.of(context).floatingActionButtonTheme.backgroundColor,
+            width: 1,
+            style: BorderStyle.solid,
+          ),
+        ),
+      ),
+      child:   PopupMenuButton(
+        color: Theme.of(context).cardColor,
+
+        // padding: EdgeInsets.zero,
+        shape:RoundedRectangleBorder(
+            side: BorderSide(width: 1,style: BorderStyle.solid,color: Theme.of(context).floatingActionButtonTheme.backgroundColor,),
+            borderRadius: BorderRadius.circular(5)),
+        elevation: 4,
+
+        itemBuilder: (context) {
+          List<String> itemFrequencies = Variables().frequency;
+          return itemFrequencies
+              .map((item) => PopupMenuItem(
+
+              height: 40,
+              padding:EdgeInsets.all(5),
+              // enabled: false,
+              value: itemFrequencies.indexOf(item),
+              child: StatefulBuilder(
+
+                  builder: (BuildContext context, StateSetter setState) {
+                    return Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: 40,
+                        margin: EdgeInsets.all(0),
+                        padding: EdgeInsets.only(left:10,top: 5,bottom: 5,right: 5),
+                        alignment: Alignment.centerLeft,
+                        decoration: ShapeDecoration(
+                          color: Theme.of(context).accentColor,
+
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                        ),
+                        child: Text(
+                          item.toString(),
+                          style: TextStyle(color: Theme.of(context).floatingActionButtonTheme.focusColor,
+                              fontSize: 12,
+                              fontFamily: "Roboto"),
+                        )
+
+                    );
+                  }
+              )
+          )
+          ).toList();
+        },
+        onSelected: (value) {
+
+          NewTaskProvider().frequencySelected = Variables().frequency[value];
+          NewTaskProvider().setState();
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text( NewTaskProvider().frequencySelected , style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal , color: Theme.of(context).floatingActionButtonTheme.backgroundColor,)),
+            Icon(Icons.keyboard_arrow_down_rounded , color:  Theme.of(context).floatingActionButtonTheme.backgroundColor,),
+
+          ],
+        ),
+      ),
+    );
+  }
+  
+  goalField(context){
+    return  Container(
+      width: MediaQuery.of(context).size.width,
+      color: Theme.of(context).backgroundColor,
+      margin: EdgeInsets.only(top:5,bottom: 10),
+      padding: EdgeInsets.only(left: 10, right: 10,),
+      child:TextFormField(
+
+        textAlign: TextAlign.left,
+        style: TextStyle(fontSize: 14,color: Theme.of(context).floatingActionButtonTheme.backgroundColor ),
+        maxLines: 1,
+        maxLength: 100,
+        showCursor: true,
+
+        controller: NewTaskProvider().addGoal,
+        autofocus: false,
+
+
+        minLines: 1,
+        keyboardType: TextInputType.text,
+
+        decoration: InputDecoration(
+          isDense: true,
+          contentPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+          alignLabelWithHint: false,
+          prefixIcon: Icon(Icons.adjust,color: Theme.of(context).floatingActionButtonTheme.backgroundColor),
+          labelText: null,
+
+          counterStyle: TextStyle(
+            height: double.minPositive,
+          ),
+          counterText: "",
+          focusedBorder:OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+
+            borderSide: BorderSide(
+              color: Theme.of(context).floatingActionButtonTheme.backgroundColor,
+              width: 1,
+              style: BorderStyle.solid,
+            ),
+          ),
+          hintText: "for reason..!",
+          hintStyle: TextStyle(color: Color(0xFFB8B8B8)),
+
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+
+            borderSide: BorderSide(
+              color: Theme.of(context).floatingActionButtonTheme.backgroundColor,
+              width: 1,
+              style: BorderStyle.solid,
+            ),
+          ),
+
+        ),
+        toolbarOptions: ToolbarOptions(
+          cut: true,
+          copy: true,
+          selectAll: true,
+          paste: true,
+        ),
+      ),
+    );
+  }
+  
+  showDateTimeSelected(context){
+    return  Container(
+
+        width: MediaQuery.of(context).size.width,
+        color: Theme.of(context).backgroundColor,
+        margin: EdgeInsets.only(top:5,bottom: 10),
+        padding: EdgeInsets.only(left: 10, right: 10,),
+        child:  Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              flex: 1,
+              child:MaterialButton(
+                height: 40,
+
+                onPressed: () => NewTaskProvider()._selectDate(context),
+                colorBrightness:Theme.of(context).primaryColorBrightness,
+                //padding: EdgeInsets.only(left: 10),
+                elevation: 2,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5)
+                ),
+                color: Theme.of(context).accentColor,
+                child:
+                Text(NewTaskProvider().selectedDate.day.toString()+"/"+NewTaskProvider().selectedDate.month.toString()+"/"+NewTaskProvider().selectedDate.year.toString() ,style: TextStyle(color: Theme.of(context).floatingActionButtonTheme.backgroundColor ,fontSize:14,fontFamily: "Roboto"),),
+
+              ),),
+            SizedBox(
+              width: 5,
+              height: 40,
+            ),
+            Expanded(
+
+              child:MaterialButton(
+                height: 40,
+                onPressed: () => NewTaskProvider()._selectTime(context),
+                colorBrightness:Theme.of(context).primaryColorBrightness,
+                // padding: EdgeInsets.only(left: 10),
+                elevation: 2,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5)
+                ),
+                color: Theme.of(context).accentColor,
+                child:
+                Text(NewTaskProvider().time.toString() ,style: TextStyle(color: Theme.of(context).floatingActionButtonTheme.backgroundColor ,fontSize:14,fontFamily: "Roboto"),),
+
+              ),),
+          ],
+        )
+
+    );
+  }
+  
+  showDateTimeReminder(context){
+    return Container(
+        width: MediaQuery.of(context).size.width,
+        color: Theme.of(context).backgroundColor,
+        margin: EdgeInsets.only(top:5,bottom: 10),
+        padding: EdgeInsets.only(left: 10, right: 10,),
+        child:  Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              flex: 1,
+              child:MaterialButton(
+                height: 40,
+                onPressed: () => NewTaskProvider()._selectReminder(context),
+                colorBrightness:Theme.of(context).primaryColorBrightness,
+                //padding: EdgeInsets.only(left: 10),
+                elevation: 2,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5)
+                ),
+                color: Theme.of(context).accentColor,
+                child:
+                Text(NewTaskProvider().selectedReminder.day.toString()+"/"+NewTaskProvider().selectedReminder.month.toString()+"/"+NewTaskProvider().selectedReminder.year.toString()  ,style: TextStyle(color: Theme.of(context).floatingActionButtonTheme.backgroundColor ,fontSize:14,fontFamily: "Roboto"),),
+
+              ),),
+            SizedBox(
+              width: 5,
+              height: 40,
+            ),
+            Expanded(
+
+              child:MaterialButton(
+                height: 40,
+                onPressed: () => NewTaskProvider()._selectTimeReminder(context),
+                colorBrightness:Theme.of(context).primaryColorBrightness,
+                // padding: EdgeInsets.only(left: 10),
+                elevation: 2,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5)
+                ),
+                color: Theme.of(context).accentColor,
+                child:
+                Text( NewTaskProvider().timeR.toString() ,style: TextStyle(color: Theme.of(context).floatingActionButtonTheme.backgroundColor ,fontSize:14,fontFamily: "Roboto"),),
+
+              ),),
+          ],
+        )
+
+    );
+  }
+  
+  noteField(context){
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      color: Theme.of(context).backgroundColor,
+      margin: EdgeInsets.only(top:5,bottom: 10),
+      padding: EdgeInsets.only(left: 10, right: 10,),
+      child: TextField(
+        textAlign: TextAlign.left,
+        style: TextStyle(fontSize: 14,color: Theme.of(context).floatingActionButtonTheme.backgroundColor ),
+        maxLines: 5,
+        maxLength: 100,
+        showCursor: true,
+
+        controller: NewTaskProvider().addNoteText,
+        autofocus: false,
+        minLines: 5,
+        keyboardType: TextInputType.text,
+
+        decoration: InputDecoration(
+
+          labelText: null,
+
+
+          counterStyle: TextStyle(
+            height: double.minPositive,
+          ),
+          counterText: "",
+          focusedBorder:OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+
+            borderSide: BorderSide(
+              color: Theme.of(context).floatingActionButtonTheme.backgroundColor,
+              width: 1,
+              style: BorderStyle.solid,
+            ),
+          ),
+          hintText: "Note...",
+          hintStyle: TextStyle(color: Color(0xFFB8B8B8)),
+
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+
+            borderSide: BorderSide(
+              color: Theme.of(context).floatingActionButtonTheme.backgroundColor,
+              width: 1,
+              style: BorderStyle.solid,
+            ),
+          ),
+
+        ),
+        toolbarOptions: ToolbarOptions(
+          cut: true,
+          copy: true,
+          selectAll: true,
+          paste: true,
+        ),
+      ),
+    );
+  }
+}
+
+ */
