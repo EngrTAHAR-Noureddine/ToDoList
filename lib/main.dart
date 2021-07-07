@@ -86,7 +86,7 @@ class MyApp extends StatelessWidget {
                     builder: (context, value, child) {
                       return MaterialApp(
                                 debugShowCheckedModeBanner: false,
-                                title: 'ToDoList',
+                                title: 'ToDo',
                                 color: Theme.of(context).backgroundColor,
                                 theme: ThemeDataClass().lightMode(),
                                 darkTheme: ThemeDataClass().darkMode(),
