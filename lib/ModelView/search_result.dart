@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 import 'package:todolist/DataBase/database.dart';
-import 'package:todolist/ModelView/add_new_task.dart';
+import 'package:todolist/ModelView/add_task.dart';
 import 'package:todolist/Models/ProvidersClass/task_list_provider.dart';
 import 'package:todolist/Models/custom_expansion_tile.dart' as custom;
 import 'package:todolist/Models/ProvidersClass/provider_home_class.dart';
@@ -125,8 +125,7 @@ class SearchResult extends StatelessWidget {
                                                     Navigator.push(
                                                       context,
                                                       MaterialPageRoute<void>(
-                                                        builder: (BuildContext context) => AddNewTasks(
-                                                          editeTask: tk.task,
+                                                        builder: (BuildContext context) => AddNewTask(editTask:tk.task,
 
                                                         ),
                                                         fullscreenDialog: true,

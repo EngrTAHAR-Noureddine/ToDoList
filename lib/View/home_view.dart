@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
 import 'package:todolist/ModelView/add_new_goal.dart';
-import 'package:todolist/ModelView/add_new_task.dart';
+import 'package:todolist/ModelView/add_task.dart';
 import 'package:todolist/Models/ProvidersClass/provider_home_class.dart';
 import 'package:todolist/View/switch_view.dart';
 
@@ -348,7 +348,7 @@ class _HomeState extends State<Home> {
                   builder: (BuildContext context) =>
                   (SwitchViews().index == 2)
                       ? AddGoal()
-                      : AddNewTasks(),
+                      : AddNewTask(),
                   fullscreenDialog: true,
                 ),
               );

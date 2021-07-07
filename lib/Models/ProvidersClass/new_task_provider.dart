@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:todolist/DataBase/database.dart';
 import 'package:todolist/Models/Data/data_variable.dart';
+import 'package:todolist/Models/Data/draft_model.dart';
 import 'package:todolist/Models/Data/task_model.dart';
+import 'package:todolist/Models/ProvidersClass/task_list_provider.dart';
+import 'package:todolist/main.dart';
+import 'package:workmanager/workmanager.dart';
 
 class NewTaskProvider extends ChangeNotifier{
   static final NewTaskProvider _singleton = NewTaskProvider._internal();
@@ -9,7 +14,8 @@ class NewTaskProvider extends ChangeNotifier{
   }
   NewTaskProvider._internal();
   List<String> itemCategories =["Add New Category","Temporary"];
-  List<bool> checkdate =[false,false,false];
+  List<bool> checkDate =[false,false,false];
+  final formKey = GlobalKey<FormState>();
 
   Task task;
   TextEditingController _taskName = new TextEditingController();
@@ -24,18 +30,215 @@ class NewTaskProvider extends ChangeNotifier{
   DateTime selectedReminder = DateTime.now();
   TimeOfDay selectedTimeReminder = TimeOfDay(hour: 00, minute: 00);
   String  _timeR= DateTime.now().hour.toString()+":"+DateTime.now().minute.toString();
+  List<String> _part =[];
 
   setTask(task){
     this.task = task;
+    _taskName.clear();
+    _addGoal.clear();
+    _addNoteText.clear();
+    if(this.task==null) this.task = new Task(
+                                                task: "",
+                                                frequency: "",
+                                                status: "",
+                                                date: "",
+                                                note: "",
+                                                goal: "",
+                                                category: "",
+                                                timeReminder: "",
+                                                dateReminder: "",
+                                                time: ""
+                                              );
+    if((this.task.task!=null)&&(this.task.task.isNotEmpty))_taskName.text = this.task.task;
+    if((this.task.timeReminder!=null)&&(this.task.timeReminder.isNotEmpty)) _timeR = this.task.timeReminder;
+
+    _categorySelected =((this.task.category!=null)&&(this.task.category.isNotEmpty))? this.task.category:(_categorySelected!=null && _categorySelected.isNotEmpty)?_categorySelected:"Category";
+
+    _frequencySelected =((this.task.frequency!=null)&&(this.task.frequency.isNotEmpty))? this.task.frequency:(_frequencySelected!=null && _frequencySelected.isNotEmpty)?_frequencySelected:Variables().frequency[0];
+
+    if((this.task.dateReminder!=null)&&(this.task.dateReminder.isNotEmpty)){
+      _part= this.task.dateReminder.split("/");
+      selectedReminder = DateTime(int.parse(_part[2]),int.parse(_part[1]),int.parse(_part[0]));
+    }
+
+    if((this.task.date!=null)&&(this.task.date.isNotEmpty)){
+      _part= this.task.date.split("/");
+      selectedDate = DateTime(int.parse(_part[2]),int.parse(_part[1]),int.parse(_part[0]));
+    }
+
+    if((this.task.note!=null)&&(this.task.note.isNotEmpty)) _addNoteText.text = this.task.note;
+
+    if((this.task.status!=null)&&(this.task.status.isNotEmpty)) this.task.status= Variables().status[3];
+
+    if((this.task.goal!=null)&&(this.task.goal.isNotEmpty))_addGoal.text = this.task.goal;
+    if((this.task.time!=null)&&(this.task.time.isNotEmpty)) _time =this.task.time ;
   }
 
   Future<void> declineAdding(context)async{
+    if(task.task!=null && task.task.isNotEmpty) {
+      DBProvider.db.newTask(task);
+      await Workmanager().initialize(callbackDispatcher);
+      await Workmanager().registerOneOffTask(
+          DateTime.now().toString(), "task",
+          inputData: {
+            "data": "init",
+            "title":" ",
+            "body":" ",
+            "time":" ",
+            "idTask":0,
+            "date":" ",
+            "status":" ",
+            "frequency":" ",
+            "isReminder":"no"},
+          initialDelay: Duration(seconds: 1)
+      );
+    }
+
+
+
+    if(_categorySelected =="Category") _categorySelected = "Temporary";
+
+    this.task.task = _taskName.text;
+    this.task.status = Variables().status[3];
+    this.task.frequency = _frequencySelected;
+    this.task.goal = _addGoal.text;
+    this.task.category = _categorySelected;
+    this.task.note = _addNoteText.text;
+    this.task.date = selectedDate.day.toString()+"/"+selectedDate.month.toString()+"/"+selectedDate.year.toString();
+    this.task.time = selectedTime.hour.toString() + ':' + selectedTime.minute.toString();
+    this.task.dateReminder = selectedReminder.day.toString()+"/"+selectedReminder.month.toString()+"/"+selectedReminder.year.toString();
+    this.task.timeReminder = selectedTimeReminder.hour.toString() + ':' + selectedTimeReminder.minute.toString();
+
+
+    Draft taskAsDraft = Task().convert(this.task);
+
+    if((taskAsDraft.task.isNotEmpty) && (taskAsDraft.task!=null)) DBProvider.db.newDraft(taskAsDraft);
+
     Navigator.pop(context);
+    ToDoListBodyProvider().setState();
+    notifyListeners();
   }
 
 
   Future<void> saveTask(context)async{
-    Navigator.pop(context);
+    if (this.formKey.currentState.validate()) {
+      DateTime yesterday= DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day-1);
+      if(selectedDate.isBefore(yesterday)){
+
+          checkDate[0] = true;
+          print("************* _checkdate[0] : "+checkDate[0].toString());
+          notifyListeners();
+      }else{
+
+          checkDate[0] = false;
+          print("************* _checkdate[0] : "+checkDate[0].toString());
+          notifyListeners();
+      }
+      if(selectedReminder.isBefore(selectedDate)){
+
+          checkDate[1] = true;
+          print("************* _checkdate[1] inside isbefore  : "+checkDate[1].toString());
+          notifyListeners();
+      }else {
+
+        if((selectedDate.year == selectedReminder.year)&&(selectedDate.month == selectedReminder.month)&&(selectedDate.day == selectedReminder.day)){
+
+          List<String> time1 = _time.split(":");
+          List<String> time2 = _timeR.split(":");
+
+          if((int.parse(time1[0])*60+int.parse(time1[1]))<(int.parse(time2[0])*60+int.parse(time2[1]))){
+
+
+              checkDate[1] = false;
+              checkDate[2] = true;
+              print("************* _checkdate[2] inside intparse : "+checkDate[2].toString());
+              notifyListeners();
+
+          }else{
+
+
+              checkDate[1] = false;
+              checkDate[2] = false;
+              print("************* _checkdate[2] else intparse: "+checkDate[2].toString());
+              notifyListeners();
+
+          }
+
+        }else{
+
+
+            checkDate[1] = false;
+            checkDate[2] = false;
+            print("************* _checkdate[2] inside else not same : "+checkDate[2].toString());
+            notifyListeners();
+
+
+        }
+
+
+      }
+      if(!checkDate[0] && !checkDate[1] && !checkDate[2]){
+
+        checkDate[0] = false;
+        checkDate[1] = false;
+        checkDate[2] = false;
+        print("************* _checkdate[0] : "+checkDate[0].toString());
+        print("************* _checkdate[1] : "+checkDate[1].toString());
+        if(_categorySelected =="Category") _categorySelected = "Temporary";
+
+        this.task.task = _taskName.text;
+        this.task.status = Variables().status[3];
+        this.task.frequency = _frequencySelected;
+        this.task.goal = _addGoal.text;
+        this.task.category = _categorySelected;
+        this.task.note = _addNoteText.text;
+        this.task.date = selectedDate.day.toString()+"/"+selectedDate.month.toString()+"/"+selectedDate.year.toString();
+        this.task.time = selectedTime.hour.toString() + ':' + selectedTime.minute.toString();
+        this.task.dateReminder = selectedReminder.day.toString()+"/"+selectedReminder.month.toString()+"/"+selectedReminder.year.toString();
+        this.task.timeReminder = selectedTimeReminder.hour.toString() + ':' + selectedTimeReminder.minute.toString();
+
+        if (task.task != null && task.task.isNotEmpty) {
+          await DBProvider.db.newTask(this.task);
+
+          WidgetsFlutterBinding.ensureInitialized();
+          await Workmanager().initialize(callbackDispatcher);
+          await Workmanager().registerOneOffTask(
+              DateTime.now().toString(), "task",
+              inputData: {
+                "data": "init",
+                "title":" ",
+                "body":" ",
+                "time":" ",
+                "idTask":0,
+                "date":" ",
+                "status":" ",
+                "frequency":" ",
+                "isReminder":"no"
+              },
+              initialDelay: Duration(seconds: 1)
+          );
+
+        }
+
+
+        this.formKey.currentState.save();
+
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('New Task added')));
+
+        notifyListeners();
+        Navigator.pop(context);
+
+      }
+
+
+
+     ToDoListBodyProvider().setState();
+    }
+
+
+
+
   }
 
 
@@ -127,14 +330,16 @@ class NewTaskProvider extends ChangeNotifier{
       lastDate: DateTime(3000),
     );
     //   DateTime dt ;
-    if (picked != null && picked != selectedDate)
-      // dt = DateTime(picked.year,picked.month,picked.day,0,0,0,0,0);
+    if (picked != null && picked != selectedDate) {
+      selectedDate = picked;
 
-        selectedDate = picked;
+    }
+    this.task.date = selectedDate.day.toString()+"/"+selectedDate.month.toString()+"/"+selectedDate.year.toString();
       notifyListeners();
   }
+
   Future<Null> _selectTime(BuildContext context) async {
-    String _hour, _minute;
+
     final TimeOfDay picked = await showTimePicker(
 
       builder: (BuildContext context, Widget child) {
@@ -146,13 +351,13 @@ class NewTaskProvider extends ChangeNotifier{
       context: context,
       initialTime: selectedTime,
     );
-    if (picked != null)
+    if (picked != null) {
+      selectedTime = picked;
 
-        selectedTime = picked;
-        _hour = selectedTime.hour.toString();
-        _minute = selectedTime.minute.toString();
-        _time = _hour + ':' + _minute;
+      _time = selectedTime.hour.toString() + ':' + selectedTime.minute.toString();
 
+    }
+    this.task.time = selectedTime.hour.toString() + ':' + selectedTime.minute.toString();
       notifyListeners();
   }
 
@@ -169,15 +374,15 @@ class NewTaskProvider extends ChangeNotifier{
       firstDate: DateTime(2000),
       lastDate: DateTime(3000),
     );
-    // DateTime dt ;
-    if (picked != null && picked != selectedReminder)
-      //dt = DateTime(picked.year,picked.month,picked.day,0,0,0,0,0);
 
-        selectedReminder = picked;
-     notifyListeners();
+    if (picked != null && picked != selectedReminder) {
+      selectedReminder = picked;
+        }
+    this.task.dateReminder = selectedReminder.day.toString()+"/"+selectedReminder.month.toString()+"/"+selectedReminder.year.toString();
+    notifyListeners();
   }
   Future<Null> _selectTimeReminder(BuildContext context) async {
-    String _hour, _minute;
+
     final TimeOfDay picked = await showTimePicker(
       builder: (BuildContext context, Widget child) {
         return Theme(
@@ -188,13 +393,12 @@ class NewTaskProvider extends ChangeNotifier{
       context: context,
       initialTime: selectedTimeReminder,
     );
-    if (picked != null)
+    if (picked != null) {
+      selectedTimeReminder = picked;
+      _timeR = selectedTimeReminder.hour.toString() + ':' + selectedTimeReminder.minute.toString();
 
-        selectedTimeReminder = picked;
-        _hour = selectedTimeReminder.hour.toString();
-        _minute = selectedTimeReminder.minute.toString();
-        _timeR = _hour + ':' + _minute;
-
+    }
+    this.task.timeReminder = selectedTimeReminder.hour.toString() + ':' + selectedTimeReminder.minute.toString();
       notifyListeners();
   }
 
@@ -708,9 +912,6 @@ class NewTaskProvider extends ChangeNotifier{
       ),
     );
   }
-
-
-  
 
 
 

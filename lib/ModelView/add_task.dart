@@ -5,12 +5,12 @@ import 'package:todolist/Models/ProvidersClass/new_task_provider.dart';
 
 class AddNewTask extends StatelessWidget {
 
-  Task editeTask;
-  final _formKey = GlobalKey<FormState>();
-  AddNewTask({ this.editeTask });
+  Task editTask;
+ 
+  AddNewTask({ this.editTask });
 
   begin(){
-    NewTaskProvider().setTask(this.editeTask);
+    NewTaskProvider().setTask(this.editTask);
   }
 
   @override
@@ -69,7 +69,7 @@ class AddNewTask extends StatelessWidget {
                           onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
 
                           child:Form(
-                                key: _formKey,
+                                key: NewTaskProvider().formKey,
                                 child:Container(
                                       color: Theme.of(context).backgroundColor,
                                       padding: EdgeInsets.all(10),
@@ -96,12 +96,13 @@ class AddNewTask extends StatelessWidget {
                                                   NewTaskProvider().titleText("Date Of Task :"),
                                                    /* Show Date & Time pickers Widgets */
                                                   NewTaskProvider().showDateTimeSelected(context),
-                                                  (NewTaskProvider().checkdate[0])?Text("date selected is false",style:TextStyle(color: Theme.of(context).errorColor,fontSize: 12)):Container(),
+                                                  (NewTaskProvider().checkDate[0])?Text("date selected is false",style:TextStyle(color: Theme.of(context).errorColor,fontSize: 12)):Container(),
                                                   /* Date Of Reminder Text*/
                                                   NewTaskProvider().titleText("Date Of Reminder :"),
                                                   /* Show Date & Time Pickers Widgets */
-                                                  (NewTaskProvider().checkdate[1])?Text("date selected is before the selected date of task",style:TextStyle(color: Theme.of(context).errorColor,fontSize: 12))
-                                                      :(NewTaskProvider().checkdate[2])?Text("Time of reminder is less then the time selected",style:TextStyle(color: Theme.of(context).errorColor,fontSize: 12)):Container(),
+                                                  NewTaskProvider().showDateTimeReminder(context),
+                                                  (NewTaskProvider().checkDate[1])?Text("date selected is before the selected date of task",style:TextStyle(color: Theme.of(context).errorColor,fontSize: 12))
+                                                      :(NewTaskProvider().checkDate[2])?Text("Time of reminder is less then the time selected",style:TextStyle(color: Theme.of(context).errorColor,fontSize: 12)):Container(),
                                                    /* Note  Text */
                                                    NewTaskProvider().titleText("Note :"),
                                                    /* Note Text Form Field */

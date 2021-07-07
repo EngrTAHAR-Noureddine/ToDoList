@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:todolist/DataBase/database.dart';
-import 'package:todolist/ModelView/add_new_task.dart';
+import 'package:todolist/ModelView/add_task.dart';
 import 'package:todolist/Models/Data/data_variable.dart';
 import 'package:todolist/Models/ProvidersClass/provider_class.dart';
 import 'package:todolist/Models/Data/task_model.dart';
@@ -141,8 +141,8 @@ class PageOfTasks extends StatelessWidget {
                                                     Navigator.push(
                                                       context,
                                                       MaterialPageRoute<void>(
-                                                        builder: (BuildContext context) => AddNewTasks(
-                                                          editeTask:tk.task,
+                                                        builder: (BuildContext context) => AddNewTask(
+                                                          editTask:tk.task,
 
                                                         ),
                                                         fullscreenDialog: true,

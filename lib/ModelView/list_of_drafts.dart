@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 import 'package:todolist/DataBase/database.dart';
+import 'package:todolist/ModelView/add_task.dart';
 import 'package:todolist/Models/Data/task_model.dart';
 import 'package:todolist/Models/ProvidersClass/task_list_provider.dart';
-import 'package:todolist/ModelView/add_new_task.dart';
 import 'package:todolist/Models/Data/draft_model.dart';
 import 'package:todolist/Models/custom_expansion_tile.dart' as custom;
 
@@ -131,8 +131,8 @@ class ListOfDrafts extends StatelessWidget{
                                                     Navigator.push(
                                                       context,
                                                       MaterialPageRoute<void>(
-                                                        builder: (BuildContext context) => AddNewTasks(
-                                                          editeTask: task,
+                                                        builder: (BuildContext context) => AddNewTask(
+                                                          editTask: task,
 
                                                         ),
                                                         fullscreenDialog: true,
