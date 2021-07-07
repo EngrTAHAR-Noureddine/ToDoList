@@ -241,8 +241,8 @@ class _HomeState extends State<Home> {
                 width: !_bigger ? 0 : MediaQuery
                     .of(context)
                     .size
-                    .width * 0.55,
-                margin: EdgeInsets.only(right: !_bigger ? 0 : 10),
+                    .width * 0.70,
+                margin: EdgeInsets.only(right: !_bigger ? 10 : 10),
                 color: Colors.transparent,
                 child: TextField(
 
@@ -323,7 +323,7 @@ class _HomeState extends State<Home> {
                     paste: true,
                   ),
                 ),
-                duration: Duration(milliseconds: 200),
+                duration: Duration(milliseconds: 150),
               ) : Container(),
 
             ],

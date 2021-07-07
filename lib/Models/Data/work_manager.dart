@@ -3,10 +3,7 @@ import 'package:todolist/DataBase/database.dart';
 import 'package:todolist/Models/Data/TodayTask.dart';
 import 'package:todolist/Models/Data/data_variable.dart';
 import 'package:todolist/Models/Data/task_model.dart';
-import 'package:todolist/Models/Data/user_model.dart';
 import 'package:todolist/Models/ProvidersClass/provider_class.dart';
-import 'package:todolist/Models/ProvidersClass/settings_provider.dart';
-import 'package:todolist/Models/ProvidersClass/task_list_provider.dart';
 import 'package:todolist/Models/notification_service.dart';
 import 'package:workmanager/workmanager.dart';
 
@@ -283,7 +280,7 @@ class WorkManagerProvider{
 
     LocalNotification.Initializer();
     LocalNotification.ShowOneTimeNotification(DateTime.now(),inputData["title"],inputData["body"],inputData["time"]);
-   // WidgetsFlutterBinding.ensureInitialized();
+
 
     Task task = await DBProvider.db.getTask(inputData["idTask"]);
 
@@ -294,7 +291,7 @@ class WorkManagerProvider{
       await DBProvider.db.updateTask(task);
       ProviderClass().setState();
     }
-   // await ProviderClass().changeColor(task, inputData["isReminder"]);
+
 
 
     WidgetsFlutterBinding.ensureInitialized();

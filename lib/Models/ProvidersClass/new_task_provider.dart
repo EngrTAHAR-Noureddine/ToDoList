@@ -40,6 +40,7 @@ class NewTaskProvider extends ChangeNotifier{
     taskName.clear();
     addGoal.clear();
     addNoteText.clear();
+    categorySelected = "Category";
     print("this time now : "+DateTime.now().toString());
 
     selectedDate = DateTime.now();
