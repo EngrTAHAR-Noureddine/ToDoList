@@ -227,7 +227,7 @@ class WorkManagerProvider{
 
       if(picker != null) {
         print(picker.hour.toString()+":"+picker.minute.toString());
-
+        String timing =picker.hour.toString()+":"+picker.minute.toString();
         if (picker.inMinute == inMinuteNow) {
           print("it time to notification");
           WidgetsFlutterBinding.ensureInitialized();
@@ -238,7 +238,7 @@ class WorkManagerProvider{
                 "data": "itTime",
                 "title":picker.task,
                 "body":(picker.note!=null)?picker.note:"click to show details...",
-                "time":picker.date,
+                "time":timing,
                 "idTask":picker.idTask,
                 "date":dateNow,
                 "status":picker.status,
@@ -258,7 +258,7 @@ class WorkManagerProvider{
                 "data": "itTime",
                 "title":picker.task,
                 "body":(picker.note!=null)?picker.note:"click to show details...",
-                "time":picker.date,
+                "time":timing,
                 "idTask":picker.idTask,
                 "date":dateNow,
                 "status":picker.status,
@@ -273,13 +273,9 @@ class WorkManagerProvider{
   }
 
   Future<void> itTimeToWork(inputData)async{
-    print("its time to work ");
-    print("inputdata = ");
-    print(inputData["idTask"]);
-    print(inputData["idTask"] is int);
 
     LocalNotification.Initializer();
-    LocalNotification.ShowOneTimeNotification(DateTime.now(),inputData["title"],inputData["body"],inputData["time"]);
+    LocalNotification.ShowOneTimeNotification(DateTime.now(),inputData["title"],inputData["date"],inputData["time"]);
 
 
     Task task = await DBProvider.db.getTask(inputData["idTask"]);

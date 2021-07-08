@@ -35,16 +35,9 @@ dependencies:
   flutter_slidable: ^0.6.0
   workmanager: ^0.4.1
   flutter_local_notifications: ^6.0.0
-  flutter_launcher_icons: ^0.9.0
 
-flutter_icons:
-  image_path_android: "assets/images/todoImage.png"
-  image_path_ios: "assets/images/todoImage.png"
-  android: true
-  ios: true
-  adaptive_icon_background: "F4F6FD"
-  adaptive_icon_foreground: "assets/images/todo.png"
-  remove_alpha_ios: true
+
+
 
 dev_dependencies:
   flutter_test:

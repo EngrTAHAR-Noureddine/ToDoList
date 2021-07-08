@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:todolist/Models/ProvidersClass/provider_class.dart';
 
 class LocalNotification {
   static FlutterLocalNotificationsPlugin flutterNotificationPlugin;
@@ -33,13 +34,13 @@ class LocalNotification {
 
   static Future<dynamic> onNotificationSelect(String payload) async {
 
-
+        ProviderClass().setState();
   }
 
   static ShowOneTimeNotification(DateTime scheduledDate,String title, String body, String time) async {
     var notificationDetails = NotificationDetails(android: androidSettings);
-    await flutterNotificationPlugin.schedule(1, "Task : "+title,
-        time+":"+body, scheduledDate, notificationDetails,
+    await flutterNotificationPlugin.schedule(1,body+" "+time,
+        "Task : "+title, scheduledDate, notificationDetails,
         androidAllowWhileIdle: true);
   }
 }
