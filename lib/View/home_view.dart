@@ -5,6 +5,7 @@ import 'package:todolist/ModelView/add_new_goal.dart';
 import 'package:todolist/ModelView/add_task.dart';
 import 'package:todolist/Models/ProvidersClass/provider_home_class.dart';
 import 'package:todolist/View/switch_view.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 
 
@@ -148,16 +149,10 @@ class _HomeState extends State<Home> {
                     (orientation == Orientation.portrait) ? Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        MaterialButton(
+                      InkWell(
 
-                          height: 30,
-                          shape: Border(
-                              right: BorderSide(color: Colors.white,
-                                  width: 0,
-                                  style: BorderStyle.solid)
-                          ),
-                          padding: EdgeInsets.all(0),
-                          onPressed: () {},
+                        onTap: () async => await canLaunch("") ? await launch("") : throw 'Could not launch',
+
                           child: DefaultTextStyle(
                             style: TextStyle(
                               fontSize: 12,
@@ -165,27 +160,11 @@ class _HomeState extends State<Home> {
                             ),
                             child: Container(
                               margin: EdgeInsets.all(0),
-                              child: Text('About The App'),
+                              child: Text('Powered by'),
                             ),
                           ),
                         ),
-                        MaterialButton(
-                          minWidth: 60,
-                          height: 30,
-                          padding: EdgeInsets.all(0),
-                          onPressed: () {},
-                          child: DefaultTextStyle(
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.white,
-                            ),
-                            child: Container(
 
-                              margin: EdgeInsets.all(0),
-                              child: Text('FeedBack'),
-                            ),
-                          ),
-                        ),
                       ],
                     ) : Container(),
                   ],
