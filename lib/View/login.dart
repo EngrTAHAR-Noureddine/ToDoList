@@ -17,7 +17,7 @@ class LogIn extends StatelessWidget {
     return FutureBuilder(
         future: getIt(),
         builder: (context,snapshot){
-          if(snapshot.hasData) {return LogInClass();} else {return Container(color: Colors.white,);}
+          if(snapshot.hasData) {return LogInClass();} else {return Container(color: Color(0xFFF4F6FD),);}
         }
 
     );
