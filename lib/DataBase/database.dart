@@ -87,6 +87,12 @@ class DBProvider {
           "hideGoal TEXT,"
           "linkAgenda TEXT"
           ")");
+      await db.insert("User", {
+        "darkMode":"light",
+        "passWord":"",
+        "hideGoal":"",
+        "linkAgenda":""
+      });
     });
 
 

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:todolist/Models/Data/theme_data.dart';
 import 'package:todolist/Models/Data/work_manager.dart';
 import 'package:todolist/Models/ProvidersClass/goal_provider.dart';
+import 'package:todolist/Models/ProvidersClass/login_provider.dart';
 import 'package:todolist/Models/ProvidersClass/new_task_provider.dart';
 import 'package:todolist/Models/ProvidersClass/settings_provider.dart';
 import 'package:todolist/Models/ProvidersClass/task_list_provider.dart';
@@ -78,6 +79,8 @@ class MyApp extends StatelessWidget {
                           create: (context) => GoalProvider(), ),
                         ChangeNotifierProvider<NewTaskProvider>(
                           create: (context) => NewTaskProvider(), ),
+                        ChangeNotifierProvider<LogInProvider>(
+                          create: (context) => LogInProvider(), ),
         ],
         child: Builder(
         builder: (context)
