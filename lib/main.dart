@@ -16,7 +16,6 @@ import 'package:workmanager/workmanager.dart';
 void callbackDispatcher() async{
   Workmanager().executeTask((taskName, inputData) async {
 
-    print(inputData["data"]);
     switch(inputData["data"]){
       case "init":
         await WorkManagerProvider().initialWork();
@@ -55,7 +54,14 @@ void main() async{
         "frequency":" ",
         "isReminder":"no"
   },
-      initialDelay: Duration(seconds: 1)
+      initialDelay: Duration(seconds: 1),
+      constraints: Constraints(
+          networkType: NetworkType.not_required,
+          requiresBatteryNotLow: true,
+
+
+
+      )
   );
 
   runApp(MyApp());

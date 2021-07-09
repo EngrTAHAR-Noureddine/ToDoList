@@ -36,6 +36,9 @@ dependencies:
   workmanager: ^0.4.1
   flutter_local_notifications: ^6.0.0
   url_launcher: ^6.0.9
+  googleapis: ^3.0.0
+  googleapis_auth: ^1.1.0
+
 
 
 
