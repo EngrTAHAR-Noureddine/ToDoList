@@ -131,7 +131,11 @@ class WorkManagerProvider{
           "frequency":" ",
           "isReminder":"no"
         },
-        initialDelay: Duration(minutes: ((24*60)-(now.hour*60+now.minute)))
+        initialDelay: Duration(minutes: ((24*60)-(now.hour*60+now.minute))),
+        constraints: Constraints(
+          requiresBatteryNotLow: true,
+          networkType: NetworkType.not_required,
+        ),
     );
     WidgetsFlutterBinding.ensureInitialized();
     await Workmanager().initialize(callbackDispatcher);
@@ -148,6 +152,10 @@ class WorkManagerProvider{
           "frequency":" ",
           "isReminder":"no"
         },
+        constraints: Constraints(
+          networkType: NetworkType.not_required,
+          requiresBatteryNotLow: true,
+        ),
         initialDelay: Duration(seconds: 1)
     );
   }
@@ -184,7 +192,7 @@ class WorkManagerProvider{
           Task task = await DBProvider.db.getTask(tdt[i].idTask);
           if(task!=null){
             print("this colored in workmanager =========== ");
-            if((task.status==Variables().status[3])||(task.status==Variables().status[4])){
+            if((tdt[i].isReminder =="no")&& ((task.status==Variables().status[3])||(task.status==Variables().status[4]))){
               List<String> dateSelected = task.date.split("/");
               List<String> dateReminder = task.dateReminder.split("/");
               task.status =Variables().status[3];
@@ -245,6 +253,10 @@ class WorkManagerProvider{
                 "frequency":picker.frequency,
                 "isReminder":picker.isReminder
               },
+              constraints: Constraints(
+                networkType: NetworkType.not_required,
+                requiresBatteryNotLow: true,
+              ),
               initialDelay: Duration(seconds: 1)
           );
         } else {
@@ -265,6 +277,10 @@ class WorkManagerProvider{
                 "frequency":picker.frequency,
                 "isReminder":picker.isReminder
               },
+              constraints: Constraints(
+                networkType: NetworkType.not_required,
+                requiresBatteryNotLow: true,
+              ),
               initialDelay: Duration(minutes: delay)
           );
         }
@@ -305,6 +321,10 @@ class WorkManagerProvider{
           "frequency":" ",
           "isReminder":"no"
         },
+        constraints: Constraints(
+          networkType: NetworkType.not_required,
+          requiresBatteryNotLow: true,
+        ),
         initialDelay: Duration(minutes: 1)
     );
   }

@@ -3,8 +3,10 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:todolist/DataBase/database.dart';
 import 'package:todolist/ModelView/add_task.dart';
 import 'package:todolist/Models/Data/data_variable.dart';
+import 'package:todolist/Models/ProvidersClass/new_task_provider.dart';
 import 'package:todolist/Models/ProvidersClass/provider_class.dart';
 import 'package:todolist/Models/Data/task_model.dart';
+import 'package:todolist/Models/ProvidersClass/settings_provider.dart';
 import 'package:todolist/Models/custom_expansion_tile.dart' as custom;
 import '../Models/ProvidersClass/task_list_provider.dart';
 
@@ -12,6 +14,7 @@ class PageOfTasks extends StatelessWidget {
 
   String category;
   PageOfTasks({this.category});
+
 
 
   @override
@@ -31,8 +34,8 @@ class PageOfTasks extends StatelessWidget {
                 Expanded(
                   child: Container(
                     color: Theme.of(context).backgroundColor,
-                    child: StreamBuilder(
-                        stream: TaskFunctions().getList(category),
+                    child: FutureBuilder(
+                        future: TaskFunctions().getList(category),
                         builder: (context,AsyncSnapshot snapshot){
 
                           if(snapshot.hasData) {
@@ -65,20 +68,24 @@ class PageOfTasks extends StatelessWidget {
                                   itemCount: items.length,
                                   padding: EdgeInsets.all(5),
                                   itemBuilder: (BuildContext context, int ind){
-                                    int index = items.length-ind-1;
+                                    int index = ind;
+                                    int length = (SettingsProvider().user.linkAgenda=="yes")?2:1;
                                     return Container(
                                       margin: EdgeInsets.all(5),
                                       child:Slidable(
                                         actionPane: SlidableScrollActionPane(),
-                                        actionExtentRatio: 0.5,
+                                        actionExtentRatio: 0.3,
 
-                                        actions: [ /*left */
-                                          (items[index].task.status == Variables().status[0])?
-                                          ToDoListBodyProvider().finishedButton(context,items[index]):(items[index].task.status == Variables().status[4])?ToDoListBodyProvider().renewalButton(context,items[index]):ToDoListBodyProvider().inProgressButton(context,items[index]),
+                                        actions: List.generate(length, (i){
+                                         if(i==1){
+                                           return ToDoListBodyProvider().sentEventButton(context,items[index]);
+                                         }else{
+                                           return (items[index].task.status == Variables().status[0])?
+                                           ToDoListBodyProvider().finishedButton(context,items[index]):(items[index].task.status == Variables().status[4])?ToDoListBodyProvider().renewalButton(context,items[index]):ToDoListBodyProvider().inProgressButton(context,items[index]);
+                                        }
+                                        }),
 
 
-
-                                        ],
 
                                         secondaryActions: [ /* right */
                                           ToDoListBodyProvider().deleteButton(context,items[index]),
@@ -138,6 +145,7 @@ class PageOfTasks extends StatelessWidget {
                                                     await DBProvider.db.deleteTask(items[index].task.id);
                                                     // Workmanager().cancelAll();
                                                     //await LocalNotification.flutterNotificationPlugin.cancelAll();
+                                                    NewTaskProvider().init();
                                                     Navigator.push(
                                                       context,
                                                       MaterialPageRoute<void>(

@@ -52,10 +52,6 @@ class GoalView extends StatelessWidget {
                     child: StreamBuilder(
                         stream: GoalProvider().getList(),
                         builder: (context,AsyncSnapshot snapshot){
-                          print(snapshot.hasData);
-                          print(snapshot.data);
-                          print(snapshot.hasError);
-                          print(snapshot.error);
 
                           if(snapshot.hasData) {
 

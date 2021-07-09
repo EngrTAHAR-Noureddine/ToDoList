@@ -168,7 +168,7 @@ class TaskFunctions{
   TaskFunctions._internal();
 
 
-  Stream<List<Item>> getList(String name)async*{
+  Future<List<Item>> getList(String name)async{
 
     DateTime dateNow = DateTime.now();
     List<Task> list =[];
@@ -188,11 +188,11 @@ class TaskFunctions{
     }
 
     List<Item> items =  (list.isEmpty)?[]:List<Item>.generate(list.length, (int index) {
-      print("item time : "+list[index].time);
+
     return Item(list[index]);
     });
 
-    yield items;
+    return items;
   }
 
 }

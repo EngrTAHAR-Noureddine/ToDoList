@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:todolist/DataBase/database.dart';
 import 'package:todolist/Models/Data/goal_model.dart';
-import 'package:todolist/Models/Data/user_model.dart';
-import 'package:todolist/Models/ProvidersClass/settings_provider.dart';
 
 class GoalProvider extends ChangeNotifier {
   static final GoalProvider _singleton = GoalProvider._internal();
@@ -73,7 +71,6 @@ class GoalProvider extends ChangeNotifier {
 
   Stream<List<Goal>> getList()async*{
 
-  User user= await SettingsProvider().getUser();
     List<Goal> list = await DBProvider.db.getAllGoals();
     yield list;
   }

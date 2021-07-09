@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:todolist/Models/ProvidersClass/provider_class.dart';
 
@@ -9,17 +9,6 @@ class LocalNotification {
 
 
   static Initializer() {
-    /*
-    *   var initializationSettingsAndroid =
-  new AndroidInitializationSettings('app_icon');
-  *
-  var initializationSettingsIOS = new IOSInitializationSettings();
-  var initializationSettings = new InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
-  flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
-  flutterLocalNotificationsPlugin.initialize(initializationSettings,
-      onSelectNotification: onSelectNotification);
-    *
-    * */
 
     flutterNotificationPlugin = FlutterLocalNotificationsPlugin();
     androidSettings = AndroidNotificationDetails(

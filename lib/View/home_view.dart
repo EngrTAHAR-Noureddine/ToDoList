@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
 import 'package:todolist/ModelView/add_new_goal.dart';
 import 'package:todolist/ModelView/add_task.dart';
+import 'package:todolist/Models/ProvidersClass/new_task_provider.dart';
 import 'package:todolist/Models/ProvidersClass/provider_home_class.dart';
 import 'package:todolist/View/switch_view.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -321,6 +322,7 @@ class _HomeState extends State<Home> {
                 .of(context)
                 .primaryColor,
             onPressed: () {
+              NewTaskProvider().init();
               Navigator.push(
                 context,
                 MaterialPageRoute<void>(

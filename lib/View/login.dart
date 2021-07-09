@@ -21,10 +21,7 @@ class LogIn extends StatelessWidget {
     return FutureBuilder(
         future: getIt(),
         builder: (context,snapshot){
-          print(snapshot.hasData);
-          print(snapshot.data);
-          print(snapshot.hasError);
-          print(snapshot.error);
+
           if(snapshot.hasData) {
 
             if(snapshot.data==true){

@@ -25,36 +25,3 @@ class ListOfTasks extends StatelessWidget {
     );
   }
 }
-
-
-
-/*
-class ListOfTasks extends StatefulWidget {
-
-  @override
-  _ListOfTasksState createState() => _ListOfTasksState();
-}
-
-class _ListOfTasksState extends State<ListOfTasks> {
-  @override
-  Widget build(BuildContext context) {
-    return Consumer<ProviderClass>(
-      builder: (context, value, child) {
-        return PageView.builder(
-          itemCount: value.listWidgets.length,
-          scrollDirection: Axis.horizontal,
-          controller: value.controller,
-          itemBuilder: (context, index){
-            return PageOfTasks(category:value.listWidgets[index]);
-          },
-          onPageChanged: (index){
-            if(index>0) if(value.listWidgets.length>2) value.removeWidget();
-          },
-        );
-      },
-
-    );
-  }
-}
-
- */

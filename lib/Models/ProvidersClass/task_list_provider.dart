@@ -5,6 +5,7 @@ import 'package:todolist/DataBase/database.dart';
 import 'package:todolist/Models/Data/data_variable.dart';
 import 'package:todolist/Models/Data/task_model.dart';
 import 'package:todolist/Models/ProvidersClass/provider_class.dart';
+import 'package:todolist/Models/event_calendar.dart';
 
 class ToDoListBodyProvider extends ChangeNotifier{
   static final ToDoListBodyProvider _singleton = ToDoListBodyProvider._internal();
@@ -62,6 +63,7 @@ class ToDoListBodyProvider extends ChangeNotifier{
       ),
     );
   }
+
   Widget finishedButton(context,item){
     return Container(
 
@@ -158,6 +160,85 @@ class ToDoListBodyProvider extends ChangeNotifier{
       ),
     );
   }
+
+  Widget sentEventButton(context,Item item){
+    EventCalendar().setContext(context);
+    return Container(
+
+      height: double.infinity,
+      decoration: BoxDecoration(
+          color: Theme.of(context).dividerColor,
+
+      ),
+      child: MaterialButton(
+
+        height: double.infinity,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.open_in_new, ),
+            Text('Add Event')
+          ],
+        ),
+        textColor: Theme.of(context).splashColor,
+        color: Colors.transparent,
+        hoverColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+        focusColor: Colors.transparent,
+        splashColor: Colors.white.withOpacity(0.3),
+        elevation: 0,
+        hoverElevation: 0,
+        highlightElevation: 0,
+        focusElevation: 0,
+
+        onPressed: (){
+          DateTime startTime,endTime;
+          String eventName;
+          String note = (item.task.note!=null && item.task.note.isNotEmpty)?item.task.note:"Empty";
+          String dateNow = DateTime.now().day.toString()+"/"+DateTime.now().month.toString()+"/"+DateTime.now().year.toString();
+
+          List<int> dateSpliter =List.generate(item.task.date.split("/").length, (index) => int.parse(item.task.date.split("/")[index]) );
+
+
+          List<String> timeSpliter = item.task.time.split(":");
+
+
+          List<int> dateRSpliter =List.generate(item.task.dateReminder.split("/").length, (index) => int.parse(item.task.dateReminder.split("/")[index]) );
+
+          List<String> timeRSpliter = item.task.timeReminder.split(":");
+
+
+          DateTime dateSelected = DateTime(dateSpliter[2] ,dateSpliter[1] , dateSpliter[0],int.parse(timeSpliter[0]),int.parse(timeSpliter[1]) );
+          DateTime dateReminder = DateTime(dateRSpliter[2] ,dateRSpliter[1],dateRSpliter[0],int.parse(timeRSpliter[0]),int.parse(timeRSpliter[1]) );
+          if(dateNow == item.task.date){
+            eventName = "Task : "+item.task.task;
+            startTime =dateSelected;
+            endTime = DateTime(dateSpliter[2] ,dateSpliter[1],dateSpliter[0],(int.parse(timeSpliter[0])+1),int.parse(timeSpliter[1]) );
+
+          }else if(item.task.dateReminder==dateNow){
+
+            eventName = "Reminder of Task : "+item.task.task;
+            startTime =dateReminder;
+            endTime = DateTime(dateRSpliter[2] ,dateRSpliter[1],dateRSpliter[0],(int.parse(timeRSpliter[0])+1),int.parse(timeRSpliter[1]) );
+
+          }
+
+
+
+          EventCalendar().insert(
+              eventName,
+              startTime,
+              endTime,
+              note
+          );
+
+          notifyListeners();
+        },
+
+      ),
+    );
+  }
+
   Widget deleteButton(context,item){
     return Container(
 
@@ -216,6 +297,8 @@ class ToDoListBodyProvider extends ChangeNotifier{
 
     );
   }
+
+
   Widget deleteDraft(context,item){
     return Container(
 

@@ -90,8 +90,8 @@ class DBProvider {
       await db.insert("User", {
         "darkMode":"light",
         "passWord":"",
-        "hideGoal":"",
-        "linkAgenda":""
+        "hideGoal":"no",
+        "linkAgenda":"no"
       });
     });
 
@@ -189,7 +189,7 @@ class DBProvider {
   }
   Future<List<Task>> getTimeByDateReminder(String date) async {
     final db = await database;
-    var res = await db.rawQuery("SELECT *FROM Task WHERE Task.dateReminder LIKE '$date' ORDER BY timeReminder asc");
+    var res = await db.rawQuery("SELECT * FROM Task WHERE Task.dateReminder LIKE '$date' ORDER BY timeReminder asc");
     List<Task> list =
     res.isNotEmpty ? res.toList() : [];
     return list;
@@ -209,7 +209,8 @@ class DBProvider {
   ///date form :selectedDate.day.toString()+"/"+selectedDate.month.toString()+"/"+selectedDate.year.toString()
   Future<List<Task>> getByDate(String date,String dateReminder) async {
     final db = await database;
-    var res = await db.query("Task", where: "date = ? OR dateReminder = ?", whereArgs: [date,dateReminder]);
+    var res = await db.rawQuery("SELECT DISTINCT * FROM Task WHERE Task.date LIKE '$date' or Task.dateReminder LIKE '$dateReminder'  ORDER BY Task.status asc");
+
 
     List<Task> list =
     res.isNotEmpty ? res.map((c) => Task.fromMap(c)).toList() : [];
@@ -222,7 +223,8 @@ class DBProvider {
 //get all tasks
   Future<List<Task>> getAllTask() async {
     final db = await database;
-    var res = await db.query("Task",orderBy: "status asc");
+    var res = await db.rawQuery("SELECT * FROM Task  ORDER BY status asc");
+    //db.query("Task",orderBy: "status asc");
     List<Task> list =
     res.isNotEmpty ? res.map((c) => Task.fromMap(c)).toList() : [];
     return list;
@@ -322,7 +324,7 @@ class DBProvider {
 
     var res =await  db.query("User", where: "id = ?", whereArgs: [id]);
     if(res.isEmpty || res==null){
-      newUser(User(id:1,darkMode: "Light",linkAgenda: "none",passWord: "",hideGoal: "no"));
+      newUser(User(id:1,darkMode: "Light",linkAgenda: "no",passWord: "",hideGoal: "no"));
       res =await  db.query("User", where: "id = ?", whereArgs: [id]);
     }
     User user;

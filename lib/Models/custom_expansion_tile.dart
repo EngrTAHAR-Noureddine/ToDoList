@@ -147,8 +147,7 @@ class _ExpansionTileState extends State<ExpansionTile>
   }
 
   Widget _buildChildren(BuildContext context, Widget child) {
-    final Color borderSideColor = /*_borderColor.value ??*/ Colors.transparent;
-    final Color titleColor = _headerColor.value;
+   final Color titleColor = _headerColor.value;
 
     return Container(
       decoration: BoxDecoration(
