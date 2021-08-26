@@ -101,6 +101,7 @@ class MyApp extends StatelessWidget {
                                 darkTheme: ThemeDataClass().darkMode(),
                                 themeMode:  value.themeMode,
                                 home: LogIn(),
+
                               );});
               }
               )
